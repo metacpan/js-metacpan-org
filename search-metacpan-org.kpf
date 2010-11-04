@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="e7a9c006-0b16-49f1-85df-85f80649fc61" kpf_version="4" name="search-metacpan-org.kpf">
+<preference-set idref="e7a9c006-0b16-49f1-85df-85f80649fc61">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+</project>
