@@ -1,0 +1,1 @@
+// main javascript for search.metacpan.org

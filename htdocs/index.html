@@ -5,6 +5,11 @@
     <head>
 
         <title>search.metacpan.org</title>
+        
+        <meta name="description" content="Proof of concept interface for using http://api.metacpan.org." />
+        <meta name="keywords" content="Perl,Perl Module,CPAN,Search CPAN" />
+        <meta name="author" content="The metacpan.org Team" />
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
         <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="/css/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" media="screen" />
@@ -19,42 +24,45 @@
         
         <script type="text/javascript" src="/js/jquery-1.4.3.min.js"></script>
         <script type="text/javascript" src="/js/jquery-ui-1.8.6.custom.min.js"></script>
-        <script type="text/javascript" src="/js/mustache.js"></script>
+        <script type="text/javascript" src="/js/mustache.min.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
 
         <!-- begin wundercounter.com code http://www.wundercounter.com/?refID=ioncache -->
-        <script language="JavaScript">
+        <script type="text/javascript">
         
         function wunder_url () {
         
             var lang        = navigator.browserLanguage;
             var referrer    = document.referrer;
         
-            if ( referrer == '' )        { referrer = parent.document.referrer }
-            if ( typeof( lang ) == 'undefined' )   { lang = navigator.language }
+            if ( referrer == '' )        { referrer = parent.document.referrer; }
+            if ( typeof( lang ) == 'undefined' )   { lang = navigator.language; }
         
             var url = 'http://www.wundercounter.com/cgi-bin/stats/image.cgi?';
-            url += 'WUNVERSION=2.0&user=ioncache';
-            url += "&page=search.metacpan.org";
-            url += '&wS='    + screen.width;
-            url += '&hS='    + screen.height;
-            url += '&cS='    + screen.colorDepth;
-            url += '&hisl='  + history.length;
-            url += '&WUNL='  + lang;
-            url += '&WUNC='  + navigator.cookieEnabled;
-            url += '&WUNJ='  + navigator.javaEnabled();
-            url += '&WUNR='  + Math.random();
-            url += '&reF='   + referrer;
+            url += 'WUNVERSION=2.0&amp;user=ioncache';
+            url += "&amp;page=search.metacpan.org";
+            url += '&amp;wS='    + screen.width;
+            url += '&amp;hS='    + screen.height;
+            url += '&amp;cS='    + screen.colorDepth;
+            url += '&amp;hisl='  + history.length;
+            url += '&amp;WUNL='  + lang;
+            url += '&amp;WUNC='  + navigator.cookieEnabled;
+            url += '&amp;WUNJ='  + navigator.javaEnabled();
+            url += '&amp;WUNR='  + Math.random();
+            url += '&amp;reF='   + referrer;
         
             return url;
         
         }
-        
-        document.write('<img src=' + wunder_url() + '" alt=" " width="1" height="1" />');
+
+        /* <![CDATA[ */
+        document.write('<img src="' + wunder_url() + '" alt=" " width="1" height="1" />');
+        /* ]]> */
+
         // -->
         </script>
         
-        <noscript><img src="http://www.wundercounter.com/cgi-bin/stats/image.cgi?WUNVERSION=2.0&user=ioncache&page=search.metacpan.org&digits=0" width="1" height="1" alt=" " />
+        <noscript><div><img src="http://www.wundercounter.com/cgi-bin/stats/image.cgi?WUNVERSION=2.0&amp;user=ioncache&amp;page=search.metacpan.org&amp;digits=0" width="1" height="1" alt=" " /></div>
         </noscript>
         <!-- end wundercounter.com code http://www.wundercounter.com/?refID=ioncache -->
 
