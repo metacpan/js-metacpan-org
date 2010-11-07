@@ -19,7 +19,14 @@
     <body>
 
         <div id="main_container">
-            Nothing to see here yet.  Move along.
+            <div id="search_container">
+                <input id="search_input" type="text" />
+            </div>
+            <div id="results_coontainer">
+                <ul id="search_results">
+                
+                </ul>
+            </div>
         </div>
         
         <script type="text/javascript" src="/js/jquery-1.4.3.min.js"></script>
@@ -27,39 +34,50 @@
         <script type="text/javascript" src="/js/mustache.min.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                if ( window.console && window.console.log && window.location.search.substring(1)) {
+                    console.log( 'Query string:  ' + window.location.search.substring(1) );
+                }
+
+                $("#search_input").keypress(function(e) {
+                    if (e.which == 13 ) {
+                        e.preventDefault;
+                        metaSearch($(this).val());
+                    }
+                });
+
+            });
+        </script>
+
         <!-- begin wundercounter.com code http://www.wundercounter.com/?refID=ioncache -->
         <script type="text/javascript">
         
-        function wunder_url () {
+            (function() {
+            
+                var lang     = ( typeof( navigator.browserLanguage ) == 'undefined' ) ? navigator.language : navigator.browserLanguage;
+                var referrer = ( document.referrer === '' ) ? parent.document.referrer : document.referrer;
+            
+                var url = 'http://www.wundercounter.com/cgi-bin/stats/image.cgi?' +
+                'WUNVERSION=2.0' +
+                '&amp;user=ioncache' +
+                '&amp;page=search.metacpan.org' +
+                '&amp;wS='   + screen.width +
+                '&amp;hS='   + screen.height +
+                '&amp;cS='   + screen.colorDepth +
+                '&amp;hisl=' + history.length +
+                '&amp;WUNL=' + lang +
+                '&amp;WUNC=' + navigator.cookieEnabled +
+                '&amp;WUNJ=' + navigator.javaEnabled() +
+                '&amp;WUNR=' + Math.random() +
+                '&amp;reF='  + referrer;
+            
+                /* <![CDATA[ */
+                document.write('<img src="' + url + '" alt=" " width="1" height="1" />');
+                /* ]]> */
+            
+            })();
         
-            var lang        = navigator.browserLanguage;
-            var referrer    = document.referrer;
-        
-            if ( referrer == '' )        { referrer = parent.document.referrer; }
-            if ( typeof( lang ) == 'undefined' )   { lang = navigator.language; }
-        
-            var url = 'http://www.wundercounter.com/cgi-bin/stats/image.cgi?';
-            url += 'WUNVERSION=2.0&amp;user=ioncache';
-            url += "&amp;page=search.metacpan.org";
-            url += '&amp;wS='    + screen.width;
-            url += '&amp;hS='    + screen.height;
-            url += '&amp;cS='    + screen.colorDepth;
-            url += '&amp;hisl='  + history.length;
-            url += '&amp;WUNL='  + lang;
-            url += '&amp;WUNC='  + navigator.cookieEnabled;
-            url += '&amp;WUNJ='  + navigator.javaEnabled();
-            url += '&amp;WUNR='  + Math.random();
-            url += '&amp;reF='   + referrer;
-        
-            return url;
-        
-        }
-
-        /* <![CDATA[ */
-        document.write('<img src="' + wunder_url() + '" alt=" " width="1" height="1" />');
-        /* ]]> */
-
-        // -->
         </script>
         
         <noscript><div><img src="http://www.wundercounter.com/cgi-bin/stats/image.cgi?WUNVERSION=2.0&amp;user=ioncache&amp;page=search.metacpan.org&amp;digits=0" width="1" height="1" alt=" " /></div>

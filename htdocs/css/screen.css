@@ -1,4 +1,19 @@
 body {
     font-size: 12px;
-    font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; 
+    font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+    padding-top: 10px;
+}
+
+#main_container {
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#search_container {
+    text-align: center;
+}
+
+#search_input {
+    width: 450px;
 }
