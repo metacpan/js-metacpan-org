@@ -4,6 +4,22 @@ body {
     padding-top: 10px;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:link {
+    color: #8d160a;
+}
+
+a:visited {
+    color: #8d160a;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 #main_container {
     width: 900px;
     margin-left: auto;
@@ -16,4 +32,51 @@ body {
 
 #search_input {
     width: 450px;
+}
+
+#search_results {
+    padding: 0px;
+    margin: 0px;
+}
+
+.module_container {
+    float: left;
+    width: 900px;
+    position: relative;
+    list-style-type: none;
+    padding: 0px;
+    margin-left: 0px;
+    margin-bottom: 10px;
+}
+
+a.name {
+    color: #6e4f1c;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.version {
+    margin-left: 10px;
+    font-size: .8em;
+    color: #6e4f1c;
+}
+
+.info_container {
+    float: left;
+    position: relative;
+    height: 16px;
+}
+
+.dist {
+    
+}
+
+.distvname {
+    margin-left: 10px;
+    font-size: .8em;
+    color: #8d160a;
+}
+
+.author {
+    margin-left: 10px;
 }

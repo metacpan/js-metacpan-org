@@ -54,6 +54,16 @@
  */
 
 
+.palette {
+    color: #1f1f1f;
+    color: #eceadf;
+    color: #453821;
+    color: #654b24;
+    color: #140f06;
+    color: #3a3427;
+    color: #6e4f1c;
+}
+
 /* Component containers
 ----------------------------------*/
 .ui-widget { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 1.1em; }

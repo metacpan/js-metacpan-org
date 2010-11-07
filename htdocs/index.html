@@ -24,14 +24,13 @@
             </div>
             <div id="results_coontainer">
                 <ul id="search_results">
-                
                 </ul>
             </div>
         </div>
         
         <script type="text/javascript" src="/js/jquery-1.4.3.min.js"></script>
         <script type="text/javascript" src="/js/jquery-ui-1.8.6.custom.min.js"></script>
-        <script type="text/javascript" src="/js/mustache.min.js"></script>
+        <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
 
         <script type="text/javascript">
@@ -45,6 +44,10 @@
                         e.preventDefault;
                         metaSearch($(this).val());
                     }
+                });
+
+                $("a").click(function(e) {
+                    e.preventDefault;
                 });
 
             });
