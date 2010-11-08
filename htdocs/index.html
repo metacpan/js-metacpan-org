@@ -11,6 +11,8 @@
         <meta name="author" content="The metacpan.org Team" />
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 
+        <link rel="shortcut icon" href="/images/favicon.ico" />
+
         <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="/css/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" media="screen" />
         
@@ -19,11 +21,22 @@
     <body>
 
         <div id="main_container">
+            <img src="/images/metacpan_logo.png" alt="metacpan" style="position: absolute; left: 0px; width: 113px; height: 64px;" />
             <div id="search_container">
-                <input id="search_input" type="text" />
+                <span style="position: relative;">
+                    <img id="search_loader" src="/images/loader.gif" alt="" style="position: absolute; top: -3px; left: -25px; width: 20px; height: 20px; display: none;" />
+                    <input id="search_input" type="text" class=".ui-widget" />
+                    <button id="search_button">Search</button>
+                </span>
+                <div id="search_type" style="margin-top: 5px;">
+                    <input type="radio" id="type_module" name="search_type" checked="checked" /><label for="type_module">Module</label>
+                    <input type="radio" id="type_distrubution" name="search_type" /><label for="type_distrubution">Distribution</label>
+                    <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
+		</div>
             </div>
-            <div id="results_coontainer">
-                <ul id="search_results">
+            <div id="paging_container">
+                <div class="page_navigation"></div>
+                <ul id="search_results" class="content">
                 </ul>
             </div>
         </div>
@@ -32,6 +45,7 @@
         <script type="text/javascript" src="/js/jquery-ui-1.8.6.custom.min.js"></script>
         <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
+        <script type="text/javascript" src="/js/jquery.pajinate.min.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
@@ -49,6 +63,12 @@
                 $("a").click(function(e) {
                     e.preventDefault;
                 });
+
+                $("#search_button").button().click(function() {
+                    metaSearch($("#search_input").val());
+                });
+                $("#search_type").buttonset();
+                
 
             });
         </script>

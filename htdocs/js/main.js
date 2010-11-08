@@ -3,10 +3,10 @@
 function metaSearch(value) {
     if ( value !== '') {
         $.ajax({
-            type: 'get',
+            type: 'post',
             url: 'http://api.metacpan.org/module/_search',
-            data: { 'q': 'name:"' + value + '"' },
-            //data: '{ size: 15, query: { term: { name: "' + value + '" } } }',
+            //data: { 'q': 'name:"' + value + '"', 'size': 500 },
+            data: '{ size: 500, query: { term: { name: "' + value + '" } } }',
             //data: {
             //    "query": {
             //        "term": {
@@ -17,18 +17,22 @@ function metaSearch(value) {
             dataType: 'json',
             cache: false,
             beforeSend: function() {
-                $("#results_container").fadeOut(200);
+                $("#paging_container").fadeOut(200);
                 $("#search_results").html("");
+                $("#search_loader").fadeIn(200);
             },
             success: function(res) {
-                var moduleTemplate = '<div><a href="#" class="name">{{name}}</a><span class="version">{{version}}</span></div><div class="info_container"><a href="#" class="dist">{{dist}}</a><span class="distvname">{{distvname}}</span><a href="#" class="author">{{author}}</a></div>';
+                var moduleTemplate = '<div><a href="#" class="name">{{name}}</a><span class="version">{{version}}</span></div><div class="info_container"><a href="#" class="dist">{{distvname}}</a><a href="#" class="author">{{author}}</a></div>';
                 $(res.hits.hits).each(function() {
                     var view = $.extend({}, this._source);
                     var module = Mustache.to_html(moduleTemplate, view);
-                    //console.log(module);
                     $("<li />").addClass("module_container").html(module).appendTo('#search_results');
-                    $("#results_container").fadeIn(200);
                 });
+                $("#paging_container").pajinate({
+                    items_per_page: 10,
+                    num_page_links_to_display: 20
+                }).fadeIn(200);
+                $("#search_loader").fadeOut(200);
             },
             error: function(xhr,status,error) {
                 if ( window.console && window.console.log ) {

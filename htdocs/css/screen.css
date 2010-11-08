@@ -1,3 +1,16 @@
+.palette {
+    color: #1f1f1f;
+    color: #eceadf;
+    color: #453821;
+    color: #654b24;
+    color: #140f06;
+    color: #3a3427;
+    color: #6e4f1c;
+    color: #b83400;
+    color: #fbdb93;
+    color: #681818;
+}
+
 body {
     font-size: 12px;
     font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
@@ -21,6 +34,7 @@ a:hover {
 }
 
 #main_container {
+    position: relative;
     width: 900px;
     margin-left: auto;
     margin-right: auto;
@@ -28,10 +42,15 @@ a:hover {
 
 #search_container {
     text-align: center;
+    margin-bottom: 10px;
 }
 
 #search_input {
     width: 450px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 1.2em;
+    color: #140f06;
 }
 
 #search_results {
@@ -80,3 +99,25 @@ a.name {
 .author {
     margin-left: 10px;
 }
+
+.page_navigation {
+    float: left;
+    margin-bottom: 10px;
+}
+
+.page_navigation a {
+    padding: 3px 5px;
+    margin: 2px;
+    color: #FFFFFF;
+    text-decoration: none;
+    float: left;
+    font-size: 1em;
+    font-weight: bold;
+    background-color: #681818;
+}
+
+.active_page {
+    background-color: #FFFFFF !important;
+    color: #681818 !important;
+} 
+
