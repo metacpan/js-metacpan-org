@@ -13,8 +13,8 @@
 
         <link rel="shortcut icon" href="/images/favicon.ico" />
 
-        <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="/css/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
         
     </head>
 
@@ -34,13 +34,8 @@
                     <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
                 </div>
             </div>
-            <!--<div id="paging_container">-->
-            <!--    <div class="page_navigation"></div>-->
-            <!--    <ul id="search_results" class="content">-->
-            <!--    </ul>-->
-            <!--</div>-->
-            <div id="results_container">
-                <table id="results_table" cellpadding="0" cellspacing="0" border="0" class="display" style="display: none;"></table>
+            <div id="results_container" style="display: none;">
+                <table id="results_table" cellpadding="0" cellspacing="0" border="0" class="display"></table>
             </div>
         </div>
         
@@ -49,7 +44,7 @@
         <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
         <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="/js/jquery.pajinate.js"></script>
+        <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
@@ -73,27 +68,25 @@
                 });
                 $("#search_type").buttonset();
                 
-
                 $("#results_table").dataTable({
                     aoColumns: [
-                        { sTitle: 'Module' },
-                        { sTitle: 'Version' },
-                        { sTitle: 'Distribution' },
-                        { sTitle: 'Author' },
-                        { sTitle: 'Search Score' },
-                        { sTitle: 'Download', sClass: 'center' }
+                        { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 219px;">Module</div>', sWidth: '219px' },
+                        { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
+                        { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 68px;">Date</div>', sType: 'date', sWidth: '68px' },
+                        { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 187px;">Distribution</div>', sWidth: '187px' },
+                        { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 126px;">Author</div>', sWidth: '126px' },
+                        { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false }
                     ],
-                    "aoColumnDefs": [ 
-                        { "sWidth": "30%", "aTargets": [ 0 ] },
-                        { "sWidth": "20%", "aTargets": [ 2 ] },
-                        { "sWidth": "15%", "aTargets": [ 3, 4 ] },
-                        { "sWidth": "10%", "aTargets": [ 1, 5 ] }
-                	],
-                    aaSorting: [[ 4, "desc" ]],
-                    bFilter: false,
+                    aaSorting: [[ 5, "desc" ]],
                     bAutoWidth: false,
                     bJQueryUI: true,
-                    sPaginationType: 'full_numbers'
+                    fnDrawCallback: function() {
+                        $(".cell_contents").textOverflow();
+                    },
+                    sPaginationType: 'full_numbers',
+                    oLanguage: {
+                        sSearch: "Filter:"
+                    }
                 });
 
             });

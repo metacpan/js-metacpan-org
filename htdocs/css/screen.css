@@ -69,6 +69,7 @@ a:hover {
     padding: 5px;
     line-height: 20px;
     white-space: nowrap;
+    overflow: hidden;
 }
 
 #results_table tr.odd {
@@ -87,6 +88,12 @@ a:hover {
 
 #results_table.display td.center {
 	text-align: center;
+}
+
+.cell_contents {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .DataTables_sort_wrapper {
@@ -108,11 +115,11 @@ a:hover {
 }
 
 .fg-toolbar {
-    padding: 5px 10px;
+    padding: 8px 10px;
 }
 
-.fg-button {
-    margin: 0px 5px;
+.fg-button, .first, .previous, .next, .last {
+    min-width: 30px;
 }
 
 .dataTables_info {
@@ -124,21 +131,33 @@ a:hover {
 	text-align: right;
 }
 
+.dataTables_paginate .ui-button {
+    padding: 0px 5px;
+    margin: 0px;
+}
+
+.dataTables_paginate .previous {
+    margin-right: 8px;
+}
+
+.dataTables_paginate .next {
+    margin-left: 8px;
+}
+
 .paging_full_numbers {
-	width: 400px;
+	width: 600px;
 	height: 22px;
 	line-height: 22px;
 }
 
-.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
-	height: 19px;
-	width: 19px;
-	margin-left: 3px;
-	float: left;
+.dataTables_length {
+    float: right;
+    text-align: right;
 }
 
-.dataTables_length {
-    text-align: right;
+.dataTables_filter {
+    float: left;
+    width: 50%;
 }
 
 .module_container {
