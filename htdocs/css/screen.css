@@ -58,6 +58,89 @@ a:hover {
     margin: 0px;
 }
 
+#results_table th {
+    text-align: left;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+#results_table td, #results_table th {
+    height: 20px;
+    padding: 5px;
+    line-height: 20px;
+    white-space: nowrap;
+}
+
+#results_table tr.odd {
+	background-color: #FFFFFF;
+}
+
+#results_table tr.even {
+	background-color: #eceadf;
+}
+
+#results_table {
+	margin: 0 auto;
+	clear: both;
+	width: 100%;
+}
+
+#results_table.display td.center {
+	text-align: center;
+}
+
+.DataTables_sort_wrapper {
+    position: relative;
+}
+
+.DataTables_sort_wrapper span {
+    position: absolute;
+    right: 0;
+    top: 2px;
+}
+
+.css_left {
+    float: left;
+}
+
+.css_right {
+    float: right;
+}
+
+.fg-toolbar {
+    padding: 5px 10px;
+}
+
+.fg-button {
+    margin: 0px 5px;
+}
+
+.dataTables_info {
+    float: left;
+}
+
+.dataTables_paginate {
+    float: right;
+	text-align: right;
+}
+
+.paging_full_numbers {
+	width: 400px;
+	height: 22px;
+	line-height: 22px;
+}
+
+.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
+	height: 19px;
+	width: 19px;
+	margin-left: 3px;
+	float: left;
+}
+
+.dataTables_length {
+    text-align: right;
+}
+
 .module_container {
     float: left;
     width: 900px;
@@ -121,3 +204,7 @@ a.name {
     color: #681818 !important;
 } 
 
+.page_link {
+    min-width: 20px;
+    text-align: center;
+}
