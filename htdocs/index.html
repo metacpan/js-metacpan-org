@@ -13,7 +13,7 @@
 
         <link rel="shortcut icon" href="/images/favicon.ico" />
 
-        <link rel="stylesheet" href="/css/jquery-ui/jquery-ui-1.8.6.custom.css" type="text/css" media="screen" />
+        <link type="text/css" rel="stylesheet" href="http://jqueryui.com/themes/base/ui.all.css" />
         <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
         
     </head>
@@ -28,10 +28,13 @@
                     <input id="search_input" type="text" class=".ui-widget" />
                     <button id="search_button">Search</button>
                 </span>
-                <div id="search_type" style="margin-top: 5px;">
-                    <input type="radio" id="type_module" name="search_type" checked="checked" /><label for="type_module">Module</label>
-                    <input type="radio" id="type_distrubution" name="search_type" /><label for="type_distrubution">Distribution</label>
-                    <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
+                <div style="width: 700px; height: 45px; margin: 5px auto 0px 215px;">
+                    <div id="search_type" style="float: left;">
+                        <input type="radio" id="type_module" name="search_type" checked="checked" /><label for="type_module">Module</label>
+                        <input type="radio" id="type_distrubution" name="search_type" /><label for="type_distrubution">Distribution</label>
+                        <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
+                    </div>
+                    <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
                 </div>
             </div>
             <div id="results_container" style="display: none;">
@@ -45,9 +48,18 @@
         <script type="text/javascript" src="/js/main.js"></script>
         <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
+                if ( $.cookie('tableDisplayLength') == '' ) {
+                    $.cookie('tableDisplayLength', 10);
+                }
+                if ( $.cookie('jquery-ui-theme') == '' ) {
+                    $.cookie('jquery-ui-theme', 'metaCPAN');
+                }
+                $('#switcher').themeswitcher();
                 if ( window.console && window.console.log && window.location.search.substring(1)) {
                     console.log( 'Query string:  ' + window.location.search.substring(1) );
                 }
@@ -81,8 +93,13 @@
                     bAutoWidth: false,
                     bJQueryUI: true,
                     fnDrawCallback: function() {
+                        var settings = $("#results_table").dataTable().fnSettings();
+                        if ( $.cookie('tableDisplayLength') !== settings._iDisplayLength ) {
+                            $.cookie('tableDisplayLength', settings._iDisplayLength);
+                        }
                         $(".cell_contents").textOverflow();
                     },
+                    iDisplayLength: ( $.cookie('tableDisplayLength') == '' ) ? 10 : $.cookie('tableDisplayLength'),
                     sPaginationType: 'full_numbers',
                     oLanguage: {
                         sSearch: "Filter:"
