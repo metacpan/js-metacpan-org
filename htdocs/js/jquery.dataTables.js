@@ -213,7 +213,7 @@
 		
 		/* Full numbers paging buttons */
 		"sPageButton": "fg-button ui-button ui-state-default",
-		"sPageButtonActive": "fg-button ui-button ui-state-default ui-state-disabled",
+		"sPageButtonActive": "fg-button ui-button ui-state-default ui-state-active",
 		"sPageButtonStaticDisabled": "fg-button ui-button ui-state-default ui-state-disabled",
 		"sPageFirst": "first ui-corner-tl ui-corner-bl",
 		"sPagePrevious": "previous",
