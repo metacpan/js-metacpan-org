@@ -1,0 +1,62 @@
+.pod, .manifest { margin-right: 20ex; }
+
+.pod PRE     {
+  background: #eeeeee;
+  border: 1px solid #888888;
+  color: black;
+  padding: 1em;
+  white-space: pre;
+}
+
+.pod a {
+  color: #006699;
+}
+
+.pod a:visited {
+  color: #006699;
+}
+
+.pod H1      {
+  background: transparent;
+  color: #006699;
+  font-size: large;
+}
+
+.pod H1 A { text-decoration: none; }
+.pod H2 A { text-decoration: none; }
+.pod H3 A { text-decoration: none; }
+.pod H4 A { text-decoration: none; }
+
+.pod H2      {
+  background: transparent;
+  color: #006699;
+  font-size: medium;
+}
+
+.pod H3      {
+  background: transparent;
+  color: #006699;
+  font-size: medium;
+  font-style: italic;
+}
+
+.pod H4      {
+  background: transparent;
+  color: #006699;
+  font-size: medium;
+  font-weight: normal;
+}
+
+.pod IMG     {
+  border: none;
+  vertical-align: top;
+}
+
+.pod .toc A  {
+  text-decoration: none;
+}
+
+.pod .toc LI {
+  line-height: 1.2em;
+  list-style-type: none;
+}

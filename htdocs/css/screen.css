@@ -17,18 +17,6 @@ body {
     padding-top: 10px;
 }
 
-a {
-    text-decoration: none;
-}
-
-a:link {
-    color: #8d160a;
-}
-
-a:visited {
-    color: #8d160a;
-}
-
 a:hover {
     text-decoration: underline;
 }
@@ -60,8 +48,12 @@ a:hover {
 
 #results_table th {
     text-align: left;
-	font-weight: bold;
-	cursor: pointer;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#results_table tr {
+    cursor: pointer;
 }
 
 #results_table td, #results_table th {
@@ -72,18 +64,10 @@ a:hover {
     overflow: hidden;
 }
 
-#results_table tr.odd {
-	background-color: #FFFFFF;
-}
-
-#results_table tr.even {
-	background-color: #eceadf;
-}
-
 #results_table {
-	margin: 0 auto;
-	clear: both;
-	width: 100%;
+    margin: 0 auto;
+    clear: both;
+    width: 100%;
 }
 
 #results_table.display td.center {
@@ -112,6 +96,30 @@ a:hover {
 
 .css_right {
     float: right;
+}
+
+.row_overrides {
+    font-weight: normal !important;
+    background-image: none !important;
+}
+
+.odd_rows {
+    background-color: #eceadf;
+}
+
+.sorting_1 {
+    background-image: url('/images/background_black_08.png') !important;
+    background-repeat: repeat;
+}
+
+.sorting_2 {
+    background-image: url('/images/background_black_05.png') !important;
+    background-repeat: repeat;
+}
+
+.sorting_3 {
+    background-image: url('/images/background_black_02.png') !important;
+    background-repeat: repeat;
 }
 
 .fg-toolbar {
@@ -150,48 +158,6 @@ a:hover {
 .dataTables_filter {
     float: left;
     width: 50%;
-}
-
-.module_container {
-    float: left;
-    width: 900px;
-    position: relative;
-    list-style-type: none;
-    padding: 0px;
-    margin-left: 0px;
-    margin-bottom: 10px;
-}
-
-a.name {
-    color: #6e4f1c;
-    font-weight: bold;
-    font-size: 1.5em;
-}
-
-.version {
-    margin-left: 10px;
-    font-size: .8em;
-    color: #6e4f1c;
-}
-
-.info_container {
-    float: left;
-    position: relative;
-    height: 16px;
-}
-
-.dist {
-    
-}
-
-.distvname {
-    margin-left: 10px;
-    font-size: .8em;
-    color: #8d160a;
-}
-
-.author {
-    margin-left: 10px;
 }
 
 .page_navigation {
