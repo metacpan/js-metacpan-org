@@ -56,7 +56,7 @@
                 if ( $.cookie('tableDisplayLength') == '' || Number($.cookie('tableDisplayLength')) < 10 ) {
                     $.cookie('tableDisplayLength', 10);
                 }
-                if ( $.cookie('jquery-ui-theme') == '' ) {
+                if ( $.cookie('jquery-ui-theme') == '' || $.cookie('jquery-ui-theme') == null) {
                     $.cookie('jquery-ui-theme', 'metaCPAN');
                 }
 
