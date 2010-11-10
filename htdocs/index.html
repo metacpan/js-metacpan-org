@@ -46,20 +46,22 @@
         <script type="text/javascript" src="/js/jquery-ui-1.8.6.custom.min.js"></script>
         <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
-        <script type="text/javascript" src="/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function() {
-                if ( $.cookie('tableDisplayLength') == '' ) {
+                if ( $.cookie('tableDisplayLength') == '' || Number($.cookie('tableDisplayLength')) < 10 ) {
                     $.cookie('tableDisplayLength', 10);
                 }
                 if ( $.cookie('jquery-ui-theme') == '' ) {
                     $.cookie('jquery-ui-theme', 'metaCPAN');
                 }
+
                 $('#switcher').themeswitcher();
+
                 if ( window.console && window.console.log && window.location.search.substring(1)) {
                     console.log( 'Query string:  ' + window.location.search.substring(1) );
                 }
