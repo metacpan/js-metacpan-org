@@ -59,6 +59,7 @@ function remotePod(module, dist, author) {
         html = html.replace(/^.*<div class="pod">/m, '<div class="pod">');
         html = html.replace(/<div class="footer">.*$/m, '');
         html = html.replace(/metacpan_newline/g, '\n');
+        html = html.replace('<div class="pod">', '<a name="___top" /><div class="pod">');
         $("#pod_contents").html(html);
         $("#module_container").fadeIn(200);
     });
