@@ -46,7 +46,7 @@
         <script type="text/javascript" src="/js/jquery-ui-1.8.6.custom.min.js"></script>
         <script type="text/javascript" src="/js/mustache.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
-        <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="/js/jquery.dataTables.js"></script>
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
@@ -79,7 +79,7 @@
                     metaSearch($("#search_input").val());
                 });
                 $("#search_type").buttonset();
-                
+
                 $("#results_table").dataTable({
                     aoColumns: [
                         { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 219px;">Module</div>', sWidth: '219px' },
@@ -97,9 +97,9 @@
                         if ( $.cookie('tableDisplayLength') !== settings._iDisplayLength ) {
                             $.cookie('tableDisplayLength', settings._iDisplayLength);
                         }
-                        $(".cell_contents").textOverflow();
+                        $(".cell_contents:visible").textOverflow();
                     },
-                    iDisplayLength: ( $.cookie('tableDisplayLength') == '' ) ? 10 : $.cookie('tableDisplayLength'),
+                    iDisplayLength: Number($.cookie('tableDisplayLength')),
                     sPaginationType: 'full_numbers',
                     oLanguage: {
                         sSearch: "Filter:"
