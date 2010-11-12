@@ -8,6 +8,10 @@
   white-space: pre;
 }
 
+code {
+    white-space: pre;
+}
+
 .pod a {
   color: #006699;
 }

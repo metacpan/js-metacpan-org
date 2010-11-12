@@ -42,9 +42,10 @@
                 <table id="results_table" cellpadding="0" cellspacing="0" border="0" class="display"></table>
             </div>
             <div id="module_container" style="display: none;">
-                <button class="back_to_results">Back to search results...</button>
-                <div id="pod_contents"></div>
-                <!--<iframe id="cpan_pod" style="width: 100%; height: 600px; border: none;"></iframe>-->
+                <div style="float: left;"><button class="back_to_results">Back to search results...</button></div>
+                <div style="float: left;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
+                <div id="pod_contents" style="float: left; width: 100%; margin-top: 10px;"></div>
+                <div id="source_contents" style="float: left; width: 100%; display: none; margin-top: 10px;"></div>
             </div>
         </div>
         
@@ -57,8 +58,14 @@
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
         <script type="text/javascript" src="/js/jquery.ba-bbq.min.js"></script>
+        <script type="text/javascript" src="http://github.com/balupton/jquery-syntaxhighlighter/raw/master/scripts/jquery.syntaxhighlighter.min.js"></script>
 
         <script type="text/javascript">
+            $.SyntaxHighlighter.init({
+                'alternateLines': true,
+                'lineNumbers': true
+            });
+
             $(document).ready(function() {
                 var queryString = $.deparam.querystring();
                 if ( window.console && window.console.log ) {
@@ -94,9 +101,23 @@
                     icons: { primary: 'ui-icon-arrowreturnthick-1-w' },
                     text: false
                 }).click(function() {
-                    $(this).parent().fadeOut(200, function() {
+                    $("#module_container").fadeOut(200, function() {
                         $("#results_container").fadeIn(200);
+                        $("#pod_contents").show(0);
+                        $("#source_contents").hide(0);
                     });
+                });
+
+                $(".toggle_pod_source").button().click(function() {
+                    if ( $("#pod_contents:visible").length ) {
+                        $("#pod_contents").fadeOut(200, function() {
+                            $("#source_contents").fadeIn(200);
+                        });
+                    } else {
+                        $("#source_contents").fadeOut(200, function() {
+                            $("#pod_contents").fadeIn(200);
+                        });
+                    }
                 });
 
                 $.extend($.fn.dataTableExt.oJUIClasses, {

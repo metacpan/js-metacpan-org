@@ -6,7 +6,7 @@ function metaSearch(value) {
             type: 'get',
             url: 'http://api.metacpan.org/module/_search',
             data: { 'q': 'name: "' + value + '"', size: 500 },
-            //data: '{ size: 500, query: { term: { name: "' + value + '" } } }',
+            //data: '{ "size": "500", "query": { "term": { "name": "' + value + '" } } }',
             //data: {
             //    "query": {
             //        "term": {
@@ -19,6 +19,7 @@ function metaSearch(value) {
             beforeSend: function() {
                 $("#results_container").fadeOut(200);
                 $("#module_container").fadeOut(200);
+                $("#results_table").dataTable().fnClearTable();
                 $("#search_loader").fadeIn(200);
             },
             success: function(res) {
@@ -34,7 +35,6 @@ function metaSearch(value) {
                         '<div class="cell_contents" title="' + this._source._score + '" style="width: 86px;">' + this._score + '</div>'
                     ]);
                 });
-                $("#results_table").dataTable().fnClearTable();
                 $("#results_table").dataTable().fnAddData(rowData);
                 $("#results_container").fadeIn(200);
                 $("#search_loader").fadeOut(200);
@@ -45,6 +45,8 @@ function metaSearch(value) {
                     console.log(status);
                     console.log(error);
                 }
+                $("#results_container").fadeIn(200);
+                $("#search_loader").fadeOut(200);
             }
         });
     }  
@@ -53,14 +55,47 @@ function metaSearch(value) {
 function remotePod(module, dist, author) {
     var modulePath = module.replace(/::/g, '/');
     var url = 'http://search.cpan.org/~' + escape(author) + '/' + escape(dist) + '/lib/' + escape(modulePath) + '.pm';
+    if ( window.console && window.console.log ) {
+        console.log('Remote pod URL: ' + url);
+    }
     requestCrossDomain( url, function(resp) {
-        var html = resp;
-        html = html.replace(/\n/gm, 'metacpan_newline');
-        html = html.replace(/^.*<div class="pod">/m, '<div class="pod">');
-        html = html.replace(/<div class="footer">.*$/m, '');
-        html = html.replace(/metacpan_newline/g, '\n');
-        html = html.replace('<div class="pod">', '<a name="___top" /><div class="pod">');
-        $("#pod_contents").html(html);
+        if ( resp != '' ) {
+            var html = resp;
+            html = html.replace(/\n/gm, 'metacpan_newline');
+            html = html.replace(/^.*<div class="pod">/m, '<div class="pod">');
+            html = html.replace(/<div class="footer">.*$/m, '');
+            html = html.replace(/metacpan_newline/g, '\n');
+            html = html.replace('<div class="pod">', '<a name="___top" /><div class="pod">');
+            $("#pod_contents").html(html);
+            if ( $("#pod_contents").html() != '' ) {
+                $("#pod_contents pre").each(function() {
+                    $(this).replaceWith('<code class="highlight" style="padding: 10px;">' + $(this).html() + '</code>');
+                });
+                $("#pod_contents").syntaxHighlight();
+                var srcUrl = 'http://cpansearch.perl.org/src/' + escape(author) + '/' + escape(dist) + '/lib/' + escape(modulePath) + '.pm';
+                var srcFunc = (function(srcResp) {
+                    if ( srcResp != '' ) {
+                        if ( window.console && window.console.log ) {
+                            console.log('Remote source URL: ' + srcUrl);
+                        }
+                        var src = srcResp.query.results.body.p;
+                        if ( typeof(src) == 'object') {
+                            src = src.join('');
+                        }
+                        src = src.replace(/^\n/gm, 'meta_newline');
+                        //src = src.replace(/\n/gm, ' ');
+                        src = src.replace(/;/gm, ';\n');
+                        //src = src.replace(/{/gm, '{\n');
+                        //src = src.replace(/}/gm, '}\n');
+                        src = src.replace(/meta_newline/gm, '\n');
+                        $("#source_contents").html(src);
+                        $("#source_contents").wrapInner('<code class="highlight" style="padding: 10px;   white-space: pre;" />').syntaxHighlight();
+                    }
+                });
+                var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from html where url="' + srcUrl + '"') + '&format=json&callback=?';
+                $.getJSON( yql, srcFunc );
+            }
+        }
         $("#module_container").fadeIn(200);
     });
 }
@@ -100,4 +135,5 @@ function requestCrossDomain( site, callback ) {
             callback('');
         }
     }
+
 }
