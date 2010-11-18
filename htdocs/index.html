@@ -39,13 +39,21 @@
                 </div>
             </div>
             <div id="results_container" style="display: none;">
-                <table id="results_table" cellpadding="0" cellspacing="0" border="0" class="display"></table>
+                <table id="module_results_table" cellpadding="0" cellspacing="0" border="0" class="display"></table>
             </div>
-            <div id="module_container" style="display: none;">
+            <div id="module_container" style="position: relative; display: none;">
                 <div style="float: left;"><button class="back_to_results">Back to search results...</button></div>
                 <div style="float: left;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
+                <div id="pod_loader" style="position: absolute; top: 20px; float: left; width: 100%; text-align: center;"><img src="/images/loader_wide.gif" style="width: 120px; height: 40px;" alt=Loading Pod..." /></div>
+                <div id="no_pod" style="float: left; width: 100%; text-align: center; display: none;">No POD could be found.</div>
                 <div id="pod_contents" style="float: left; width: 100%; margin-top: 10px;"></div>
                 <div id="source_contents" style="float: left; width: 100%; display: none; margin-top: 10px;"></div>
+            </div>
+            <div id="distrubution_container" style="position: relative; display: none;">
+                
+            </div>
+            <div id="author_container" style="position: relative; display: none;">
+                
             </div>
         </div>
         
@@ -68,9 +76,7 @@
 
             $(document).ready(function() {
                 var queryString = $.deparam.querystring();
-                if ( window.console && window.console.log ) {
-                    console.log(queryString);
-                }
+                debug(queryString);
 
                 if ( $.cookie('tableDisplayLength') == '' || Number($.cookie('tableDisplayLength')) < 10 ) {
                     $.cookie('tableDisplayLength', 10);
@@ -102,9 +108,12 @@
                     text: false
                 }).click(function() {
                     $("#module_container").fadeOut(200, function() {
-                        $("#results_container").fadeIn(200);
-                        $("#pod_contents").show(0);
-                        $("#source_contents").hide(0);
+                        $("#results_container").fadeIn(200, function() {
+                            $("#pod_contents").show();
+                            $("#pod_loader").show();
+                            $("#source_contents").hide();
+                            $("#no_pod").hide();
+                        });
                     });
                 });
 
@@ -128,7 +137,7 @@
                     //sStripEven: 'odd_rows'
                 });
 
-                $("#results_table").dataTable({
+                $("#module_results_table").dataTable({
                     aoColumns: [
                         { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 219px;">Module</div>', sWidth: '219px' },
                         { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
@@ -141,7 +150,7 @@
                     bAutoWidth: false,
                     bJQueryUI: true,
                     fnDrawCallback: function() {
-                        var settings = $("#results_table").dataTable().fnSettings();
+                        var settings = $("#module_results_table").dataTable().fnSettings();
                         if ( $.cookie('tableDisplayLength') !== settings._iDisplayLength ) {
                             $.cookie('tableDisplayLength', settings._iDisplayLength);
                         }
@@ -154,17 +163,21 @@
                     }
                 });
 
-                $("#results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'hover', function() {
+                $("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'hover', function() {
                     $(this).toggleClass('ui-state-highlight');
                 });
 
-                $("#results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'click', function(res) {
+                $("#module_results_table").delegate('a', 'click', function(e) {
+                    e.preventDefault;
+                });
 
+                $("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'click', function(res) {
                     var module = $(this).find('td:first-child').text();
                     var dist = $(this).find('td:nth-child(4)').text();
                     var author = $(this).find('td:nth-child(5)').text();
                     $("#results_container").fadeOut(function() {
                         remotePod(module, dist, author);
+                        $("#module_container").fadeIn(200);
                     });
                 });
 
@@ -187,9 +200,10 @@
                 if ( queryString.action === 'search' && queryString.value !== '' ) {
                     metaSearch(queryString.value);
                 } else if ( queryString.action === 'showPod' && queryString.value !== '' ) {
-                    $.getJSON('http://api.metacpan.org/module/' + queryString.value, function(res) {
+                    $.getJSON('http://api.metacpan.org/module/' + encodeURIComponent(queryString.value), function(res) {
                         $("#results_container").fadeOut(function() {
                             remotePod(res._source.name, res._source.distvname, res._source.author);
+                            $("#module_container").fadeIn(200);
                         });
                     });
                 }
