@@ -22,7 +22,7 @@
     <body>
 
         <div id="main_container">
-            <img src="/images/metacpan_logo.png" alt="metacpan" style="position: absolute; left: 0px; width: 113px; height: 64px;" />
+            <a href="http://search.metacpan.org"><img src="/images/metacpan_logo.png" alt="metacpan" style="position: absolute; left: 0px; width: 113px; height: 64px; border: none;" /></a>
             <div id="search_container">
                 <span style="position: relative;">
                     <img id="search_loader" src="/images/loader.gif" alt="" style="position: absolute; top: -3px; left: -25px; width: 20px; height: 20px; display: none;" />
@@ -45,7 +45,12 @@
                 <div style="float: left;"><button class="back_to_results">Back to search results...</button></div>
                 <div style="float: left; display: none;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
                 <div id="pod_loader" style="position: absolute; top: 20px; float: left; width: 100%; text-align: center;"><img src="/images/loader_wide.gif" style="width: 120px; height: 40px;" alt=Loading Pod..." /></div>
-                <div id="no_pod" style="float: left; width: 100%; text-align: center; display: none;">No POD could be found.</div>
+                <div id="no_pod" class="ui-widget" style="width: 50%; margin: auto; display: none;">
+                    <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
+                        <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
+                        <strong>Error:</strong> No POD could be found.</p>
+                    </div>
+                </div>
                 <div id="pod_contents" style="float: left; width: 100%; margin-top: 10px; display: none;"></div>
                 <div id="source_contents" style="float: left; width: 100%; display: none; margin-top: 10px;"></div>
             </div>
@@ -197,11 +202,25 @@
                 if ( queryString.action === 'search' && queryString.value !== '' ) {
                     metaSearch(queryString.value);
                 } else if ( queryString.action === 'showPod' && queryString.value !== '' ) {
-                    $.getJSON('http://api.metacpan.org/module/' + encodeURIComponent(queryString.value), function(res) {
-                        $("#results_container").fadeOut(function() {
-                            remotePod(res._source.name, res._source.distvname, res._source.author);
-                            $("#module_container").fadeIn(200);
-                        });
+                    $.ajax({
+                        type: 'get',
+                        url:  'http://api.metacpan.org/module/' + queryString.value,
+                        dataType: 'json',
+                        succes: function(res) {
+                            $("#results_container").fadeOut(function() {
+                                showPod(res._source.name);
+                            });
+                        },
+                        error: function(xhr, error, status) {
+                            debug(xhr);
+                            debug(status);
+                            debug(error);
+                            $("#module_container").fadeIn(200, function() {
+                                $("#pod_loader").fadeOut(5, function() {
+                                    $("#no_pod").fadeIn(200);                                    
+                                });
+                            });
+                        }
                     });
                 }
 

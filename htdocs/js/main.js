@@ -113,34 +113,50 @@ function showPod(module) {
             },
             success: function(res) {
                 debug(res);
-                var podHTML = res._source.pod;
-                podHTML = podHTML.replace('<html>', '');
-                podHTML = podHTML.replace('</html>', '');
-                podHTML = podHTML.replace('<head>', '');
-                podHTML = podHTML.replace('</head>', '');
-                podHTML = podHTML.replace('<body>', '');
-                podHTML = podHTML.replace('</body>', '');
-                podHTML = podHTML.replace('<title>', '');
-                podHTML = podHTML.replace('</title>', '');
-                podHTML = podHTML.replace(/<meta.* \/>/, '');
-                podHTML = podHTML.replace(/<link.* \/>/, '');
-                podHTML = podHTML.replace('<div style="height:50px">&nbsp;</div>', '');
-                debug(podHTML);
-                $("#pod_contents").html(podHTML).wrapInner('<div class="pod" />');
-                $("#pod_contents pre").each(function() {
-                    $(this).replaceWith('<code class="highlight" style="padding: 10px;">' + $(this).html() + '</code>');
-                });
-                $("#pod_contents").syntaxHighlight();
-                $("#pod_loader").fadeOut(200, function() {
-                    $("#pod_contents").fadeIn(200);
-                });
+                if ( res.hasOwnProperty('_source') && res._source.hasOwnProperty('pod') ) {
+                    var podHTML = res._source.pod;
+                    podHTML = podHTML.replace('<html>', '');
+                    podHTML = podHTML.replace('</html>', '');
+                    podHTML = podHTML.replace('<head>', '');
+                    podHTML = podHTML.replace('</head>', '');
+                    podHTML = podHTML.replace('<body>', '');
+                    podHTML = podHTML.replace('</body>', '');
+                    podHTML = podHTML.replace('<title>', '');
+                    podHTML = podHTML.replace('</title>', '');
+                    podHTML = podHTML.replace(/<meta.* \/>/, '');
+                    podHTML = podHTML.replace(/<link.* \/>/, '');
+                    podHTML = podHTML.replace('<div style="height:50px">&nbsp;</div>', '');
+
+                    $("#pod_contents").html(podHTML).wrapInner('<div class="pod" />');
+                    $("#pod_contents a").filter(function() {
+                        var href = $(this).attr('href');
+                        var http = /^http:\/\//;
+                        var anchor = /^#/;
+                        var mailto = /^mailto:/;
+                        return ( http.exec(href) || anchor.exec(href) || mailto.exec(href) ) ? 0 : 1;
+                    }).map(function() {
+                        $(this).attr('href', '/?action=showPod&value=' + $(this).attr('href'));
+                    });
+                    $("#pod_contents pre").each(function() {
+                        $(this).replaceWith('<code class="highlight" style="padding: 10px;">' + $(this).html() + '</code>');
+                    });
+                    $("#pod_contents").syntaxHighlight();
+                    $("#pod_loader").fadeOut(200, function() {
+                        $("#pod_contents").fadeIn(200);
+                    });
+                } else {
+                    $("#pod_loader").fadeOut(200, function() {
+                        $("#no_pod").fadeIn(200);
+                    });
+                }
             },
             error: function(xhr,status,error) {
                 debug(xhr);
                 debug(status);
                 debug(error);
-                $("#results_container").fadeIn(200);
-                $("#search_loader").fadeOut(200);
+                $("#pod_loader").fadeOut(200, function() {
+                    $("#no_pod").fadeIn(200);
+                });
             }
     });
 }
