@@ -48,9 +48,10 @@ function metaSearch(value) {
     if ( value !== '') {
         $.ajax({
             type: 'get',
+            //type: 'post',
             url: 'http://api.metacpan.org/module/_search',
             data: { 'q': 'name: "' + value + '"', size: 1000 },
-            //data: '{ "size": "500", "query": { "term": { "name": "' + value + '" } } }',
+            //data: '{ "size": "500", "query": { "term": { "name": "' + value.toLowerCase() + '" } } }',
             //data: {
             //    "query": {
             //        "term": {
@@ -76,7 +77,6 @@ function metaSearch(value) {
                 var rowData = [];
                 $(res.hits.hits).each(function() {
                     rowData.push([
-                        
                         '<div class="cell_contents" title="' + this._source.name + '" style="width: 219px;">' + this._source.name + '</div>',
                         '<div class="cell_contents" title="' + this._source.version + '" style="width: 68px;">' + this._source.version + '</div>',
                         '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 68px;">' + this._source.release_date.substr(0,10) + '</div>',
@@ -98,6 +98,51 @@ function metaSearch(value) {
             }
         });
     }  
+}
+
+function showPod(module) {
+    $.ajax({
+            type: 'get',
+            //type: 'post',
+            url: 'http://api.metacpan.org/pod/' + module,
+            dataType: 'json',
+            cache: false,
+            beforeSend: function() {
+                $("#pod_contents").html('');
+                $("#module_container").fadeIn(200);
+            },
+            success: function(res) {
+                debug(res);
+                var podHTML = res._source.pod;
+                podHTML = podHTML.replace('<html>', '');
+                podHTML = podHTML.replace('</html>', '');
+                podHTML = podHTML.replace('<head>', '');
+                podHTML = podHTML.replace('</head>', '');
+                podHTML = podHTML.replace('<body>', '');
+                podHTML = podHTML.replace('</body>', '');
+                podHTML = podHTML.replace('<title>', '');
+                podHTML = podHTML.replace('</title>', '');
+                podHTML = podHTML.replace(/<meta.* \/>/, '');
+                podHTML = podHTML.replace(/<link.* \/>/, '');
+                podHTML = podHTML.replace('<div style="height:50px">&nbsp;</div>', '');
+                debug(podHTML);
+                $("#pod_contents").html(podHTML).wrapInner('<div class="pod" />');
+                $("#pod_contents pre").each(function() {
+                    $(this).replaceWith('<code class="highlight" style="padding: 10px;">' + $(this).html() + '</code>');
+                });
+                $("#pod_contents").syntaxHighlight();
+                $("#pod_loader").fadeOut(200, function() {
+                    $("#pod_contents").fadeIn(200);
+                });
+            },
+            error: function(xhr,status,error) {
+                debug(xhr);
+                debug(status);
+                debug(error);
+                $("#results_container").fadeIn(200);
+                $("#search_loader").fadeOut(200);
+            }
+    });
 }
 
 function remotePod(module, dist, author) {
@@ -125,6 +170,7 @@ function remotePod(module, dist, author) {
                         debug('Remote source URL: ' + srcUrl);
                         var src = srcResp.query.results.body.p;
                         if ( typeof(src) == 'object') {
+                            console.log( src );
                             src = src.join('');
                         }
                         src = src.replace(/^\n/gm, 'meta_newline');

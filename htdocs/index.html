@@ -43,10 +43,10 @@
             </div>
             <div id="module_container" style="position: relative; display: none;">
                 <div style="float: left;"><button class="back_to_results">Back to search results...</button></div>
-                <div style="float: left;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
+                <div style="float: left; display: none;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
                 <div id="pod_loader" style="position: absolute; top: 20px; float: left; width: 100%; text-align: center;"><img src="/images/loader_wide.gif" style="width: 120px; height: 40px;" alt=Loading Pod..." /></div>
                 <div id="no_pod" style="float: left; width: 100%; text-align: center; display: none;">No POD could be found.</div>
-                <div id="pod_contents" style="float: left; width: 100%; margin-top: 10px;"></div>
+                <div id="pod_contents" style="float: left; width: 100%; margin-top: 10px; display: none;"></div>
                 <div id="source_contents" style="float: left; width: 100%; display: none; margin-top: 10px;"></div>
             </div>
             <div id="distrubution_container" style="position: relative; display: none;">
@@ -71,7 +71,7 @@
         <script type="text/javascript">
             $.SyntaxHighlighter.init({
                 'alternateLines': true,
-                'lineNumbers': true
+                'lineNumbers': false
             });
 
             $(document).ready(function() {
@@ -109,7 +109,7 @@
                 }).click(function() {
                     $("#module_container").fadeOut(200, function() {
                         $("#results_container").fadeIn(200, function() {
-                            $("#pod_contents").show();
+                            $("#pod_contents").hide();
                             $("#pod_loader").show();
                             $("#source_contents").hide();
                             $("#no_pod").hide();
@@ -132,9 +132,6 @@
                 $.extend($.fn.dataTableExt.oJUIClasses, {
                     sStripOdd: 'ui-state-active row_overrides',
                     sStripEven: 'ui-state-default row_overrides'
-                    //sStripEven: 'ui-widget-content row-overrides',
-                    //sStripOdd: 'ui-widget-content row-overrides'
-                    //sStripEven: 'odd_rows'
                 });
 
                 $("#module_results_table").dataTable({
@@ -176,8 +173,8 @@
                     var dist = $(this).find('td:nth-child(4)').text();
                     var author = $(this).find('td:nth-child(5)').text();
                     $("#results_container").fadeOut(function() {
-                        remotePod(module, dist, author);
-                        $("#module_container").fadeIn(200);
+                        showPod(module);
+                        //remotePod(module, dist, author);
                     });
                 });
 
