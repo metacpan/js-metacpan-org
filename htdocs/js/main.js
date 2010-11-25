@@ -44,6 +44,7 @@ function requestCrossDomain( site, callback ) {
 
 }
 
+// does a search on module name through ElasticSearch
 function metaSearch(value) {
     if ( value !== '') {
         $.ajax({
@@ -100,6 +101,7 @@ function metaSearch(value) {
     }  
 }
 
+// retrieves and displays the podf from ElasticSearch for a module
 function showPod(module) {
     $.ajax({
             type: 'get',
@@ -115,6 +117,9 @@ function showPod(module) {
                 debug(res);
                 if ( res.hasOwnProperty('_source') && res._source.hasOwnProperty('pod') ) {
                     var podHTML = res._source.pod;
+                    
+                    // /some interim formatting until we clean up the formatted
+                    // pod stored in ElasticSearch
                     podHTML = podHTML.replace('<html>', '');
                     podHTML = podHTML.replace('</html>', '');
                     podHTML = podHTML.replace('<head>', '');
