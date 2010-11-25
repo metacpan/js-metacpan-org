@@ -206,7 +206,7 @@
                         type: 'get',
                         url:  'http://api.metacpan.org/module/' + queryString.value,
                         dataType: 'json',
-                        succes: function(res) {
+                        success: function(res) {
                             $("#results_container").fadeOut(function() {
                                 showPod(res._source.name);
                             });
