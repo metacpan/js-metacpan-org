@@ -1,1 +1,0 @@
-/home/mjubenville/projects/Pajinate/jquery.pajinate.js

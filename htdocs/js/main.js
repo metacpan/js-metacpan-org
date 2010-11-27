@@ -104,10 +104,11 @@ function showPod(module) {
                     }).map(function() {
                         $(this).attr('href', '/?action=showPod&value=' + $(this).attr('href'));
                     });
-                    $("#pod_contents pre").each(function() {
-                        $(this).replaceWith('<code class="highlight" style="padding: 10px;">' + $(this).html() + '</code>');
+                    $("#pod_contents pre").each(function(i, e) {
+                        $(this).addClass("language-perl");
+                        $(this).wrapInner('<code class="language-perl" />');
+                        hljs.highlightBlock(e, '    ');
                     });
-                    $("#pod_contents").syntaxHighlight();
                     $("#pod_loader").fadeOut(200, function() {
                         $("#pod_contents").fadeIn(200);
                     });

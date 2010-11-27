@@ -1,66 +1,75 @@
 .pod, .manifest { margin-right: 20ex; }
 
-.pod PRE     {
-  background: #eeeeee;
-  border: 1px solid #888888;
-  color: black;
-  padding: 1em;
-  white-space: pre;
-}
-
-code {
+.pod pre     {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid #681818;
+    color: black;
+    padding: 1em;
     white-space: pre;
 }
 
+.pod code {
+    white-space: pre
+}
+
 .pod a {
-  color: #006699;
+  color: #681818;
 }
 
 .pod a:visited {
-  color: #006699;
+  color: #c89a8a;
 }
 
-.pod H1      {
+.pod a:hover {
+    text-decoration: none;
+}
+
+.pod h1      {
   background: transparent;
-  color: #006699;
+  color: #681818;
   font-size: large;
 }
 
-.pod H1 A { text-decoration: none; }
-.pod H2 A { text-decoration: none; }
-.pod H3 A { text-decoration: none; }
-.pod H4 A { text-decoration: none; }
+.pod h1 a { text-decoration: none; }
+.pod h2 a { text-decoration: none; }
+.pod h3 a { text-decoration: none; }
+.pod h4 a { text-decoration: none; }
 
-.pod H2      {
+.pod h2      {
   background: transparent;
-  color: #006699;
+  color: #681818;
   font-size: medium;
 }
 
-.pod H3      {
+.pod h3      {
   background: transparent;
-  color: #006699;
+  color: #681818;
   font-size: medium;
   font-style: italic;
 }
 
-.pod H4      {
+.pod h4      {
   background: transparent;
-  color: #006699;
+  color: #681818;
   font-size: medium;
   font-weight: normal;
 }
 
-.pod IMG     {
+.pod img     {
   border: none;
   vertical-align: top;
 }
 
-.pod .toc A  {
-  text-decoration: none;
+.pod #index {
+    padding: 0px;
 }
 
-.pod .toc LI {
-  line-height: 1.2em;
+.pod #index li {
   list-style-type: none;
+  margin: .3em 0;
+}
+
+.pod #index ul  {
+    padding-left: 1.5em;
 }

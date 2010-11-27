@@ -16,6 +16,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="http://jqueryui.com/themes/base/ui.all.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/screen.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/pod.css" />
+        <link rel="stylesheet" href="http://yandex.st/highlightjs/5.15/styles/vs.min.css">
         
     </head>
 
@@ -62,24 +63,23 @@
             </div>
             <div id="footerSpacer"></div>
         </div>
-        <div id="footer"><p>View the source code on github at <a href="https://github.com/CPAN-API/search-metacpan-org" target="_blank">https://github.com/CPAN-API/search-metacpan-org</a></p></div>
+        <!--<div id="footer"><p>View the source code on github at <a href="https://github.com/CPAN-API/search-metacpan-org" target="_blank">https://github.com/CPAN-API/search-metacpan-org</a></p></div>-->
         
-        <script type="text/javascript" src="/js/jquery-1.4.3.min.js"></script>
-        <script type="text/javascript" src="/js/jquery-ui-1.8.6.custom.min.js"></script>
-        <script type="text/javascript" src="/js/mustache.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/js/mustache.min.js"></script>
+        <script type="text/javascript" src="/js/json2.min.js"></script>
+        <script type="text/javascript" src="/js/underscore-min.js"></script>
+        <script type="text/javascript" src="/js/backbone-min.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
         <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
         <script type="text/javascript" src="/js/jquery.ba-bbq.min.js"></script>
-        <script type="text/javascript" src="http://github.com/balupton/jquery-syntaxhighlighter/raw/master/scripts/jquery.syntaxhighlighter.min.js"></script>
+        <script src="http://yandex.st/highlightjs/5.15/highlight.min.js"></script>
 
         <script type="text/javascript">
-            $.SyntaxHighlighter.init({
-                'alternateLines': true,
-                'lineNumbers': false
-            });
 
             $(document).ready(function() {
                 var queryString = $.deparam.querystring();
@@ -208,19 +208,20 @@
                         type: 'get',
                         url:  'http://api.metacpan.org/module/' + queryString.value,
                         dataType: 'json',
-                        success: function(res) {
-                            $("#results_container").fadeOut(function() {
-                                showPod(res._source.name);
+                        beforeSend: function() {
+                            $("#results_container").fadeOut(200, function() {
+                                $("#module_container").fadeIn(200);
                             });
+                        },
+                        success: function(res) {
+                            showPod(res._source.name);
                         },
                         error: function(xhr, error, status) {
                             debug(xhr);
                             debug(status);
                             debug(error);
-                            $("#module_container").fadeIn(200, function() {
-                                $("#pod_loader").fadeOut(5, function() {
-                                    $("#no_pod").fadeIn(200);                                    
-                                });
+                            $("#pod_loader").fadeOut(5, function() {
+                                $("#no_pod").fadeIn(200);                                    
                             });
                         }
                     });
