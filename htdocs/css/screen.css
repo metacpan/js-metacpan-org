@@ -21,6 +21,13 @@ body {
     padding-top: 10px;
 }
 
+a {
+    color: #b83400;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
 a:hover {
     text-decoration: underline;
 }
@@ -31,13 +38,14 @@ a:hover {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
+    margin: 0 auto;
 }
 
 #footer {
 	position: fixed;
     bottom: 0;
-	width: 100%;
-	line-height: 40px;
+    width: 100%;
+    height: 60px;
 	text-align: center;
     background-color: #FFFFFF;
 }

@@ -24,6 +24,8 @@
 
 .pod a {
   color: #681818;
+  text-decoration: underline;
+  font-size: 1em;
 }
 
 .pod a:visited {
