@@ -1,16 +1,25 @@
-.pod, .manifest { margin-right: 20ex; }
-
+.pod {
+    width: 100%;
+}
 .pod pre     {
     width: 100%;
     background: #FFFFFF;
     border: 1px solid #681818;
     color: black;
     padding: 1em;
-    white-space: pre;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 .pod code {
-    white-space: pre
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
 .pod a {
@@ -18,7 +27,7 @@
 }
 
 .pod a:visited {
-  color: #c89a8a;
+  color: #453821;
 }
 
 .pod a:hover {

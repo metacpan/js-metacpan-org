@@ -13,10 +13,10 @@
 
         <link rel="shortcut icon" href="/images/favicon.ico" />
 
-        <link rel="stylesheet" type="text/css" media="screen" href="http://jqueryui.com/themes/base/ui.all.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/screen.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/pod.css" />
-        <link rel="stylesheet" href="http://yandex.st/highlightjs/5.15/styles/vs.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="http://jqueryui.com/themes/base/ui.all.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="http://yandex.st/highlightjs/5.15/styles/vs.min.css">
         
     </head>
 
@@ -33,7 +33,7 @@
                 <div style="width: 700px; height: 45px; margin: 5px auto 0px 215px;">
                     <div id="search_type" style="float: left;">
                         <input type="radio" id="type_module" name="search_type" /><label for="type_module">Module</label>
-                        <input type="radio" id="type_dist" name="search_type" /><label for="type_dist">Distribution</label>
+                        <!--<input type="radio" id="type_dist" name="search_type" /><label for="type_dist">Distribution</label>-->
                         <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
                     </div>
                     <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
@@ -67,11 +67,12 @@
         
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="/js/mustache.min.js"></script>
+        <script type="text/javascript" src="/js/ICanHaz.min.js"></script>
         <script type="text/javascript" src="/js/json2.min.js"></script>
         <script type="text/javascript" src="/js/underscore-min.js"></script>
         <script type="text/javascript" src="/js/backbone-min.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
+        <script type="text/javascript" src="/js/views.js"></script>
         <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
@@ -181,7 +182,6 @@
                     var author = $(this).find('td:nth-child(5)').text();
                     $("#results_container").fadeOut(function() {
                         showPod(module);
-                        //remotePod(module, dist, author);
                     });
                 });
 

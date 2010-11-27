@@ -106,7 +106,7 @@ function showPod(module) {
                     });
                     $("#pod_contents pre").each(function(i, e) {
                         $(this).addClass("language-perl");
-                        $(this).wrapInner('<code class="language-perl" />');
+                        $(this).wrapInner('<code />');
                         hljs.highlightBlock(e, '    ');
                     });
                     $("#pod_loader").fadeOut(200, function() {
