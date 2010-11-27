@@ -50,6 +50,12 @@ a:hover {
     background-color: #FFFFFF;
 }
 
+#footer_spacer {
+    width: 900px;
+    height: 60px;
+    margin: 0 auto;
+}
+
 #search_container {
     text-align: center;
     margin-bottom: 10px;
