@@ -74,6 +74,12 @@ a:hover {
     margin: 0px;
 }
 
+#module_results_table a {
+    color: #b83400;
+    font-size: 1em;
+    text-decoration: none;
+}
+
 #module_results_table th {
     text-align: left;
     font-weight: bold;

@@ -44,7 +44,7 @@ function metaSearch(value) {
                         '<div class="cell_contents" title="' + this._source.version + '" style="width: 68px;">' + this._source.version + '</div>',
                         '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 68px;">' + this._source.release_date.substr(0,10) + '</div>',
                         '<div class="cell_contents" title="' + this._source.distvname + '" style="width: 187px;">' + this._source.distvname + '</div>',
-                        '<div class="cell_contents" title="' + this._source.author + '" style="width: 126px;"><a href="http://api.metacpan.org/author/' + this._source.author + '">' + this._source.author + '</a></div>',
+                        '<div class="cell_contents" title="' + this._source.author + '" style="width: 126px;">' + this._source.author + '</div>',
                         '<div class="cell_contents" title="' + this._score + '" style="width: 86px;">' + this._score + '</div>'
                     ]);
                 });
