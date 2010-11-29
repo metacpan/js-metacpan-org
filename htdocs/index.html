@@ -96,6 +96,11 @@
 
             $(document).ready(function() {
 
+                $.ajaxSetup({
+                    cache: false,
+                    dataType: 'json'
+                });
+
                 // some global defaults for the DataTable plugin
                 $.extend($.fn.dataTableExt.oJUIClasses, {
                     sStripOdd: 'ui-state-active row_overrides',

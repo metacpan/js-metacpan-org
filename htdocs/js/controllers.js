@@ -37,9 +37,7 @@ var Metacpan = Backbone.Controller.extend({
         this.hideViews();
 
         $.ajax({
-            type: 'get',
             url:  'http://api.metacpan.org/module/' + query,
-            dataType: 'json',
             beforeSend: function() {
                 ModuleDetailsView.resetPod();
                 ModuleDetailsView.show();
@@ -60,11 +58,7 @@ var Metacpan = Backbone.Controller.extend({
     showPod: function(module) {
         this.saveLocation("/showpod/" + module);
         $.ajax({
-            type: 'get',
-            //type: 'post',
             url: 'http://api.metacpan.org/pod/' + module,
-            dataType: 'json',
-            cache: false,
             beforeSend: function() {
                 ModuleDetailsView.resetPod();
                 ModuleDetailsView.show();
@@ -108,7 +102,6 @@ var Metacpan = Backbone.Controller.extend({
             this.saveLocation("/search/module/" + module);
             SearchBoxView.updateQuery(module);
             $.ajax({
-                type: 'get',
                 //type: 'post',
                 url: 'http://api.metacpan.org/module/_search',
                 data: { 'q': 'name: "' + module + '"', size: 1000 },
@@ -120,22 +113,14 @@ var Metacpan = Backbone.Controller.extend({
                 //        }
                 //    }
                 //},
-                dataType: 'json',
-                cache: false,
                 beforeSend: function() {
-                    MetacpanController.hideViews(function () {
-                        $("#pod_contents").show();
-                        $("#pod_loader").show();
-                        $("#source_contents").hide();
-                        $("#no_pod").hide();
-                        $("#module_results_table").dataTable().fnClearTable(); 
-                    });
+                    MetacpanController.hideViews($("#module_results_table").dataTable().fnClearTable());
+                    ModuleDetailsView.resetPod();
                     $("#search_loader").fadeIn(200);
                 },
                 success: function(res) {
                     debug(res);
-                    ModuleResultsView.update(res);
-                    ModuleResultsView.show();
+                    ModuleResultsView.update(res, true);
                     $("#search_loader").fadeOut(200);
                 },
                 error: function(xhr,status,error) {

@@ -80,7 +80,7 @@ var ModuleResults = Backbone.View.extend({
     },
 
     // updates the module results table
-    update: function(res) {
+    update: function(res, show) {
         var rowData = [];
         $(res.hits.hits).each(function() {
             rowData.push([
@@ -93,6 +93,9 @@ var ModuleResults = Backbone.View.extend({
             ]);
         });
         $("#module_results_table").dataTable().fnAddData(rowData);
+        if (show) {
+            this.show();
+        }
     }
 
 });
@@ -158,7 +161,7 @@ var ModuleDetails = Backbone.View.extend({
         }).map(function() {
             $(this).attr('href', '/#/showpod/' + $(this).attr('href'));
         });
-        this.$("#pod_contents pre").each(function(i, e) {
+        $("#pod_contents pre").each(function(i, e) {
             $(this).addClass("language-perl");
             $(this).wrapInner('<code />');
             hljs.highlightBlock(e, '    ');
@@ -176,6 +179,7 @@ var ModuleDetails = Backbone.View.extend({
     },
 
     resetPod: function() {
+        $("#no_pod").hide();
         $("#pod_contents").html('');
         $("#pod_loader").fadeIn(200);
     }
