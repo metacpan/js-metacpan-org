@@ -117,14 +117,15 @@ var ModuleDetails = Backbone.View.extend({
             icons: { primary: 'ui-icon-arrowreturnthick-1-w' },
             text: false
         }).click(function() {
-            ModuleDetailsView.hide(
-                ModuleResultsView.show((function() {
-                    $("#pod_contents").hide();
-                    $("#pod_loader").show();
-                    $("#source_contents").hide();
-                    $("#no_pod").hide();
-                }))
-            );
+            history.back()
+            //ModuleDetailsView.hide(
+            //    ModuleResultsView.show((function() {
+            //        $("#pod_contents").hide();
+            //        $("#pod_loader").show();
+            //        $("#source_contents").hide();
+            //        $("#no_pod").hide();
+            //    }))
+            //);
         });
     },
 

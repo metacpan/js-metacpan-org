@@ -41,6 +41,7 @@ var Metacpan = Backbone.Controller.extend({
             url:  'http://api.metacpan.org/module/' + query,
             dataType: 'json',
             beforeSend: function() {
+                ModuleDetailsView.resetPod();
                 ModuleDetailsView.show();
             },
             success: function(res) {
