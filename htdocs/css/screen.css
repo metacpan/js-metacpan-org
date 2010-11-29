@@ -219,3 +219,8 @@ a:hover {
     min-width: 20px;
     text-align: center;
 }
+
+.metacpanView {
+    display: none;
+    position: relative;
+}

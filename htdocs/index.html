@@ -39,24 +39,8 @@
                     <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
                 </div>
             </div>
-            <div id="results_container" style="display: none;">
-                <table id="module_results_table" cellpadding="0" cellspacing="0" border="0" class="display"></table>
-            </div>
-            <div id="module_container" style="position: relative; display: none;">
-                <div style="width: 100%; height: 3.5em;">
-                    <div style="float: left;"><button class="back_to_results">Back to search results...</button></div>
-                    <div style="float: left; display: none;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
-                </div>
-                <div id="pod_loader" style="position: absolute; top: 20px; float: left; width: 100%; text-align: center;"><img src="/images/loader_wide.gif" style="width: 120px; height: 40px;" alt=Loading Pod..." /></div>
-                <div id="no_pod" class="ui-widget" style="width: 50%; margin: auto; display: none;">
-                    <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
-                        <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
-                        <strong>Error:</strong> No POD could be found.</p>
-                    </div>
-                </div>
-                <div id="pod_contents" style="width: 100%; margin-top: 10px; display: none;"></div>
-                <div id="source_contents" style="width: 100%; display: none; margin-top: 10px;"></div>
-            </div>
+            <div id="module_results" class="metacpanView"></div>
+            <div id="module_details" class="metacpanView"></div>
             <div id="distrubution_container" style="position: relative; display: none;">
                 
             </div>
@@ -68,7 +52,7 @@
         <div id="footer">
             <p>
                 <img src="/images/beta.png" alt="BETA" style="height: 35px; margin-right: 10px;"/>
-                <span style="position: relative; top: -10px;">This site is currently in beta.  View the Github repositories for the <a href="https://github.com/CPAN-API/cpan-api">API</a> or this <a href="https://github.com/CPAN-API/search-metacpan-org">Search</a> site.  Get in touch with us on our <a href="http://groups.google.com/group/cpan-api">Google Group</a>.</span>
+                <span style="position: relative; top: -10px;">This site is currently in beta.  View the Github repositories for the <a href="https://github.com/CPAN-API/cpan-api" target="_blank">API</a> or this <a href="https://github.com/CPAN-API/search-metacpan-org" target="_blank">Search</a> site.  Get in touch with us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group</a>.</span>
             </p>
         </div>
         
@@ -90,12 +74,38 @@
         <script type="text/javascript" src="/js/jquery.ba-bbq.min.js"></script>
         <script src="http://yandex.st/highlightjs/5.15/highlight.min.js"></script>
 
+        <!--Template definitions-->
+        <script id="resultsTable" type="text/html">
+            <table id="{{id}}" cellpadding="0" cellspacing="0" border="0" class="display"></table>
+        </script>
+        <script id="moduleDetailsView"  type="text/html">
+            <div style="width: 100%; height: 3.5em;">
+                <div style="float: left;"><button class="back_to_results">Back to search results...</button></div>
+                <div style="float: left; display: none;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
+            </div>
+            <div id="pod_loader" style="position: absolute; top: 20px; float: left; width: 100%; text-align: center;"><img src="/images/loader_wide.gif" style="width: 120px; height: 40px;" alt="Loading Pod..." /></div>
+            <div id="no_pod" class="ui-widget" style="width: 50%; margin: auto; display: none;">
+                <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
+                    <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
+                    <strong>Error:</strong> <span id="pod_error"></span></p>
+                </div>
+            </div>
+            <div id="pod_contents" style="width: 100%; margin-top: 10px; display: none;"></div>
+            <div id="source_contents" style="width: 100%; display: none; margin-top: 10px;"></div>
+        </script>
+        <!--End of Template definitions-->
+
         <script type="text/javascript">
 
             $(document).ready(function() {
-                var queryString = $.deparam.querystring();
-                debug(queryString);
 
+                // some global defaults for the DataTable plugin
+                $.extend($.fn.dataTableExt.oJUIClasses, {
+                    sStripOdd: 'ui-state-active row_overrides',
+                    sStripEven: 'ui-state-default row_overrides'
+                });
+
+                // sets up some persistant cookie variables
                 if ( $.cookie('tableDisplayLength') == '' || Number($.cookie('tableDisplayLength')) < 10 ) {
                     $.cookie('tableDisplayLength', 10);
                 }
@@ -103,12 +113,13 @@
                     $.cookie('jquery-ui-theme', 'metaCPAN');
                 }
 
+                // initializes the theme switcher
                 $('#switcher').themeswitcher();
 
                 $("#search_input").keypress(function(e) {
                     if (e.which == 13 ) {
                         e.preventDefault;
-                        metaSearch($(this).val());
+                        MetacpanController.moduleSearch($(this).val());
                     }
                 });
 
@@ -117,23 +128,9 @@
                 });
 
                 $("#search_button").button().click(function() {
-                    metaSearch($("#search_input").val());
+                    MetacpanController.moduleSearch($("#search_input").val());
                 });
                 $("#search_type").buttonset();
-
-                $(".back_to_results").button({
-                    icons: { primary: 'ui-icon-arrowreturnthick-1-w' },
-                    text: false
-                }).click(function() {
-                    $("#module_container").fadeOut(200, function() {
-                        $("#results_container").fadeIn(200, function() {
-                            $("#pod_contents").hide();
-                            $("#pod_loader").show();
-                            $("#source_contents").hide();
-                            $("#no_pod").hide();
-                        });
-                    });
-                });
 
                 $(".toggle_pod_source").button().click(function() {
                     if ( $("#pod_contents:visible").length ) {
@@ -147,95 +144,55 @@
                     }
                 });
 
-                $.extend($.fn.dataTableExt.oJUIClasses, {
-                    sStripOdd: 'ui-state-active row_overrides',
-                    sStripEven: 'ui-state-default row_overrides'
-                });
+                //$("#module_results_table").dataTable({
+                //    aoColumns: [
+                //        { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 219px;">Module</div>', sWidth: '219px' },
+                //        { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
+                //        { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 68px;">Date</div>', sWidth: '68px' },
+                //        { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 187px;">Distribution</div>', sWidth: '187px' },
+                //        { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 126px;">Author</div>', sWidth: '126px' },
+                //        { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false }
+                //    ],
+                //    aaSorting: [[ 5, "desc" ]],
+                //    bAutoWidth: false,
+                //    bJQueryUI: true,
+                //    fnDrawCallback: function() {
+                //        var settings = $("#module_results_table").dataTable().fnSettings();
+                //        if ( $.cookie('tableDisplayLength') !== settings._iDisplayLength ) {
+                //            $.cookie('tableDisplayLength', settings._iDisplayLength);
+                //        }
+                //        $(".cell_contents:visible").textOverflow();
+                //    },
+                //    iDisplayLength: Number($.cookie('tableDisplayLength')),
+                //    sPaginationType: 'full_numbers',
+                //    oLanguage: {
+                //        sSearch: 'Filter:'
+                //    }
+                //});
 
-                $("#module_results_table").dataTable({
-                    aoColumns: [
-                        { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 219px;">Module</div>', sWidth: '219px' },
-                        { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
-                        { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 68px;">Date</div>', sWidth: '68px' },
-                        { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 187px;">Distribution</div>', sWidth: '187px' },
-                        { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 126px;">Author</div>', sWidth: '126px' },
-                        { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false }
-                    ],
-                    aaSorting: [[ 5, "desc" ]],
-                    bAutoWidth: false,
-                    bJQueryUI: true,
-                    fnDrawCallback: function() {
-                        var settings = $("#module_results_table").dataTable().fnSettings();
-                        if ( $.cookie('tableDisplayLength') !== settings._iDisplayLength ) {
-                            $.cookie('tableDisplayLength', settings._iDisplayLength);
-                        }
-                        $(".cell_contents:visible").textOverflow();
-                    },
-                    iDisplayLength: Number($.cookie('tableDisplayLength')),
-                    sPaginationType: 'full_numbers',
-                    oLanguage: {
-                        sSearch: 'Filter:'
-                    }
-                });
+                //$("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'hover', function() {
+                //    $(this).toggleClass('ui-state-highlight');
+                //});
+                //
+                //$("#module_results_table").delegate('a', 'click', function(e) {
+                //    e.preventDefault;
+                //});
 
-                $("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'hover', function() {
-                    $(this).toggleClass('ui-state-highlight');
-                });
+                //$("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'click', function(res) {
+                //    var module = $(this).find('td:first-child').text();
+                //    var dist = $(this).find('td:nth-child(4)').text();
+                //    var author = $(this).find('td:nth-child(5)').text();
+                //    $("#module_results").fadeOut(200, function() {
+                //        showPod(module);
+                //    });
+                //});
 
-                $("#module_results_table").delegate('a', 'click', function(e) {
-                    e.preventDefault;
-                });
-
-                $("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'click', function(res) {
-                    var module = $(this).find('td:first-child').text();
-                    var dist = $(this).find('td:nth-child(4)').text();
-                    var author = $(this).find('td:nth-child(5)').text();
-                    $("#results_container").fadeOut(function() {
-                        showPod(module);
-                    });
-                });
-
-                // do some setup based on the query string
-                if ( queryString.value ) {
-                    $("#search_input").val(queryString.value);
-                }
-
-                if ( queryString.type === 'author' ) {
-                    $("#type_author").attr('checked', true);
-                    $("#type_author").button('refresh');
-                } else if ( queryString.type === 'dist' ) {
-                    $("#type_dist").attr('checked', true);
-                    $("#type_dist").button('refresh');
-                } else {
-                    $("#type_module").attr('checked', true);   
-                    $("#type_module").button('refresh');
-                }
-
-                if ( queryString.action === 'search' && queryString.value !== '' ) {
-                    metaSearch(queryString.value);
-                } else if ( queryString.action === 'showPod' && queryString.value !== '' ) {
-                    $.ajax({
-                        type: 'get',
-                        url:  'http://api.metacpan.org/module/' + queryString.value,
-                        dataType: 'json',
-                        beforeSend: function() {
-                            $("#results_container").fadeOut(200, function() {
-                                $("#module_container").fadeIn(200);
-                            });
-                        },
-                        success: function(res) {
-                            showPod(res._source.name);
-                        },
-                        error: function(xhr, error, status) {
-                            debug(xhr);
-                            debug(status);
-                            debug(error);
-                            $("#pod_loader").fadeOut(5, function() {
-                                $("#no_pod").fadeIn(200);                                    
-                            });
-                        }
-                    });
-                }
+                MetacpanController = new Metacpan();
+                ModuleResultsView = new ModuleResults();
+                ModuleResultsView.render();
+                ModuleDetailsView = new ModuleDetails();
+                ModuleDetailsView.render();
+                Backbone.history.start();
 
             });
         </script>
