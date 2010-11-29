@@ -3,8 +3,8 @@
 var Metacpan = Backbone.Controller.extend({
 
     routes: {
-        "/search/:type/:query":      "search",
-        "/showpod/:query":           "showpod"
+        "/search/:type/:query":     "search",
+        "/sowpod/:query":           "showpod"
     },
 
     initialize: function() {
@@ -18,10 +18,18 @@ var Metacpan = Backbone.Controller.extend({
 
         this.hideViews();
 
+        SearchBoxView.searchType(type);
+
         switch(type) {
         
             case 'module':
                 this.moduleSearch(query);
+                break;
+            case 'author':
+                //this.authorSearch(query);
+                this.saveLocation("/search/author/" + query);
+                SearchBoxView.updateQuery(query);
+                AuthorResultsView.show();
                 break;
             default:
                 debug('"' + type + '" is not a valid search type.' );

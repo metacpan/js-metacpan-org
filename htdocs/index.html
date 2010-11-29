@@ -27,8 +27,15 @@
             <div id="search_box"></div>
             <div id="module_results" class="metacpanView"></div>
             <div id="module_details" class="metacpanView"></div>
-            <div id="distrubution_container" class="metacpanView"> </div>
-            <div id="author_container" class="metacpanView"></div>
+            <div id="distrubution_results" class="metacpanView"> </div>
+            <div id="author_results" class="metacpanView">
+                <div id="no_pod" class="ui-widget" style="width: 300px; margin: auto;">
+                    <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
+                        <p style="text-align: center;"><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span> 
+                        <strong>Author search not yet implemented.</strong></p>
+                    </div>
+                </div>
+            </div>
         </div>
         <div id="footer_spacer">&nbsp;</div>
         <div id="footer">
@@ -83,9 +90,9 @@
             </span>
             <div style="width: 700px; height: 45px; margin: 5px auto 0px 215px;">
                 <div id="search_type" style="float: left;">
-                    <input type="radio" id="type_module" name="search_type" /><label for="type_module">Module</label>
-                    <!--<input type="radio" id="type_dist" name="search_type" /><label for="type_dist">Distribution</label>-->
-                    <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
+                    <input type="radio" id="type_module" name="search_type" value="module" checked="checked" /><label for="type_module">Module</label>
+                    <!--<input type="radio" id="type_dist" name="search_type" value="dist" /><label for="type_dist">Distribution</label>-->
+                    <input type="radio" id="type_author" name="search_type" value="author" /><label for="type_author">Author</label>
                 </div>
                 <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
             </div>
@@ -111,7 +118,7 @@
                 if ( $.cookie('tableDisplayLength') == '' || Number($.cookie('tableDisplayLength')) < 10 ) {
                     $.cookie('tableDisplayLength', 10);
                 }
-                if ( $.cookie('jquery-ui-theme') == '' || $.cookie('jquery-ui-theme') == null) {
+                if ( $.cookie('jquery-ui-theme') == '' || $.cookie('jquery-ui-theme') == null ) {
                     $.cookie('jquery-ui-theme', 'metaCPAN');
                 }
 
@@ -119,59 +126,16 @@
                     e.preventDefault;
                 });
 
-                $(".toggle_pod_source").button().click(function() {
-                    if ( $("#pod_contents:visible").length ) {
-                        $("#pod_contents").fadeOut(200, function() {
-                            $("#source_contents").fadeIn(200);
-                        });
-                    } else {
-                        $("#source_contents").fadeOut(200, function() {
-                            $("#pod_contents").fadeIn(200);
-                        });
-                    }
-                });
-
-                //$("#module_results_table").dataTable({
-                //    aoColumns: [
-                //        { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 219px;">Module</div>', sWidth: '219px' },
-                //        { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
-                //        { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 68px;">Date</div>', sWidth: '68px' },
-                //        { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 187px;">Distribution</div>', sWidth: '187px' },
-                //        { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 126px;">Author</div>', sWidth: '126px' },
-                //        { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false }
-                //    ],
-                //    aaSorting: [[ 5, "desc" ]],
-                //    bAutoWidth: false,
-                //    bJQueryUI: true,
-                //    fnDrawCallback: function() {
-                //        var settings = $("#module_results_table").dataTable().fnSettings();
-                //        if ( $.cookie('tableDisplayLength') !== settings._iDisplayLength ) {
-                //            $.cookie('tableDisplayLength', settings._iDisplayLength);
-                //        }
-                //        $(".cell_contents:visible").textOverflow();
-                //    },
-                //    iDisplayLength: Number($.cookie('tableDisplayLength')),
-                //    sPaginationType: 'full_numbers',
-                //    oLanguage: {
-                //        sSearch: 'Filter:'
+                //$(".toggle_pod_source").button().click(function() {
+                //    if ( $("#pod_contents:visible").length ) {
+                //        $("#pod_contents").fadeOut(200, function() {
+                //            $("#source_contents").fadeIn(200);
+                //        });
+                //    } else {
+                //        $("#source_contents").fadeOut(200, function() {
+                //            $("#pod_contents").fadeIn(200);
+                //        });
                 //    }
-                //});
-
-                //$("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'hover', function() {
-                //    $(this).toggleClass('ui-state-highlight');
-                //});
-                //
-                //$("#module_results_table").delegate('a', 'click', function(e) {
-                //    e.preventDefault;
-                //});
-
-                //$("#module_results_table").delegate('tr.ui-state-active, tr.ui-state-default', 'click', function(res) {
-                //    var module = $(this).find('td:first-child').text();
-                //    var dist = $(this).find('td:nth-child(4)').text();
-                //    var author = $(this).find('td:nth-child(5)').text();
-                //    $("#module_results").fadeOut(200, function() {
-                //        showPod(module);
-                //    });
                 //});
 
                 MetacpanController = new Metacpan();
@@ -181,6 +145,8 @@
                 ModuleResultsView.render();
                 ModuleDetailsView = new ModuleDetails();
                 ModuleDetailsView.render();
+                AuthorResultsView = new AuthorResults();
+                AuthorResultsView.render();
                 Backbone.history.start();
 
             });

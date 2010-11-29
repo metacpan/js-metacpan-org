@@ -195,7 +195,7 @@ var SearchBox = Backbone.View.extend({
     el: $("#search_box"),
 
     initialize: function() {
-        _.bindAll(this, [ "render", "updateQuery" ]);
+        _.bindAll(this, [ "render", "updateQuery", "searchType" ]);
     },
 
     render: function() {
@@ -207,18 +207,61 @@ var SearchBox = Backbone.View.extend({
         $("#search_input").keypress(function(e) {
             if (e.which == 13 ) {
                 e.preventDefault;
-                MetacpanController.moduleSearch($(this).val());
+                MetacpanController.search($("input[name='search_type']:checked").val(), $(this).val());
             }
         });
 
         $("#search_button").button().click(function() {
-            MetacpanController.moduleSearch($("#search_input").val());
+            MetacpanController.search($("input[name='search_type']:checked").val(), $("#search_input").val());
         });
         $("#search_type").buttonset();
     },
 
     updateQuery: function(query) {
         $("#search_input").val(query);
+    },
+
+    searchType: function(type) {
+        $("#type_" + type).attr('checked', true);
+        $("#type_" + type).button('refresh');
     }
+
+});
+
+var AuthorResults = Backbone.View.extend({
+
+    id: "author_results",
+
+    tagName: "div",
+
+    className: "metacpanView",
+
+    el: $("#author_results"),
+
+    initialize: function() {
+        _.bindAll(this, [ "render", "show", "hide" ]);
+    },
+
+    render: function() {
+        //$(this.el).append(ich.resultsTable({ id: "author_results_table" }));
+    },
+
+    // fades the view in
+    show: function(callback) {
+        $(this.el).fadeIn(200, function() {
+            if (typeof(callback) != 'undefined' ) {
+                callback();
+            }
+        });
+    },
+
+    // fades the view out
+    hide: function(callback) {
+        $(this.el).fadeOut(200, function() {
+            if (typeof(callback) != 'undefined' ) {
+                callback();
+            }
+        });
+    },
 
 });
