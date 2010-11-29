@@ -16,6 +16,8 @@ var Metacpan = Backbone.Controller.extend({
         debug("Type :  " + type);
         debug("Query:  " + query);
 
+        document.title = 'Search results for: ' + query + ' - search.metacpan.org';
+
         this.hideViews();
 
         SearchBoxView.searchType(type);
@@ -41,6 +43,8 @@ var Metacpan = Backbone.Controller.extend({
     showpod: function(query) {
         debug("Action: showpod");
         debug("Query:  " + query);
+
+        document.title = query + ' - search.metacpan.org';
 
         this.hideViews();
 
