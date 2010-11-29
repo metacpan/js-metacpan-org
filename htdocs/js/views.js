@@ -180,3 +180,40 @@ var ModuleDetails = Backbone.View.extend({
     }
 
 });
+
+var SearchBox = Backbone.View.extend({
+
+    id: "search_box",
+
+    tagName: "div",
+
+    el: $("#search_box"),
+
+    initialize: function() {
+        _.bindAll(this, [ "render", "updateQuery" ]);
+    },
+
+    render: function() {
+        $(this.el).append(ich.searchBox());
+
+        // initializes the theme switcher
+        $('#switcher').themeswitcher();
+
+        $("#search_input").keypress(function(e) {
+            if (e.which == 13 ) {
+                e.preventDefault;
+                MetacpanController.moduleSearch($(this).val());
+            }
+        });
+
+        $("#search_button").button().click(function() {
+            MetacpanController.moduleSearch($("#search_input").val());
+        });
+        $("#search_type").buttonset();
+    },
+
+    updateQuery: function(query) {
+        $("#search_input").val(query);
+    }
+
+});

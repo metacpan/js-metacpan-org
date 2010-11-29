@@ -24,29 +24,11 @@
 
         <div id="main_container">
             <a href="http://search.metacpan.org"><img src="/images/metacpan_logo.png" alt="metacpan" style="position: absolute; left: 0px; width: 113px; height: 64px; border: none;" /></a>
-            <div id="search_container">
-                <span style="position: relative;">
-                    <img id="search_loader" src="/images/loader.gif" alt="" style="position: absolute; top: -3px; left: -25px; width: 20px; height: 20px; display: none;" />
-                    <input id="search_input" type="text" class=".ui-widget" />
-                    <button id="search_button">Search</button>
-                </span>
-                <div style="width: 700px; height: 45px; margin: 5px auto 0px 215px;">
-                    <div id="search_type" style="float: left;">
-                        <input type="radio" id="type_module" name="search_type" /><label for="type_module">Module</label>
-                        <!--<input type="radio" id="type_dist" name="search_type" /><label for="type_dist">Distribution</label>-->
-                        <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
-                    </div>
-                    <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
-                </div>
-            </div>
+            <div id="search_box"></div>
             <div id="module_results" class="metacpanView"></div>
             <div id="module_details" class="metacpanView"></div>
-            <div id="distrubution_container" style="position: relative; display: none;">
-                
-            </div>
-            <div id="author_container" style="position: relative; display: none;">
-                
-            </div>
+            <div id="distrubution_container" class="metacpanView"> </div>
+            <div id="author_container" class="metacpanView"></div>
         </div>
         <div id="footer_spacer">&nbsp;</div>
         <div id="footer">
@@ -93,6 +75,21 @@
             <div id="pod_contents" style="width: 100%; margin-top: 10px; display: none;"></div>
             <div id="source_contents" style="width: 100%; display: none; margin-top: 10px;"></div>
         </script>
+        <script id="searchBox" type="text/html">
+            <span style="position: relative;">
+                <img id="search_loader" src="/images/loader.gif" alt="" style="position: absolute; top: -3px; left: -25px; width: 20px; height: 20px; display: none;" />
+                <input id="search_input" type="text" class=".ui-widget" />
+                <button id="search_button">Search</button>
+            </span>
+            <div style="width: 700px; height: 45px; margin: 5px auto 0px 215px;">
+                <div id="search_type" style="float: left;">
+                    <input type="radio" id="type_module" name="search_type" /><label for="type_module">Module</label>
+                    <!--<input type="radio" id="type_dist" name="search_type" /><label for="type_dist">Distribution</label>-->
+                    <input type="radio" id="type_author" name="search_type" /><label for="type_author">Author</label>
+                </div>
+                <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
+            </div>
+        </script>
         <!--End of Template definitions-->
 
         <script type="text/javascript">
@@ -113,24 +110,9 @@
                     $.cookie('jquery-ui-theme', 'metaCPAN');
                 }
 
-                // initializes the theme switcher
-                $('#switcher').themeswitcher();
-
-                $("#search_input").keypress(function(e) {
-                    if (e.which == 13 ) {
-                        e.preventDefault;
-                        MetacpanController.moduleSearch($(this).val());
-                    }
-                });
-
                 $("#main_content a").click(function(e) {
                     e.preventDefault;
                 });
-
-                $("#search_button").button().click(function() {
-                    MetacpanController.moduleSearch($("#search_input").val());
-                });
-                $("#search_type").buttonset();
 
                 $(".toggle_pod_source").button().click(function() {
                     if ( $("#pod_contents:visible").length ) {
@@ -188,6 +170,8 @@
                 //});
 
                 MetacpanController = new Metacpan();
+                SearchBoxView = new SearchBox();
+                SearchBoxView.render();
                 ModuleResultsView = new ModuleResults();
                 ModuleResultsView.render();
                 ModuleDetailsView = new ModuleDetails();

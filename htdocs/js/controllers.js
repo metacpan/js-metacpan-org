@@ -41,9 +41,7 @@ var Metacpan = Backbone.Controller.extend({
             url:  'http://api.metacpan.org/module/' + query,
             dataType: 'json',
             beforeSend: function() {
-                $("#results_container").fadeOut(200, function() {
-                    $("#module_container").fadeIn(200);
-                });
+                ModuleDetailsView.show();
             },
             success: function(res) {
                 MetacpanController.showPod(res._source.name);
@@ -107,6 +105,7 @@ var Metacpan = Backbone.Controller.extend({
     moduleSearch: function(module) {
         if ( module !== '') {
             this.saveLocation("/search/module/" + module);
+            SearchBoxView.updateQuery(module);
             $.ajax({
                 type: 'get',
                 //type: 'post',
