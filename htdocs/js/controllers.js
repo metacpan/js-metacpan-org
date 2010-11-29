@@ -4,7 +4,7 @@ var Metacpan = Backbone.Controller.extend({
 
     routes: {
         "/search/:type/:query":     "search",
-        "/sowpod/:query":           "showpod"
+        "/showpod/:query":          "showpod"
     },
 
     initialize: function() {
