@@ -135,16 +135,15 @@ var ModuleDetails = Backbone.View.extend({
                 podHTML: pod._source.pod,
                 release_date: module._source.release_date.substr(0,10)
             }));
-        });
-        $("#pod_html a.moduleLink").map(function() {
-            $(this).attr('href', '/#/showpod/' + $(this).attr('href'));
-        });
-        $("#pod_html pre").each(function(i, e) {
-            $(this).addClass("language-perl");
-            $(this).wrapInner('<code />');
-            hljs.highlightBlock(e, '    ');
-        });
-        $("#module_view_contents").fadeIn(200);
+            $("#pod_html a.moduleLink").map(function() {
+                $(this).attr('href', '/#/showpod/' + $(this).attr('href'));
+            });
+            $("#pod_html pre").each(function(i, e) {
+                $(this).addClass("language-perl");
+                $(this).wrapInner('<code />');
+                hljs.highlightBlock(e, '    ');
+            });
+        }).fadeIn(200);
     },
 
     noPod: function(message) {
