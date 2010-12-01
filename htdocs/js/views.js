@@ -165,7 +165,7 @@ var SearchBox = Backbone.View.extend({
     el: $("#search_box"),
 
     initialize: function() {
-        _.bindAll(this, [ "render", "updateQuery", "searchType" ]);
+        _.bindAll(this, [ "render", "updateQuery", "searchType", "loader" ]);
     },
 
     render: function() {
@@ -194,6 +194,26 @@ var SearchBox = Backbone.View.extend({
     searchType: function(type) {
         $("#type_" + type).attr('checked', true);
         $("#type_" + type).button('refresh');
+    },
+    
+    loader: function(action) {
+        var loader = $("#search_loader");
+
+        switch(action) {
+
+            case 'show':
+                loader.fadeIn(200);
+                break;
+
+            case 'hide':
+                loader.fadeOut(200);
+                break;
+
+            default:
+                debug('Invalid action passed to SearchBoxView.loader');
+
+        }
+
     }
 
 });
@@ -220,11 +240,12 @@ var AuthorResults = Backbone.View.extend({
     show: function() {
         $(".metacpanView").fadeOut(200);
         setTimeout(function() { $("#author_results").fadeIn(200); }, 200);
-    },
+    }
 
 });
 
 var AuthorDetails = Backbone.View.extend({
+
     id: "author_details",
 
     tagName: "div",
@@ -246,14 +267,13 @@ var AuthorDetails = Backbone.View.extend({
     },
 
     showAuthor: function(author) {
-        debug(author);
         $("#author_view_contents").fadeOut(200, function() {
             $(this).html(ich.authorDetails({
                 pauseid: author._source.pauseid,
                 authorDir: author._source.author_dir,
                 authorName: author._source.name,
                 email: author._source.email,
-                githubName: author._source.github_name,
+                githubName: author._source.github_username,
                 gravatar: author._source.gravatar_url,
                 irc_nick: author._source.irc_nick,
                 linkedinProfile: author._source.linkedin_public_profile,
@@ -265,7 +285,6 @@ var AuthorDetails = Backbone.View.extend({
     },
 
     noAuthor: function(message) {
-        debug(message);
         $("#author_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);
     },
 
@@ -274,4 +293,5 @@ var AuthorDetails = Backbone.View.extend({
         $(".metacpanView").fadeOut(200);
         setTimeout(function() { $("#author_details").fadeIn(200); }, 200);
     }
+
 });

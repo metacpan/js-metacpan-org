@@ -3,9 +3,9 @@
 var Metacpan = Backbone.Controller.extend({
 
     routes: {
+        "/author/:query":           "showauthor",
         "/search/:type/:query":     "search",
-        "/showpod/:query":          "showpod",
-        "/author/:query":           "showauthor"
+        "/showpod/:query":          "showpod"
     },
 
     initialize: function() {
@@ -40,13 +40,13 @@ var Metacpan = Backbone.Controller.extend({
                     //},
                     beforeSend: function() {
                         $(".metacpanView").fadeOut(200);
-                        $("#search_loader").fadeIn(200);
+                        SearchBoxView.loader('show');
                     },
                     success: function(res) {
                         debug(res);
                         $("#module_results_table").dataTable().fnClearTable();
                         ModuleResultsView.update(res, true);
-                        $("#search_loader").fadeOut(200);
+                        SearchBoxView.loader('hide');
                     },
                     error: function(xhr,status,error) {
                         debug(xhr);
@@ -54,7 +54,7 @@ var Metacpan = Backbone.Controller.extend({
                         debug(error);
                         $("#module_results_table").dataTable().fnClearTable()
                         ModuleResultsView.show();
-                        $("#search_loader").fadeOut(200);
+                        SearchBoxView.loader('hide');
                     }
                 });
                 break;
@@ -76,6 +76,8 @@ var Metacpan = Backbone.Controller.extend({
         debug("Query:  " + query);
 
         document.title = query + ' - search.metacpan.org';
+
+        SearchBoxView.searchType('module');
 
         $.ajax({
             url:  'http://api.metacpan.org/module/' + query,
@@ -131,6 +133,8 @@ var Metacpan = Backbone.Controller.extend({
 
         document.title = author + ' - search.metacpan.org';
 
+        SearchBoxView.searchType('author');
+
         $.ajax({
             url:  'http://api.metacpan.org/author/' + author,
             beforeSend: function() {
@@ -148,7 +152,6 @@ var Metacpan = Backbone.Controller.extend({
                 AuthorDetailsView.noAuthor("no author info found for PAUSEID << " + author + " >>");
             }
         }); 
-
 
     },
 
