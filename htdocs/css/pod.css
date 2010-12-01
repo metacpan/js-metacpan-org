@@ -39,7 +39,7 @@
 .pod h1      {
   background: transparent;
   color: #681818;
-  font-size: large;
+  font-size: 1.7em;
 }
 
 .pod h1 a { text-decoration: none; }
@@ -50,20 +50,20 @@
 .pod h2      {
   background: transparent;
   color: #681818;
-  font-size: medium;
+  font-size: 1.5em;
 }
 
 .pod h3      {
   background: transparent;
   color: #681818;
-  font-size: medium;
+  font-size: 1.3em;
   font-style: italic;
 }
 
 .pod h4      {
   background: transparent;
   color: #681818;
-  font-size: medium;
+  font-size: 1.1em;
   font-weight: normal;
 }
 
@@ -83,4 +83,41 @@
 
 .pod #index ul  {
     padding-left: 1.5em;
+}
+
+#module_details_header .module_name {
+    float: left;
+    width: 100%;
+    font-size: 1.8em;
+    color: #681818;
+}
+
+#module_details_header .author_info {
+    position: relative;
+    float: left;
+    width: 250px;
+    font-size: 1.2em;
+    color: #654b24;
+    text-align: right;
+}
+
+#module_details_header .gravatar {
+    position: absolute;
+    bottom: -105px;
+    right: 0px;
+    border: 0;
+}
+
+#module_details_header .module_info {
+    float: left;
+    width: 650px;
+    font-size: 1em;
+    color: #654b24;
+}
+#module_details_header .separator {
+    float: left;
+    width: 100%;
+    height: 4px;
+    margin: 5px 0;
+    background-color: #6e4f1c;
 }

@@ -27,17 +27,18 @@
             <div id="search_box"></div>
             <div id="module_results" class="metacpanView"></div>
             <div id="module_details" class="metacpanView"></div>
-            <div id="distrubution_results" class="metacpanView"> </div>
+            <div id="distrubution_results" class="metacpanView"></div>
             <div id="author_results" class="metacpanView">
-                <div id="no_pod" class="ui-widget" style="width: 300px; margin: auto;">
+                <div class="ui-widget" style="width: 300px; margin: auto;">
                     <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
                         <p style="text-align: center;"><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span> 
                         <strong>Author search not yet implemented.</strong></p>
                     </div>
                 </div>
             </div>
+            <div id="author_details" class="metacpanView"></div>
         </div>
-        <div id="footer_spacer">&nbsp;</div>
+        <div class="spacer">&nbsp;</div>
         <div id="footer">
             <p>
                 <img src="/images/beta.png" alt="BETA" style="height: 35px; margin-right: 10px;"/>
@@ -55,7 +56,6 @@
         <script type="text/javascript" src="/js/models.js"></script>
         <script type="text/javascript" src="/js/views.js"></script>
         <script type="text/javascript" src="/js/controllers.js"></script>
-        <script type="text/javascript" src="/js/templates.js"></script>
         <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
@@ -65,21 +65,11 @@
 
         <!--Template definitions-->
         <script id="resultsTable" type="text/html">
-            <table id="{{id}}" cellpadding="0" cellspacing="0" border="0" class="display"></table>
+            <table id="{{id}}" cellpadding="0" cellspacing="0" border="0" class="results_table"></table>
         </script>
         <script id="moduleDetailsView"  type="text/html">
-            <div style="width: 100%; height: 3.5em;">
-                <div style="float: left;"><button class="back_to_results">Back to search results...</button></div>
-                <div style="float: left; display: none;"><button class="toggle_pod_source">Toggle Pod/Source</button></div>
-            </div>
-            <div id="pod_loader" style="position: absolute; top: 20px; float: left; width: 100%; text-align: center;"><img src="/images/loader_wide.gif" style="width: 120px; height: 40px;" alt="Loading Pod..." /></div>
-            <div id="no_pod" class="ui-widget" style="width: 50%; margin: auto; display: none;">
-                <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
-                    <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
-                    <strong>Error:</strong> <span id="pod_error"></span></p>
-                </div>
-            </div>
-            <div id="pod_contents" style="width: 100%; margin-top: 10px; display: none;"></div>
+            {{>backButtonPart}}
+            <div id="module_view_contents">{{>loaderPart}}</div>
             <div id="source_contents" style="width: 100%; display: none; margin-top: 10px;"></div>
         </script>
         <script id="searchBox" type="text/html">
@@ -95,6 +85,61 @@
                     <input type="radio" id="type_author" name="search_type" value="author" /><label for="type_author">Author</label>
                 </div>
                 <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
+            </div>
+        </script>
+        <script id="podView" type="text/html">
+            <div id="module_details_header" class="pod">
+                <div class="module_name">{{name}}</div>
+                <div class="module_info">{{distvname}} &mdash; {{release_date}}</div>
+                <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" /></a></div>
+                <div class="separator">&nbsp;</div>
+            </div>
+            <div id="pod_html" class="pod" style="float: left;">{{{podHTML}}}</div>
+            <div class="spacer" style="float: left;"></div>
+        </script>
+        <script id="authorView" type="text/html">
+            {{>backButtonPart}}
+            <div id="author_view_contents">{{>loaderPart}}</div>
+        </script>
+        <script id="authorDetails" type="text/html">
+            <div>
+                pauseid:  {{pauseid}}<br />
+                Author Name: {{authorName}}<br />
+                Author Dir: {{authorDir}}<br />
+                Email: {{email}}<br />
+                Github Name: {{githubName}}<br />
+                Gravatar: {{gravatar}}<br />
+                IRC Nickname: {{irc_nick}}<br />
+                Linkedin Profile: {{linkedinProfile}}<br />
+                Perl Monks Name: {{perlmonksName}}<br />
+                Stack Oveflow Profile: {{stackoverflowProfile}}<br />
+                Twitter Name: {{twitterName}}<br />
+            </div>
+        </script>
+        <script id="error" type="text/html">
+            {{>errorPart}}
+        </script>
+        <script id="loader" type="text/html">
+            {{>loaderPart}}
+        </script>
+        <script id="backButton" type="text/html">
+            {{>backButtonPart}}
+        </script>
+        <!-- Template Partials -->
+        <script id="loaderPart" class="partial" type="text/html">
+            <div class="loader"><img src="/images/loader_wide.gif" style="width: 120px; height: 40px;" alt="Loading..." /></div>
+        </script>
+        <script id="backButtonPart" class="partial" type="text/html">
+            <div style="width: 100%; height: 3.5em;">
+                <div style="float: left;"><button class="back_button">Back...</button></div>
+            </div>
+        </script>
+        <script id="errorPart" class="partial" type="text/html">
+            <div class="error" class="ui-widget" style="width: 50%; margin: auto; display: none;">
+                <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
+                    <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
+                    <strong>Error:</strong> <span id="pod_error">{{message}}</span></p>
+                </div>
             </div>
         </script>
         <!--End of Template definitions-->
@@ -126,18 +171,7 @@
                     e.preventDefault;
                 });
 
-                //$(".toggle_pod_source").button().click(function() {
-                //    if ( $("#pod_contents:visible").length ) {
-                //        $("#pod_contents").fadeOut(200, function() {
-                //            $("#source_contents").fadeIn(200);
-                //        });
-                //    } else {
-                //        $("#source_contents").fadeOut(200, function() {
-                //            $("#pod_contents").fadeIn(200);
-                //        });
-                //    }
-                //});
-
+                // initialize Backbone code
                 MetacpanController = new Metacpan();
                 SearchBoxView = new SearchBox();
                 SearchBoxView.render();
@@ -147,6 +181,9 @@
                 ModuleDetailsView.render();
                 AuthorResultsView = new AuthorResults();
                 AuthorResultsView.render();
+                AuthorDetailsView = new AuthorDetails();
+                AuthorDetailsView.render();
+                MetacpanController.enableBackButtons();
                 Backbone.history.start();
 
             });

@@ -4,11 +4,12 @@ var Metacpan = Backbone.Controller.extend({
 
     routes: {
         "/search/:type/:query":     "search",
-        "/showpod/:query":          "showpod"
+        "/showpod/:query":          "showpod",
+        "/author/:query":           "showauthor"
     },
 
     initialize: function() {
-        _.bindAll(this, [ "hideViews", "showPod", "moduleSearch" ]);
+        _.bindAll(this, [ "enableBackButtons" ]);
     },
     
     search: function(type, query) {
@@ -18,14 +19,44 @@ var Metacpan = Backbone.Controller.extend({
 
         document.title = 'Search results for: ' + query + ' - search.metacpan.org';
 
-        this.hideViews();
-
         SearchBoxView.searchType(type);
 
         switch(type) {
         
             case 'module':
-                this.moduleSearch(query);
+                this.saveLocation("/search/module/" +query);
+                SearchBoxView.updateQuery(query);
+                $.ajax({
+                    //type: 'post',
+                    url: 'http://api.metacpan.org/module/_search',
+                    data: { 'q': 'name: "' + query + '"', size: 1000 },
+                    //data: '{ "size": "500", "query": { "term": { "name": "' + module.toLowerCase() + '" } } }',
+                    //data: {
+                    //    "query": {
+                    //        "term": {
+                    //            "name": '"' + module + '"'
+                    //        }
+                    //    }
+                    //},
+                    beforeSend: function() {
+                        $(".metacpanView").fadeOut(200);
+                        $("#search_loader").fadeIn(200);
+                    },
+                    success: function(res) {
+                        debug(res);
+                        $("#module_results_table").dataTable().fnClearTable();
+                        ModuleResultsView.update(res, true);
+                        $("#search_loader").fadeOut(200);
+                    },
+                    error: function(xhr,status,error) {
+                        debug(xhr);
+                        debug(status);
+                        debug(error);
+                        $("#module_results_table").dataTable().fnClearTable()
+                        ModuleResultsView.show();
+                        $("#search_loader").fadeOut(200);
+                    }
+                });
                 break;
             case 'author':
                 //this.authorSearch(query);
@@ -36,8 +67,8 @@ var Metacpan = Backbone.Controller.extend({
             default:
                 debug('"' + type + '" is not a valid search type.' );
         
-        }
-        
+        } 
+
     },
 
     showpod: function(query) {
@@ -46,111 +77,85 @@ var Metacpan = Backbone.Controller.extend({
 
         document.title = query + ' - search.metacpan.org';
 
-        this.hideViews();
-
         $.ajax({
             url:  'http://api.metacpan.org/module/' + query,
             beforeSend: function() {
-                ModuleDetailsView.resetPod();
+                ModuleDetailsView.reset();
                 ModuleDetailsView.show();
             },
             success: function(res) {
-                MetacpanController.showPod(res._source.name);
+                debug(res);
+                MetacpanController.saveLocation("/showpod/" + res._source.name);
+                $.ajax({
+                    url: 'http://api.metacpan.org/pod/' + res._source.name,
+                    success: function(pod) {
+                        debug(pod);
+                        if ( pod.hasOwnProperty('_source') && pod._source.hasOwnProperty('pod') ) {
+                            $.ajax({
+                                url: 'http://api.metacpan.org/author/' + res._source.author,
+                                success: function(author) {
+                                    ModuleDetailsView.updatePod(res, pod, author);
+                                },
+                                error: function() {
+                                    ModuleDetailsView.updatePod(module, pod);
+                                }
+                            });
+                        } else {
+                            ModuleDetailsView.noPod("no pod could be found for << " + res._source.name + " >>");
+                        }
+                    },
+                    error: function(xhr,status,error) {
+                        debug(xhr);
+                        debug(status);
+                        debug(error);
+                        ModuleDetailsView.noPod("no pod could be found for << " + res._source.name + " >>");
+                    }
+                });
             },
             error: function(xhr, error, status) {
                 debug(xhr);
                 debug(status);
                 debug(error);
-                ModuleDetailsView.noPod("no module named << " + query + " >> could be found.");
+                MetacpanController.saveLocation("/showpod/" + query);
+                ModuleDetailsView.noPod("no module found for << " + query + " >>");
             }
         });
 
     },
-    
-    showPod: function(module) {
-        this.saveLocation("/showpod/" + module);
+
+    showauthor: function(query) {
+        debug("Action: showauthor");
+        debug("Query:  " + query);
+
+        document.title = query + ' - search.metacpan.org';
+
         $.ajax({
-            url: 'http://api.metacpan.org/pod/' + module,
+            url:  'http://api.metacpan.org/author/' + query,
             beforeSend: function() {
-                ModuleDetailsView.resetPod();
-                ModuleDetailsView.show();
+                AuthorDetailsView.reset();
+                AuthorDetailsView.show();
             },
             success: function(res) {
                 debug(res);
-                if ( res.hasOwnProperty('_source') && res._source.hasOwnProperty('pod') ) {
-                    var podHTML = res._source.pod;
-                    
-                    // /some interim formatting until we clean up the formatted
-                    // pod stored in ElasticSearch
-                    podHTML = podHTML.replace('<html>', '');
-                    podHTML = podHTML.replace('</html>', '');
-                    podHTML = podHTML.replace('<head>', '');
-                    podHTML = podHTML.replace('</head>', '');
-                    podHTML = podHTML.replace('<body>', '');
-                    podHTML = podHTML.replace('</body>', '');
-                    podHTML = podHTML.replace('<title>', '');
-                    podHTML = podHTML.replace('</title>', '');
-                    podHTML = podHTML.replace(/<meta.* \/>/, '');
-                    podHTML = podHTML.replace(/<link.* \/>/, '');
-                    podHTML = podHTML.replace('<div style="height:50px">&nbsp;</div>', '');
-
-                    ModuleDetailsView.updatePod(podHTML);
-
-                } else {
-                    ModuleDetailsView.noPod("no pod could be found.");
-                }
+                AuthorDetailsView.showAuthor(res);
             },
-            error: function(xhr,status,error) {
+            error: function(xhr, error, status) {
                 debug(xhr);
                 debug(status);
                 debug(error);
-                ModuleDetailsView.noPod("no pod could be found.");
+                AuthorView.noAuthor("no PAUSEID found for << " + query + " >>");
             }
-        });
+        }); 
+
+
     },
 
-    moduleSearch: function(module) {
-        if ( module !== '') {
-            this.saveLocation("/search/module/" + module);
-            SearchBoxView.updateQuery(module);
-            $.ajax({
-                //type: 'post',
-                url: 'http://api.metacpan.org/module/_search',
-                data: { 'q': 'name: "' + module + '"', size: 1000 },
-                //data: '{ "size": "500", "query": { "term": { "name": "' + module.toLowerCase() + '" } } }',
-                //data: {
-                //    "query": {
-                //        "term": {
-                //            "name": '"' + module + '"'
-                //        }
-                //    }
-                //},
-                beforeSend: function() {
-                    MetacpanController.hideViews($("#module_results_table").dataTable().fnClearTable());
-                    ModuleDetailsView.resetPod();
-                    $("#search_loader").fadeIn(200);
-                },
-                success: function(res) {
-                    debug(res);
-                    ModuleResultsView.update(res, true);
-                    $("#search_loader").fadeOut(200);
-                },
-                error: function(xhr,status,error) {
-                    debug(xhr);
-                    debug(status);
-                    debug(error);
-                    ModuleResultsView.show();
-                    $("#search_loader").fadeOut(200);
-                }
-            });
-        }  
-    },
-
-    hideViews: function(callback) {
-        $(".metacpanView").fadeOut(200, function() {
-            if (typeof(callback) != 'undefined' ) {
-                callback();
-            }
+    enableBackButtons: function() {
+        $(".back_button").button({
+            icons: { primary: 'ui-icon-arrowreturnthick-1-w' },
+            text: false
+        }).click(function() {
+            history.back()
         });
     }
 

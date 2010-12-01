@@ -50,9 +50,9 @@ a:hover {
     background-color: #FFFFFF;
 }
 
-#footer_spacer {
+.spacer {
     width: 900px;
-    height: 60px;
+    height: 80px;
     margin: 0 auto;
 }
 
@@ -69,23 +69,29 @@ a:hover {
     color: #140f06;
 }
 
-#module_results_table a {
+.results_table {
+    margin: 0 auto;
+    clear: both;
+    width: 100%;
+}
+
+.results_table a {
     color: #b83400;
     font-size: 1em;
     text-decoration: none;
 }
 
-#module_results_table th {
+.results_table th {
     text-align: left;
     font-weight: bold;
     cursor: pointer;
 }
 
-#module_results_table tr {
+.results_table tr {
     cursor: pointer;
 }
 
-#module_results_table td, #module_results_table th {
+.results_table td, .results_table th {
     height: 20px;
     padding: 5px;
     line-height: 20px;
@@ -93,13 +99,7 @@ a:hover {
     overflow: hidden;
 }
 
-#module_results_table {
-    margin: 0 auto;
-    clear: both;
-    width: 100%;
-}
-
-#module_results_table.display td.center {
+.results_table td.center {
 	text-align: center;
 }
 
@@ -218,4 +218,12 @@ a:hover {
 .metacpanView {
     display: none;
     position: relative;
+}
+
+.loader {
+    position: absolute;
+    top: 20px;
+    float: left;
+    width: 100%;
+    text-align: center;
 }
