@@ -127,10 +127,12 @@ var Metacpan = Backbone.Controller.extend({
         debug("Action: showauthor");
         debug("Query:  " + query);
 
-        document.title = query + ' - search.metacpan.org';
+        var author = query.toUpperCase();
+
+        document.title = author + ' - search.metacpan.org';
 
         $.ajax({
-            url:  'http://api.metacpan.org/author/' + query,
+            url:  'http://api.metacpan.org/author/' + author,
             beforeSend: function() {
                 AuthorDetailsView.reset();
                 AuthorDetailsView.show();
@@ -143,7 +145,7 @@ var Metacpan = Backbone.Controller.extend({
                 debug(xhr);
                 debug(status);
                 debug(error);
-                AuthorView.noAuthor("no PAUSEID found for << " + query + " >>");
+                AuthorDetailsView.noAuthor("no author info found for PAUSEID << " + author + " >>");
             }
         }); 
 

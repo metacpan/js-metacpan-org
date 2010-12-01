@@ -266,6 +266,7 @@ var AuthorDetails = Backbone.View.extend({
     },
 
     noAuthor: function(message) {
+        debug(message);
         $("#author_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);
     },
 
