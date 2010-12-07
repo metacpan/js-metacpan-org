@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://opengraphprotocol.org/schema/"
+    xmlns:fb="http://www.facebook.com/2008/fbml"    
+    xml:lang="en" lang="en"
+>-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
     <head>
 
         <title>search.metacpan.org</title>
@@ -10,14 +15,21 @@
         <meta name="keywords" content="Perl,Perl Module,CPAN,Search CPAN" />
         <meta name="author" content="The metacpan.org Team" />
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<!--        <meta property="og:title" content="Metacpan Search Home" />
+        <meta property="og:site_name" content="search.metacpan.org" />
+        <meta property="og:url" content="http://search.metacpan.org" />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content="http://search.metacpan.org/images/metacpan_logo.png" />
+        <meta property="og:description" content="An AJAX based search site for use with http://api.metacpan.org" />
+        <meta property="fb:admins" content="ioncache" />-->
 
-        <link rel="shortcut icon" href="/images/favicon.ico" />
+        <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
 
         <link rel="stylesheet" type="text/css" media="screen" href="/css/screen.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/pod.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="http://jqueryui.com/themes/base/ui.all.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="http://yandex.st/highlightjs/5.15/styles/vs.min.css">
-        
+        <link rel="stylesheet" type="text/css" media="screen" href="http://yandex.st/highlightjs/5.15/styles/vs.min.css" />
+
     </head>
 
     <body>
@@ -27,7 +39,7 @@
             <div id="search_box"></div>
             <div id="module_results" class="metacpanView"></div>
             <div id="module_details" class="metacpanView"></div>
-            <div id="distrubution_results" class="metacpanView"></div>
+            <div id="distribution_results" class="metacpanView"></div>
             <div id="author_results" class="metacpanView">
                 <div class="ui-widget" style="width: 300px; margin: auto;">
                     <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
@@ -41,10 +53,11 @@
         <div id="footer">
             <p>
                 <img src="/images/beta.png" alt="BETA" style="height: 35px; margin-right: 10px;"/>
-                <span style="position: relative; top: -10px;">This site is currently in beta.  View the Github repositories for the <a href="https://github.com/CPAN-API/cpan-api" target="_blank">API</a> or this <a href="https://github.com/CPAN-API/search-metacpan-org" target="_blank">Search</a> site.  Get in touch with us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group</a>.</span>
+                <span style="position: relative; top: -10px;">This site is currently in beta.  View the Github repositories for the <a href="https://github.com/CPAN-API/cpan-api" >API</a> or this <a href="https://github.com/CPAN-API/search-metacpan-org" target="_blank">Search</a> site.  Get in touch with us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group</a>.</span>
             </p>
         </div>
-        
+
+        <!-- Scripts, Templates, Etc. -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/js/ICanHaz.min.js"></script>
@@ -60,16 +73,18 @@
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
         <script type="text/javascript" src="/js/jquery.ba-bbq.min.js"></script>
-        <script src="http://yandex.st/highlightjs/5.15/highlight.min.js"></script>
+        <script type="text/javascript" src="http://yandex.st/highlightjs/5.15/highlight.min.js"></script>
+<!--        <script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>-->
 
         <!--Template Definitions-->
         <script id="resultsTable" type="text/html">
             <table id="{{id}}" cellpadding="0" cellspacing="0" border="0" class="results_table"></table>
+            <div class="spacer">&nbsp;</div>
         </script>
         <script id="moduleDetailsView"  type="text/html">
             {{>backButtonPart}}
-            <div id="module_view_contents">{{>loaderPart}}</div>
-            <div id="source_contents" style="width: 100%; display: none; margin-top: 10px;"></div>
+            <div id="module_view_contents"></div>
+            <div id="module_view_loader">{{>loaderPart}}</div>
             <div class="spacer">&nbsp;</div>
         </script>
         <script id="searchBox" type="text/html">
@@ -90,8 +105,9 @@
         <script id="podView" type="text/html">
             <div id="module_details_header" class="pod">
                 <div class="module_name">{{name}}</div>
+                <!--<div class="fb_box">{{{fbLike}}}</div>-->
                 <div class="module_info">{{distvname}} &mdash; {{release_date}}</div>
-                <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" /></a></div>
+                <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" alt="" /></a></div>
                 <div class="separator">&nbsp;</div>
             </div>
             <div id="pod_html" class="pod" style="float: left;">{{{podHTML}}}</div>
@@ -99,7 +115,8 @@
         </script>
         <script id="authorView" type="text/html">
             {{>backButtonPart}}
-            <div id="author_view_contents">{{>loaderPart}}</div>
+            <div id="author_view_contents"></div>
+            <div id="author_view_loader">{{>loaderPart}}</div>
         </script>
         <script id="authorDetails" type="text/html">
             <div>
@@ -136,41 +153,20 @@
             </div>
         </script>
         <script id="errorPart" class="partial" type="text/html">
-            <div class="error" class="ui-widget" style="width: 50%; margin: auto;">
+            <div class="error ui-widget" style="width: 50%; margin: auto;">
                 <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
                     <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
                     <strong>Error:</strong> <span id="pod_error">{{message}}</span></p>
                 </div>
             </div>
         </script>
+        <script id="fb_button" class="partial" type="text/html">
+            
+        </script>
         <!--End of Template Definitions-->
 
         <script type="text/javascript">
-
             $(document).ready(function() {
-
-                $.ajaxSetup({
-                    cache: false,
-                    dataType: 'json'
-                });
-
-                // some global defaults for the DataTable plugin
-                $.extend($.fn.dataTableExt.oJUIClasses, {
-                    sStripOdd: 'ui-state-active row_overrides',
-                    sStripEven: 'ui-state-default row_overrides'
-                });
-
-                // sets up some persistant cookie variables
-                if ( $.cookie('tableDisplayLength') == '' || Number($.cookie('tableDisplayLength')) < 10 ) {
-                    $.cookie('tableDisplayLength', 10);
-                }
-                if ( $.cookie('jquery-ui-theme') == '' || $.cookie('jquery-ui-theme') == null ) {
-                    $.cookie('jquery-ui-theme', 'metaCPAN');
-                }
-
-                $("#main_content a").click(function(e) {
-                    e.preventDefault;
-                });
 
                 // initialize Backbone code
                 MetacpanController = new Metacpan();

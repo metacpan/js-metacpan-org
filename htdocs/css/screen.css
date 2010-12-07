@@ -11,6 +11,10 @@
     color: #681818;
 }
 
+html {
+    overflow-y: scroll;
+}
+
 html, body {
 	height: 100%;
 }

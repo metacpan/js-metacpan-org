@@ -11,7 +11,7 @@ var ModuleResults = Backbone.View.extend({
     el: $("#module_results"),
 
     initialize: function() {
-        _.bindAll(this, [ "render", "show", "hide", "update" ]);
+        _.bindAll(this, [ "render", "show", "hide", "update", "current" ]);
     },
 
     events: {
@@ -21,7 +21,7 @@ var ModuleResults = Backbone.View.extend({
     },
 
     render: function() {
-        $(this.el).append(ich.resultsTable({ id: "module_results_table" }));
+        this.el.append(ich.resultsTable({ id: "module_results_table" }));
         
         $("#module_results_table").dataTable({
             aoColumns: [
@@ -30,7 +30,7 @@ var ModuleResults = Backbone.View.extend({
                 { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 68px;">Date</div>', sWidth: '68px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 187px;">Distribution</div>', sWidth: '187px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 126px;">Author</div>', sWidth: '126px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false, sType: 'numeric' }
+                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false }
             ],
             aaSorting: [[ 5, "desc" ]],
             bAutoWidth: false,
@@ -52,7 +52,7 @@ var ModuleResults = Backbone.View.extend({
 
     // shows the pod when clicking on a row
     showpod: function(row) {
-        window.location = '/#/showpod/' + $(row.currentTarget).find('td:first-child').text();
+        window.location = '/#/showpod/' + $(row.currentTarget).find('td:first-child div').attr('title');
     },
 
     // toggles row class when hovering
@@ -76,14 +76,23 @@ var ModuleResults = Backbone.View.extend({
                 '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 68px;">' + this._source.release_date.substr(0,10) + '</div>',
                 '<div class="cell_contents" title="' + this._source.distvname + '" style="width: 187px;">' + this._source.distvname + '</div>',
                 '<div class="cell_contents" title="' + this._source.author + '" style="width: 126px;">' + this._source.author + '</div>',
-                '<div class="cell_contents" title="' + this._score + '" style="width: 86px;">' + this._score + '</div>'
+                '<div class="cell_contents" title="' + this._score + '" style="width: 86px;">' + Number(this._score) + '</div>'
             ]);
         });
-        var test = $("#module_results_table").dataTable().fnAddData(rowData);
+        var temp = $("#module_results_table").dataTable().fnAddData(rowData);
 
         if (show) {
             this.show();
         }
+    },
+
+    currentModule: '',
+
+    current: function(module) {
+        if ( typeof(module) != 'undefined' ) {
+            this.currentModule = module;
+        }
+        return this.currentModule;
     }
 
 });
@@ -99,11 +108,11 @@ var ModuleDetails = Backbone.View.extend({
     el: $("#module_details"),
 
     initialize: function() {
-        _.bindAll(this, [ "render", "show", "hide", "updatePod", "noPod", "reset" ]);
+        _.bindAll(this, [ "render", "show", "hide", "updatePod", "noPod", "showPod", "current" ]);
     },
 
     render: function() {
-        $(this.el).append(ich.moduleDetailsView());
+        this.el.append(ich.moduleDetailsView());
         //$(".toggle_pod_source").button().click(function() {
         //    if ( $("#pod_contents:visible").length ) {
         //        $("#pod_contents").fadeOut(200, function() {
@@ -120,7 +129,12 @@ var ModuleDetails = Backbone.View.extend({
     // fades the view in
     show: function() {
         $(".metacpanView").fadeOut(200);
-        setTimeout(function() { $("#module_details").fadeIn(200); }, 200);
+        var fn = (function() {
+            $("#module_view_contents").hide();
+            $("#module_view_loader").show();
+            $("#module_details").fadeIn(200);
+        });
+        setTimeout(fn, 205);
     },
 
     updatePod: function(module, pod, author) {
@@ -130,11 +144,15 @@ var ModuleDetails = Backbone.View.extend({
                 authorName: author._source.name,
                 distvname: module._source.distvname,
                 email: author._source.email,
+                //fbLike: '<fb:like href="http://search.metacpan.org/#/showpod/' + encodeURIComponent(module._source.name) + '" show_faces="true" width="300" font="trebuchet ms"></fb:like>',
                 gravatar: author._source.gravatar_url,
                 name: module._source.name,
                 podHTML: pod._source.pod,
                 release_date: module._source.release_date.substr(0,10)
             }));
+            //$("meta[property=og:title]").attr("content", module._source.name);
+            //$("meta[property=og:url]").attr("content", 'http://search.metacpan.org/#/showpod/' + encodeURIComponent(module._source.name));
+            //FB.XFBML.parse($("div#fb_box").get(0));
             $("#pod_html a.moduleLink").map(function() {
                 $(this).attr('href', '/#/showpod/' + $(this).attr('href'));
             });
@@ -143,15 +161,29 @@ var ModuleDetails = Backbone.View.extend({
                 $(this).wrapInner('<code />');
                 hljs.highlightBlock(e, '    ');
             });
-        }).fadeIn(200);
+            $("#module_view_loader").hide();
+        }).fadeIn(205);
     },
 
     noPod: function(message) {
-        $("#module_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);
+        $("#module_view_loader").fadeOut(200, function() {
+            $("#module_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);            
+        });
     },
 
-    reset: function() {
-        $("#module_view_contents").fadeOut(200).html(ich.loader()).fadeIn(200);
+    showPod: function() {
+        $("#module_view_loader").fadeOut(200, function() {
+            $("#module_view_contents").fadeIn(200);
+        });
+    },
+
+    currentModule: '',
+
+    current: function(module) {
+        if ( typeof(module) != 'undefined' ) {
+            this.currentModule = module;
+        }
+        return this.currentModule;
     }
 
 });
@@ -169,7 +201,7 @@ var SearchBox = Backbone.View.extend({
     },
 
     render: function() {
-        $(this.el).append(ich.searchBox());
+        this.el.append(ich.searchBox());
 
         // initializes the theme switcher
         $('#switcher').themeswitcher();
@@ -233,7 +265,7 @@ var AuthorResults = Backbone.View.extend({
     },
 
     render: function() {
-        //$(this.el).append(ich.resultsTable({ id: "author_results_table" }));
+        //this.el.append(ich.resultsTable({ id: "author_results_table" }));
     },
 
     // fades the view in
@@ -255,18 +287,14 @@ var AuthorDetails = Backbone.View.extend({
     el: $("#author_details"),
 
     initialize: function() {
-        _.bindAll(this, [ "render", "show", "hide", "reset", "update", "showAuthor", "noAuthor" ]);
+        _.bindAll(this, [ "render", "show", "hide", "updateAuthor", "showAuthor", "noAuthor", "current" ]);
     },
 
     render: function() {
-        $(this.el).html(ich.authorView());
+        this.el.html(ich.authorView());
     },
 
-    reset: function() {
-        $("#author_view_contents").fadeOut(200).html(ich.loader()).fadeIn(200);
-    },
-
-    showAuthor: function(author) {
+    updateAuthor: function(author) {
         $("#author_view_contents").fadeOut(200, function() {
             $(this).html(ich.authorDetails({
                 pauseid: author._source.pauseid,
@@ -281,17 +309,40 @@ var AuthorDetails = Backbone.View.extend({
                 stackoverflowProfile: author._source.stackoverflow_public_profile,
                 twitterName: author._source.twitter_username
             }));
-        }).fadeIn(200);
+            $("#author_view_loader").hide();
+        }).fadeIn(205);
     },
 
     noAuthor: function(message) {
-        $("#author_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);
+        $("#author_view_loader").fadeOut(200, function() {
+            $("#author_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);            
+        })
+    },
+    
+    showAuthor: function() {
+        $("#author_view_loader").fadeOut(200, function() {
+            $("#author_view_contents").fadeIn(200);
+        });
     },
 
     // fades the view in
     show: function() {
         $(".metacpanView").fadeOut(200);
-        setTimeout(function() { $("#author_details").fadeIn(200); }, 200);
+        var fn = (function() {
+            $("#author_view_contents").hide();
+            $("#author_view_loader").show();
+            $("#author_details").fadeIn(200);
+        });
+        setTimeout(fn, 205);
+    },
+
+    currentAuthor: '',
+
+    current: function(author) {
+        if ( typeof(author) != 'undefined' ) {
+            this.currentAuthor = author;
+        }
+        return this.currentAuthor;
     }
 
 });

@@ -85,17 +85,34 @@
     padding-left: 1.5em;
 }
 
+.pod #index a:visited {
+  color: #681818;
+}
+
 #module_details_header .module_name {
     float: left;
-    width: 100%;
+    width: 600px;
     font-size: 1.8em;
     color: #681818;
+}
+
+#module_details_header .fb_box {
+    float: left;
+    width: 300px;
+    text-align: right;
+}
+
+#module_details_header .module_info {
+    float: left;
+    width: 600px;
+    font-size: 1em;
+    color: #654b24;
 }
 
 #module_details_header .author_info {
     position: relative;
     float: left;
-    width: 250px;
+    width: 300px;
     font-size: 1.2em;
     color: #654b24;
     text-align: right;
@@ -108,12 +125,6 @@
     border: 0;
 }
 
-#module_details_header .module_info {
-    float: left;
-    width: 650px;
-    font-size: 1em;
-    color: #654b24;
-}
 #module_details_header .separator {
     float: left;
     width: 100%;
