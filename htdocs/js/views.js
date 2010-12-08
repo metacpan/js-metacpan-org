@@ -45,7 +45,8 @@ var ModuleResults = Backbone.View.extend({
             iDisplayLength: Number($.cookie('tableDisplayLength')),
             sPaginationType: 'full_numbers',
             oLanguage: {
-                sSearch: 'Filter:'
+                sSearch: 'Filter:',
+                sEmptyTable: 'No modules found.'
             }
         });
     },
@@ -390,7 +391,8 @@ var AuthorDetails = Backbone.View.extend({
             iDisplayLength: Number($.cookie('tableDisplayLength')),
             sPaginationType: 'full_numbers',
             oLanguage: {
-                sSearch: 'Filter:'
+                sSearch: 'Filter:',
+                sEmptyTable: 'No modules found.'
             }
         });
     },
