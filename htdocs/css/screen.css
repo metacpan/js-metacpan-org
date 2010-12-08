@@ -262,3 +262,20 @@ a:hover {
 .author_details_info .contact_info_value {
     float: left;
 }
+
+.source_header {
+    width: 100%;
+	height: 1.8em;
+	font-size: 1.8em;
+    color: #681818;
+	border-bottom: 1px solid #681818;
+}
+
+.source_module_name {
+	float: left;
+}
+
+.source_author_name {
+	float: right;
+	text-align: right;
+}

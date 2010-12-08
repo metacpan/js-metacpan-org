@@ -195,25 +195,6 @@ var Metacpan = Backbone.Controller.extend({
                         SourceDetailsView.showSource();
                     } else {
                         SourceDetailsView.current(res._source.name);
-                        $.ajax({
-                            url: res._source.source_url,
-                            dataType: 'text',
-                            processData: false,
-                            success: function(source) {
-                                debug(source);
-                                if ( source != '') {
-                                    SourceDetailsView.showSource(source);
-                                } else {
-                                    SourceDetailsView.noSource("no source could be found for << " + res._source.name + " >>");
-                                }
-                            },
-                            error: function(xhr,status,error) {
-                                debug(xhr);
-                                debug(status);
-                                debug(error);
-                                SourceDetailsView.noSource("no source could be found for << " + res._source.name + " >>");
-                            }
-                        });
                     }
                 },
                 error: function(xhr, error, status) {
@@ -261,6 +242,22 @@ var Metacpan = Backbone.Controller.extend({
                     success: function(res) {
                         debug(res);
                         AuthorDetailsView.updateAuthor(res);
+                        $.ajax({
+                            url: 'http://api.metacpan.org/module/_search',
+                            data: { 'q': 'author: "' + author + '"', size: 1000 },
+                            success: function(results) {
+                                debug('Succeeded module search for author: ' + author);
+                                debug(res);
+                                AuthorDetailsView.update(results);
+                            },
+                            error: function(xhr,status,error) {
+                                debug('Failed module search for author: ' + author);
+                                debug(xhr);
+                                debug(status);
+                                debug(error);
+                                AuthorDetailsView.update();
+                            }
+                        });
                     },
                     error: function(xhr, error, status) {
                         debug(xhr);

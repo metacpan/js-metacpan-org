@@ -218,12 +218,15 @@ var SourceDetails = Backbone.View.extend({
         setTimeout(fn, 205);
     },
 
-    showSource: function(source) {
-        if ( source !== '' ) {
+    showSource: function(source, author) {
+        if ( typeof(source) != 'undefined' ) {
             $("#source_view_contents").fadeOut(200, function() {
-                $(this).html(source);
-                $(this).wrapInner('<pre class="language-perl"><code></code></pre>');
-                hljs.highlightBlock($(this), '    ');
+                var container = $(this);
+                container.html('');
+                container.text(source);
+                container.wrapInner('<pre id="module_source" class="language-perl"><code></code></pre>');
+                container.prepend(ich.sourceHeader({ module: SourceDetailsView.current(), author: author }));
+                hljs.highlightBlock($("#module_source").get(0), '    ');
                 $("#source_view_loader").hide();
             }).fadeIn(205);
         } else {
@@ -345,7 +348,7 @@ var AuthorDetails = Backbone.View.extend({
     el: $("#author_details"),
 
     initialize: function() {
-        _.bindAll(this, [ "render", "show", "hide", "updateAuthor", "showAuthor", "noAuthor", "current" ]);
+        _.bindAll(this, [ "render", "show", "hide", "update", "updateAuthor", "showAuthor", "noAuthor", "current" ]);
     },
 
     events: {
@@ -357,7 +360,8 @@ var AuthorDetails = Backbone.View.extend({
     render: function() {
         this.el.html(ich.authorView());
         
-        $("#author_results").append(ich.resultsTable({ id: "author_results_table" }));
+        $("#author_results").append('<div id="author_results_table_container" style="display: none;" />');
+        $("#author_results_table_container").append(ich.resultsTable({ id: "author_results_table" }));
         
         $("#author_results_table").dataTable({
             aoColumns: [
@@ -418,11 +422,32 @@ var AuthorDetails = Backbone.View.extend({
         });
     },
 
+    // updates the author results table
+    update: function(res) {
+        $("#author_results_table_container").fadeOut(function() {
+            var rowData = [];
+            $("#author_results_table").dataTable().fnClearTable();
+            if ( typeof(res) != 'undefined' ) {
+                debug('test');
+                $(res.hits.hits).each(function() {
+                    rowData.push([
+                        '<div class="cell_contents" title="' + this._source.name + '" style="width: 325px;">' + this._source.name + '</div>',
+                        '<div class="cell_contents" title="' + this._source.version + '" style="width: 68px;">' + this._source.version + '</div>',
+                        '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 68px;">' + this._source.release_date.substr(0,10) + '</div>',
+                        '<div class="cell_contents" title="' + this._source.distvname + '" style="width: 293px;">' + this._source.distvname + '</div>',
+                    ]);
+                });
+            }
+            var temp = $("#author_results_table").dataTable().fnAddData(rowData);
+        }).fadeIn(200);
+
+    },
+
     // fades the view in
     show: function() {
         $(".metacpanView").fadeOut(200);
         var fn = (function() {
-            $("#author_view_contents, #author_results").hide();
+            $("#author_view_contents, #author_results, #author_results_table_container").hide();
             $("#author_view_loader").show();
             $("#author_details").fadeIn(200);
         });
