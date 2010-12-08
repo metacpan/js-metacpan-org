@@ -50,6 +50,7 @@ var Metacpan = Backbone.Controller.extend({
 
             case 'module':
                 this.saveLocation("/search/module/" +query);
+                SearchBoxView.updateTweet();
 
                 if ( ModuleResultsView.current() === query ) {
                     ModuleResultsView.show();
@@ -89,12 +90,6 @@ var Metacpan = Backbone.Controller.extend({
                     });
                 }
                 break;
-            //case 'author':
-            //    //this.authorSearch(query);
-            //    this.saveLocation("/search/author/" + query);
-            //    SearchBoxView.updateQuery(query);
-            //    AuthorResultsView.show();
-            //    break;
             default:
                 debug('<< ' + type + ' >> is not a valid search type.' );
         
@@ -121,6 +116,7 @@ var Metacpan = Backbone.Controller.extend({
                 success: function(res) {
                     debug(res);
                     MetacpanController.saveLocation("/showpod/" + res._source.name);
+                    SearchBoxView.updateTweet();
                     if ( ModuleDetailsView.current() === res._source.name ) {
                         ModuleDetailsView.showPod();
                     } else {
@@ -158,11 +154,13 @@ var Metacpan = Backbone.Controller.extend({
                     debug(error);
                     if ( ModuleDetailsView.current() === query ) {
                         MetacpanController.saveLocation("/showpod/" + query);
+                        SearchBoxView.updateTweet();
                         var fn = (function() { ModuleDetailsView.showPod(); });
                         setTimeout(fn, 205);
                     } else {
                         ModuleDetailsView.current(query);
                         MetacpanController.saveLocation("/showpod/" + query);
+                        SearchBoxView.updateTweet();
                         var fn = (function() { ModuleDetailsView.noPod("no module found for << " + query + " >>"); });
                         setTimeout(fn, 205);
                     }
@@ -191,10 +189,48 @@ var Metacpan = Backbone.Controller.extend({
                 success: function(res) {
                     debug(res);
                     MetacpanController.saveLocation("/showsrc/" + res._source.name);
+                    SearchBoxView.updateTweet();
                     if ( SourceDetailsView.current() === res._source.name ) {
                         SourceDetailsView.showSource();
                     } else {
                         SourceDetailsView.current(res._source.name);
+                        $.ajax({
+                            url: res._source.source_url.replace(':5000', '').replace('api.', 'search.'),
+                            dataType: 'text',
+                            processData: false,
+                            success: function(source) {
+                                if ( typeof(source) != 'undefined') {
+                                    SourceDetailsView.showSource(source, res._source.author);
+                                    $.ajax({
+                                        url: 'http://api.metacpan.org/module/_search',
+                                        data: { 'q': 'author: "' + res._source.author + '"', size: 1000 },
+                                        beforeSend: function() {
+                                            $("#author_results_table").dataTable().fnClearTable();
+                                        },
+                                        success: function(results) {
+                                            debug('Succeeded module search for author: ' + res._source.author);
+                                            debug(res);
+                                            AuthorDetailsView.update(results);
+                                        },
+                                        error: function(xhr,status,error) {
+                                            debug('Failed module search for author: ' + res._source.author);
+                                            debug(xhr);
+                                            debug(status);
+                                            debug(error);
+                                        }
+                                    });
+                                } else {
+                                    SourceDetailsView.noSource("no source could be found for << " + res._source.name + " >>");
+                                }
+                            },
+                            error: function(xhr,status,error) {
+                                debug('Failed retrieving source:');
+                                debug(xhr);
+                                debug(status);
+                                debug(error);
+                                SourceDetailsView.noSource("no source could be found for << " + res._source.name + " >>");
+                            }
+                        });
                     }
                 },
                 error: function(xhr, error, status) {
@@ -203,11 +239,13 @@ var Metacpan = Backbone.Controller.extend({
                     debug(error);
                     if ( SourceDetailsView.current() === query ) {
                         MetacpanController.saveLocation("/showsrc/" + query);
+                        SearchBoxView.updateTweet();
                         var fn = (function() { SourceDetailsView.showSource(); });
                         setTimeout(fn, 205);
                     } else {
                         SourceDetailsView.current(query);
                         MetacpanController.saveLocation("/showsrc/" + query);
+                        SearchBoxView.updateTweet();
                         var fn = (function() { SourceDetailsView.noSource("no module found for << " + query + " >>"); });
                         setTimeout(fn, 205);
                     }
@@ -226,6 +264,7 @@ var Metacpan = Backbone.Controller.extend({
         document.title = author + ' - search.metacpan.org';
 
         MetacpanController.saveLocation("/author/" + author);
+        SearchBoxView.updateTweet();
 
         SearchBoxView.searchType('author');
 

@@ -279,3 +279,8 @@ a:hover {
 	float: right;
 	text-align: right;
 }
+
+#tweetbox {
+	float: left;
+	margin: 5px 0 0 20px;
+}

@@ -261,8 +261,10 @@ var SearchBox = Backbone.View.extend({
 
     el: $("#search_box"),
 
+    tweetcode: '<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="ioncache">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>',
+
     initialize: function() {
-        _.bindAll(this, [ "render", "updateQuery", "searchType", "loader" ]);
+        _.bindAll(this, [ "render", "updateQuery", "searchType", "loader", "updateTweet" ]);
     },
 
     render: function() {
@@ -304,6 +306,11 @@ var SearchBox = Backbone.View.extend({
             }
         });
         $("#search_type").buttonset();
+        $("#tweetbox").html(this.tweetcode);
+    },
+
+    updateTweet: function() {
+        $("#tweetbox").fadeOut(50).html(this.tweetcode).fadeIn(50);
     },
 
     updateQuery: function(query) {
@@ -428,7 +435,6 @@ var AuthorDetails = Backbone.View.extend({
             var rowData = [];
             $("#author_results_table").dataTable().fnClearTable();
             if ( typeof(res) != 'undefined' ) {
-                debug('test');
                 $(res.hits.hits).each(function() {
                     rowData.push([
                         '<div class="cell_contents" title="' + this._source.name + '" style="width: 325px;">' + this._source.name + '</div>',
