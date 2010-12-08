@@ -231,3 +231,34 @@ a:hover {
     width: 100%;
     text-align: center;
 }
+
+.author_details_info {
+    float: left;
+    width: 860px;
+    margin-bottom: 15px;
+    padding: 20px;
+}
+
+.author_details_info .left {
+    float: left;
+    width: 760px;
+}
+
+.author_details_info .right {
+    float: right;
+    width: 80px;
+    padding-left: 20px;
+}
+
+.author_details_info .contact_info {
+    margin-bottom: 5px;
+}
+
+.author_details_info .contact_info_label {
+    float: left;
+    width: 150px;
+}
+
+.author_details_info .contact_info_value {
+    float: left;
+}

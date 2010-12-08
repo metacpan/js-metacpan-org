@@ -5,7 +5,8 @@ var Metacpan = Backbone.Controller.extend({
     routes: {
         "/author/:query":           "showauthor",
         "/search/:type/:query":     "search",
-        "/showpod/:query":          "showpod"
+        "/showpod/:query":          "showpod",
+        "/showsrc/:query":          "showsrc"
     },
 
     initialize: function() {
@@ -88,14 +89,14 @@ var Metacpan = Backbone.Controller.extend({
                     });
                 }
                 break;
-            case 'author':
-                //this.authorSearch(query);
-                this.saveLocation("/search/author/" + query);
-                SearchBoxView.updateQuery(query);
-                AuthorResultsView.show();
-                break;
+            //case 'author':
+            //    //this.authorSearch(query);
+            //    this.saveLocation("/search/author/" + query);
+            //    SearchBoxView.updateQuery(query);
+            //    AuthorResultsView.show();
+            //    break;
             default:
-                debug('"' + type + '" is not a valid search type.' );
+                debug('<< ' + type + ' >> is not a valid search type.' );
         
         } 
 
@@ -171,6 +172,70 @@ var Metacpan = Backbone.Controller.extend({
 
     },
 
+    showsrc: function(query) {
+        debug("Action: showsrc");
+        debug("Query:  " + query);
+
+        document.title = 'Source: ' + query + ' - search.metacpan.org';
+
+        SearchBoxView.searchType('module');
+
+        SourceDetailsView.show();
+
+        if ( SourceDetailsView.current() === query ) {
+            var fn = (function() { SourceDetailsView.showSource(); });
+            setTimeout(fn, 410);
+        } else {
+            $.ajax({
+                url:  'http://api.metacpan.org/module/' + query,
+                success: function(res) {
+                    debug(res);
+                    MetacpanController.saveLocation("/showsrc/" + res._source.name);
+                    if ( SourceDetailsView.current() === res._source.name ) {
+                        SourceDetailsView.showSource();
+                    } else {
+                        SourceDetailsView.current(res._source.name);
+                        $.ajax({
+                            url: res._source.source_url,
+                            dataType: 'text',
+                            processData: false,
+                            success: function(source) {
+                                debug(source);
+                                if ( source != '') {
+                                    SourceDetailsView.showSource(source);
+                                } else {
+                                    SourceDetailsView.noSource("no source could be found for << " + res._source.name + " >>");
+                                }
+                            },
+                            error: function(xhr,status,error) {
+                                debug(xhr);
+                                debug(status);
+                                debug(error);
+                                SourceDetailsView.noSource("no source could be found for << " + res._source.name + " >>");
+                            }
+                        });
+                    }
+                },
+                error: function(xhr, error, status) {
+                    debug(xhr);
+                    debug(status);
+                    debug(error);
+                    if ( SourceDetailsView.current() === query ) {
+                        MetacpanController.saveLocation("/showsrc/" + query);
+                        var fn = (function() { SourceDetailsView.showSource(); });
+                        setTimeout(fn, 205);
+                    } else {
+                        SourceDetailsView.current(query);
+                        MetacpanController.saveLocation("/showsrc/" + query);
+                        var fn = (function() { SourceDetailsView.noSource("no module found for << " + query + " >>"); });
+                        setTimeout(fn, 205);
+                    }
+                }
+            });
+        }
+
+    },
+
     showauthor: function(query) {
         debug("Action: showauthor");
         debug("Query:  " + query);
@@ -178,6 +243,8 @@ var Metacpan = Backbone.Controller.extend({
         var author = query.toUpperCase();
 
         document.title = author + ' - search.metacpan.org';
+
+        MetacpanController.saveLocation("/author/" + author);
 
         SearchBoxView.searchType('author');
 

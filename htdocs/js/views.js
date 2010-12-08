@@ -86,13 +86,13 @@ var ModuleResults = Backbone.View.extend({
         }
     },
 
-    currentModule: '',
+    currentData: '',
 
-    current: function(module) {
-        if ( typeof(module) != 'undefined' ) {
-            this.currentModule = module;
+    current: function(data) {
+        if ( typeof(data) != 'undefined' ) {
+            this.currentData = data;
         }
-        return this.currentModule;
+        return this.currentData;
     }
 
 });
@@ -143,6 +143,7 @@ var ModuleDetails = Backbone.View.extend({
                 author: module._source.author,
                 authorName: author._source.name,
                 distvname: module._source.distvname,
+                download_url: module._source.download_url,
                 email: author._source.email,
                 //fbLike: '<fb:like href="http://search.metacpan.org/#/showpod/' + encodeURIComponent(module._source.name) + '" show_faces="true" width="300" font="trebuchet ms"></fb:like>',
                 gravatar: author._source.gravatar_url,
@@ -177,13 +178,74 @@ var ModuleDetails = Backbone.View.extend({
         });
     },
 
-    currentModule: '',
+    currentData: '',
 
-    current: function(module) {
-        if ( typeof(module) != 'undefined' ) {
-            this.currentModule = module;
+    current: function(data) {
+        if ( typeof(data) != 'undefined' ) {
+            this.currentData = data;
         }
-        return this.currentModule;
+        return this.currentData;
+    }
+
+});
+
+var SourceDetails = Backbone.View.extend({
+
+    id: "source_details",
+
+    tagName: "div",
+
+    className: "metacpanView",
+
+    el: $("#source_details"),
+
+    initialize: function() {
+        _.bindAll(this, [ "render", "show", "hide", "showSource", "noSource", "current" ]);
+    },
+
+    render: function() {
+        this.el.append(ich.sourceDetailsView());
+    },
+
+    // fades the view in
+    show: function() {
+        $(".metacpanView").fadeOut(200);
+        var fn = (function() {
+            $("#source_view_contents").hide();
+            $("#source_view_loader").show();
+            $("#source_details").fadeIn(200);
+        });
+        setTimeout(fn, 205);
+    },
+
+    showSource: function(source) {
+        if ( source !== '' ) {
+            $("#source_view_contents").fadeOut(200, function() {
+                $(this).html(source);
+                $(this).wrapInner('<pre class="language-perl"><code></code></pre>');
+                hljs.highlightBlock($(this), '    ');
+                $("#source_view_loader").hide();
+            }).fadeIn(205);
+        } else {
+            $("#source_view_loader").fadeOut(200, function() {
+                $("#source_view_contents").fadeIn(200);
+            });
+        }
+    },
+
+    noSource: function(message) {
+        $("#source_view_loader").fadeOut(200, function() {
+            $("#source_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);            
+        });
+    },
+
+    currentData: '',
+
+    current: function(data) {
+        if ( typeof(data) != 'undefined' ) {
+            this.currentData = data;
+        }
+        return this.currentData;
     }
 
 });
@@ -209,12 +271,34 @@ var SearchBox = Backbone.View.extend({
         $("#search_input").keypress(function(e) {
             if (e.which == 13 ) {
                 e.preventDefault;
-                MetacpanController.search($("input[name='search_type']:checked").val(), $(this).val());
+                var type = $("input[name='search_type']:checked").val();
+                var query = $(this).val();
+                switch(type) {
+                    case 'module':
+                        MetacpanController.search(type, query);
+                        break;
+                    case 'author':
+                        MetacpanController.showauthor(query);
+                        break;
+                    default:
+                        debug('Invalid search type.');
+                }
             }
         });
 
         $("#search_button").button().click(function() {
-            MetacpanController.search($("input[name='search_type']:checked").val(), $("#search_input").val());
+            var type = $("input[name='search_type']:checked").val();
+            var query = $("#search_input").val();
+            switch(type) {
+                case 'module':
+                    MetacpanController.search(type, query);
+                    break;
+                case 'author':
+                    MetacpanController.showauthor(query);
+                    break;
+                default:
+                    debug('<< ' + type + ' >> is not a valid search type.' );
+            }
         });
         $("#search_type").buttonset();
     },
@@ -250,32 +334,6 @@ var SearchBox = Backbone.View.extend({
 
 });
 
-var AuthorResults = Backbone.View.extend({
-
-    id: "author_results",
-
-    tagName: "div",
-
-    className: "metacpanView",
-
-    el: $("#author_results"),
-
-    initialize: function() {
-        _.bindAll(this, [ "render", "show", "hide" ]);
-    },
-
-    render: function() {
-        //this.el.append(ich.resultsTable({ id: "author_results_table" }));
-    },
-
-    // fades the view in
-    show: function() {
-        $(".metacpanView").fadeOut(200);
-        setTimeout(function() { $("#author_results").fadeIn(200); }, 200);
-    }
-
-});
-
 var AuthorDetails = Backbone.View.extend({
 
     id: "author_details",
@@ -290,8 +348,40 @@ var AuthorDetails = Backbone.View.extend({
         _.bindAll(this, [ "render", "show", "hide", "updateAuthor", "showAuthor", "noAuthor", "current" ]);
     },
 
+    events: {
+        "click #author_results_table tbody tr": "showpod",
+        "hover #author_results_table tbody tr.ui-state-active": "hover",
+        "hover #author_results_table tbody tr.ui-state-default": "hover"
+    },
+
     render: function() {
         this.el.html(ich.authorView());
+        
+        $("#author_results").append(ich.resultsTable({ id: "author_results_table" }));
+        
+        $("#author_results_table").dataTable({
+            aoColumns: [
+                { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 325px;">Module</div>', sWidth: '325px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
+                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 68px;">Date</div>', sWidth: '68px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 293px;">Distribution</div>', sWidth: '293px' }
+            ],
+            aaSorting: [[ 0, "asc" ]],
+            bAutoWidth: false,
+            bJQueryUI: true,
+            fnDrawCallback: function() {
+                var settings = $("#author_results_table").dataTable().fnSettings();
+                if ( $.cookie('tableDisplayLength') !== settings._iDisplayLength ) {
+                    $.cookie('tableDisplayLength', settings._iDisplayLength);
+                }
+                $(".cell_contents:visible").textOverflow();
+            },
+            iDisplayLength: Number($.cookie('tableDisplayLength')),
+            sPaginationType: 'full_numbers',
+            oLanguage: {
+                sSearch: 'Filter:'
+            }
+        });
     },
 
     updateAuthor: function(author) {
@@ -311,17 +401,20 @@ var AuthorDetails = Backbone.View.extend({
             }));
             $("#author_view_loader").hide();
         }).fadeIn(205);
+        $("#author_results").fadeOut(200).fadeIn(205);
     },
 
     noAuthor: function(message) {
-        $("#author_view_loader").fadeOut(200, function() {
-            $("#author_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200);            
-        })
+        $("#author_view_loader, #author_results").fadeOut(200);
+        var fn = (function() {
+            $("#author_view_contents").fadeOut(200).html(ich.error({ message: message })).fadeIn(200); 
+        });
+        setTimeout(fn, 205);
     },
     
     showAuthor: function() {
         $("#author_view_loader").fadeOut(200, function() {
-            $("#author_view_contents").fadeIn(200);
+            $("#author_view_contents, #author_results").fadeIn(200);
         });
     },
 
@@ -329,20 +422,30 @@ var AuthorDetails = Backbone.View.extend({
     show: function() {
         $(".metacpanView").fadeOut(200);
         var fn = (function() {
-            $("#author_view_contents").hide();
+            $("#author_view_contents, #author_results").hide();
             $("#author_view_loader").show();
             $("#author_details").fadeIn(200);
         });
         setTimeout(fn, 205);
     },
 
-    currentAuthor: '',
+    // shows the pod when clicking on a row
+    showpod: function(row) {
+        window.location = '/#/showpod/' + $(row.currentTarget).find('td:first-child div').attr('title');
+    },
 
-    current: function(author) {
-        if ( typeof(author) != 'undefined' ) {
-            this.currentAuthor = author;
+    // toggles row class when hovering
+    hover: function(row) {
+        $(row.currentTarget).toggleClass('ui-state-highlight');
+    },
+
+    currentData: '',
+
+    current: function(data) {
+        if ( typeof(data) != 'undefined' ) {
+            this.currentData = data;
         }
-        return this.currentAuthor;
+        return this.currentData;
     }
 
 });

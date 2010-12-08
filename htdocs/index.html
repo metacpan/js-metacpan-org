@@ -39,15 +39,8 @@
             <div id="search_box"></div>
             <div id="module_results" class="metacpanView"></div>
             <div id="module_details" class="metacpanView"></div>
+            <div id="source_details" class="metacpanView"></div>
             <div id="distribution_results" class="metacpanView"></div>
-            <div id="author_results" class="metacpanView">
-                <div class="ui-widget" style="width: 300px; margin: auto;">
-                    <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
-                        <p style="text-align: center;"><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span> 
-                        <strong>Author search not yet implemented.</strong></p>
-                    </div>
-                </div>
-            </div>
             <div id="author_details" class="metacpanView"></div>
         </div>
         <div id="footer">
@@ -87,6 +80,12 @@
             <div id="module_view_loader">{{>loaderPart}}</div>
             <div class="spacer">&nbsp;</div>
         </script>
+        <script id="sourceDetailsView"  type="text/html">
+            {{>backButtonPart}}
+            <div id="source_view_contents"></div>
+            <div id="source_view_loader">{{>loaderPart}}</div>
+            <div class="spacer">&nbsp;</div>
+        </script>
         <script id="searchBox" type="text/html">
             <span style="position: relative;">
                 <img id="search_loader" src="/images/loader.gif" alt="" style="position: absolute; top: -3px; left: -25px; width: 20px; height: 20px; display: none;" />
@@ -106,7 +105,9 @@
             <div id="module_details_header" class="pod">
                 <div class="module_name">{{name}}</div>
                 <!--<div class="fb_box">{{{fbLike}}}</div>-->
-                <div class="module_info">{{distvname}} &mdash; {{release_date}}</div>
+                <div class="module_info">
+                    {{distvname}} &mdash; {{release_date}} &mdash; <a href="/#/showsrc/{{name}}">View Source</a>{{#download_url}} &mdash; <a href="{{download_url}}">Download Archive</a>{{/download_url}}
+                </div>
                 <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" alt="" /></a></div>
                 <div class="separator">&nbsp;</div>
             </div>
@@ -116,23 +117,85 @@
         <script id="authorView" type="text/html">
             {{>backButtonPart}}
             <div id="author_view_contents"></div>
+            <div id="author_results" style="float: left; display: none;"></div>
             <div id="author_view_loader">{{>loaderPart}}</div>
+            <div class="spacer">&nbsp;</div>
         </script>
         <script id="authorDetails" type="text/html">
-            <div>
-                pauseid:  {{pauseid}}<br />
-                Author Name: {{authorName}}<br />
-                Author Dir: {{authorDir}}<br />
-                Email: {{email}}<br />
-                Github Name: {{githubName}}<br />
-                Gravatar: {{gravatar}}<br />
-                IRC Nickname: {{irc_nick}}<br />
-                Linkedin Profile: {{linkedinProfile}}<br />
-                Perl Monks Name: {{perlmonksName}}<br />
-                Stack Oveflow Profile: {{stackoverflowProfile}}<br />
-                Twitter Name: {{twitterName}}<br />
-            </div>
-            <div class="spacer">&nbsp;</div>
+            <div class="ui-widget ui-widget-content ui-corner-all author_details_info">
+                <div class="left">
+                    <div class="left ui-widget-header ui-corner-all" style="width: 720px; padding: 5px 20px; margin-bottom: 10px; font-size: 1.5em;">
+                        <div style="float: left;">{{authorName}}</div>
+                        <div style="float: right;">{{pauseid}}</div>
+                    </div>
+                    <div class="left" style="width: 720px; padding: 5px 20px; margin-bottom: 5px; font-size: 1.2em; font-weight: bold; border-bottom: 1px dotted;">
+                        Contact Information
+                    </div>
+                    <div class="left" style="width: 720px; padding: 0 20px;">
+                        <!--Author Dir: {{authorDir}}<br />-->
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                Email:
+                            </div>
+                            <div class="contact_info_value">
+                                {{#email}}<a href="mailto:{{email}}">{{email}}</a>{{/email}}
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                Github:
+                            </div>
+                            <div class="contact_info_value">
+                                {{#githubName}}<a href="https://github.com/{{githubName}}">{{githubName}} (github.com/{{githubName}})</a>{{/githubName}}
+                            </div>
+                        </div>
+                        <!--<div class="left contact_info">
+                            <div class="contact_info_label">
+                                IRC Nickname:
+                            </div>
+                            <div class="contact_info_value">
+                                {{irc_nick}}
+                            </div>
+                        </div>-->
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                               Linkedin Profile:
+                            </div>
+                            <div class="contact_info_value">
+                               {{#linkedinProfile}}<a href="{{linkedinProfile}}">{{linkedinProfile}}</a>{{/linkedinProfile}}
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                PerlMonks:
+                            </div>
+                            <div class="contact_info_value">
+                                {{#perlmonksName}}<a href="http://www.perlmonks.org/?node={{perlmonksName}}">{{perlmonksName}}</a>{{/perlmonksName}}
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                Stack Oveflow Profile:
+                            </div>
+                            <div class="contact_info_value">
+                                {{#stackoverflowProfile}}<a href="{{stackoverflowProfile}}">{{stackoverflowProfile}}</a>{{/stackoverflowProfile}}
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                Twitter Name:
+                            </div>
+                            <div class="contact_info_value">
+                                {{#twitterName}}<a href="http://www.twitter.com/{{twitterName}}">{{twitterName}} (twitter.com/{{twitterName}})</a>{{/twitterName}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right" style="text-align: center;">
+                    <div><img src="{{gravatar}}" alt=" " /></div>
+                </div>
+                <div class="spacer">&nbsp;</div>
+			</div>
         </script>
         <script id="error" type="text/html">
             {{>errorPart}}
@@ -176,8 +239,8 @@
                 ModuleResultsView.render();
                 ModuleDetailsView = new ModuleDetails();
                 ModuleDetailsView.render();
-                AuthorResultsView = new AuthorResults();
-                AuthorResultsView.render();
+                SourceDetailsView = new SourceDetails();
+                SourceDetailsView.render();
                 AuthorDetailsView = new AuthorDetails();
                 AuthorDetailsView.render();
                 MetacpanController.enableBackButtons();
