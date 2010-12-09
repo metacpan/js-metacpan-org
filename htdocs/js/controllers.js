@@ -195,7 +195,7 @@ var Metacpan = Backbone.Controller.extend({
                     } else {
                         SourceDetailsView.current(res._source.name);
                         $.ajax({
-                            url: res._source.source_url.replace(':5000', '').replace('api.', 'search.'),
+                            url: res._source.source_url,
                             dataType: 'text',
                             processData: false,
                             success: function(source) {
@@ -267,6 +267,7 @@ var Metacpan = Backbone.Controller.extend({
         SearchBoxView.updateTweet();
 
         SearchBoxView.searchType('author');
+        SearchBoxView.updateQuery(query);
 
         AuthorDetailsView.show();
 

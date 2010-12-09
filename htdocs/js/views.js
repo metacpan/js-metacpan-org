@@ -427,7 +427,7 @@ var AuthorDetails = Backbone.View.extend({
     
     showAuthor: function() {
         $("#author_view_loader").fadeOut(200, function() {
-            $("#author_view_contents, #author_results").fadeIn(200);
+            $("#author_view_contents, #author_results, #author_results_table_container").fadeIn(200);
         });
     },
 
