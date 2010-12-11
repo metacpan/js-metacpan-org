@@ -45,6 +45,7 @@ var Metacpan = Backbone.Controller.extend({
         document.title = 'Search results for: ' + query + ' - search.metacpan.org';
 
         SearchBoxView.searchType(type);
+        SearchBoxView.updateQuery(query);
 
         switch(type) {
 
@@ -56,7 +57,6 @@ var Metacpan = Backbone.Controller.extend({
                     ModuleResultsView.show();
                 } else {
                     ModuleResultsView.current(query);
-                    SearchBoxView.updateQuery(query);
                     $.ajax({
                         url: 'http://api.metacpan.org/module/_search',
                         data: { 'q': 'name: "' + query + '"', size: 1000 },
@@ -104,6 +104,7 @@ var Metacpan = Backbone.Controller.extend({
         document.title = query + ' - search.metacpan.org';
 
         SearchBoxView.searchType('module');
+        SearchBoxView.updateQuery(query);
 
         ModuleDetailsView.show();
 
@@ -177,6 +178,7 @@ var Metacpan = Backbone.Controller.extend({
         document.title = 'Source: ' + query + ' - search.metacpan.org';
 
         SearchBoxView.searchType('module');
+        SearchBoxView.updateQuery(query);
 
         SourceDetailsView.show();
 

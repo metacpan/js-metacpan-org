@@ -30,7 +30,7 @@ var ModuleResults = Backbone.View.extend({
                 { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 68px;">Date</div>', sWidth: '68px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 187px;">Distribution</div>', sWidth: '187px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 126px;">Author</div>', sWidth: '126px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false }
+                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false, sType: 'numeric' }
             ],
             aaSorting: [[ 5, "desc" ]],
             bAutoWidth: false,
@@ -114,17 +114,6 @@ var ModuleDetails = Backbone.View.extend({
 
     render: function() {
         this.el.append(ich.moduleDetailsView());
-        //$(".toggle_pod_source").button().click(function() {
-        //    if ( $("#pod_contents:visible").length ) {
-        //        $("#pod_contents").fadeOut(200, function() {
-        //            $("#source_contents").fadeIn(200);
-        //        });
-        //    } else {
-        //        $("#source_contents").fadeOut(200, function() {
-        //            $("#pod_contents").fadeIn(200);
-        //        });
-        //    }
-        //});
     },
 
     // fades the view in
@@ -146,15 +135,11 @@ var ModuleDetails = Backbone.View.extend({
                 distvname: module._source.distvname,
                 download_url: module._source.download_url,
                 email: author._source.email,
-                //fbLike: '<fb:like href="http://search.metacpan.org/#/showpod/' + encodeURIComponent(module._source.name) + '" show_faces="true" width="300" font="trebuchet ms"></fb:like>',
                 gravatar: author._source.gravatar_url,
                 name: module._source.name,
                 podHTML: pod._source.pod,
                 release_date: module._source.release_date.substr(0,10)
             }));
-            //$("meta[property=og:title]").attr("content", module._source.name);
-            //$("meta[property=og:url]").attr("content", 'http://search.metacpan.org/#/showpod/' + encodeURIComponent(module._source.name));
-            //FB.XFBML.parse($("div#fb_box").get(0));
             $("#pod_html a.moduleLink").map(function() {
                 $(this).attr('href', '/#/showpod/' + $(this).attr('href'));
             });
@@ -279,6 +264,9 @@ var SearchBox = Backbone.View.extend({
                 e.preventDefault;
                 var type = $("input[name='search_type']:checked").val();
                 var query = $(this).val();
+                if ( /::/.test(query) ) {
+                    type = 'module';
+                }
                 switch(type) {
                     case 'module':
                         MetacpanController.search(type, query);
@@ -295,6 +283,9 @@ var SearchBox = Backbone.View.extend({
         $("#search_button").button().click(function() {
             var type = $("input[name='search_type']:checked").val();
             var query = $("#search_input").val();
+            if ( /::/.test(query) ) {
+                type = 'module';
+            }
             switch(type) {
                 case 'module':
                     MetacpanController.search(type, query);
@@ -403,6 +394,8 @@ var AuthorDetails = Backbone.View.extend({
                 pauseid: author._source.pauseid,
                 authorDir: author._source.author_dir,
                 authorName: author._source.name,
+                blogFeed: author._source.blog_feed,
+                blogURL: author._source.blog_url,
                 email: author._source.email,
                 githubName: author._source.github_username,
                 gravatar: author._source.gravatar_url,
@@ -410,7 +403,8 @@ var AuthorDetails = Backbone.View.extend({
                 linkedinProfile: author._source.linkedin_public_profile,
                 perlmonksName: author._source.perlmonks_username,
                 stackoverflowProfile: author._source.stackoverflow_public_profile,
-                twitterName: author._source.twitter_username
+                twitterName: author._source.twitter_username,
+                website: author._source.website
             }));
             $("#author_view_loader").hide();
         }).fadeIn(205);

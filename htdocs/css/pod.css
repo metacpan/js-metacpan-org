@@ -89,6 +89,13 @@
   color: #681818;
 }
 
+#module_details_header {
+    float: left;
+    color: #681818;
+	border-bottom: 1px solid #681818;
+    padding-bottom: 10px;
+}
+
 #module_details_header .module_name {
     float: left;
     width: 600px;

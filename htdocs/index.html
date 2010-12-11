@@ -15,13 +15,6 @@
         <meta name="keywords" content="Perl,Perl Module,CPAN,Search CPAN" />
         <meta name="author" content="The metacpan.org Team" />
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-<!--        <meta property="og:title" content="Metacpan Search Home" />
-        <meta property="og:site_name" content="search.metacpan.org" />
-        <meta property="og:url" content="http://search.metacpan.org" />
-        <meta property="og:type" content="article" />
-        <meta property="og:image" content="http://search.metacpan.org/images/metacpan_logo.png" />
-        <meta property="og:description" content="An AJAX based search site for use with http://api.metacpan.org" />
-        <meta property="fb:admins" content="ioncache" />-->
 
         <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
 
@@ -46,7 +39,7 @@
         <div id="footer">
             <p>
                 <img src="/images/beta.png" alt="BETA" style="height: 35px; margin-right: 10px;"/>
-                <span style="position: relative; top: -10px;">This site is currently in beta.  View the Github repositories for the <a href="https://github.com/CPAN-API/cpan-api" >API</a> or this <a href="https://github.com/CPAN-API/search-metacpan-org" target="_blank">Search</a> site.  Get in touch with us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group</a>.</span>
+                <span style="position: relative; top: -10px;">Currently in beta.  Find us on Github: <strong>This Search Site</strong> &mdash; <a href="https://github.com/CPAN-API/search-metacpan-org" target="_blank">Repo</a> / <a href="https://github.com/CPAN-API/search-metacpan-org/issues" target="_blank">Bugs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<strong>The API</strong> &mdash; <a href="https://github.com/CPAN-API/cpan-api" >Repo</a> / <a href="https://github.com/CPAN-API/cpan-api/issues" target="_blank">Bugs</a>. Get in touch with us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group</a>.</span>
             </p>
         </div>
 
@@ -65,7 +58,6 @@
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
         <script type="text/javascript" src="http://yandex.st/highlightjs/5.15/highlight.min.js"></script>
-<!--        <script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>-->
 
         <!--Template Definitions-->
         <script id="resultsTable" type="text/html">
@@ -118,7 +110,6 @@
                     {{distvname}} &mdash; {{release_date}} &mdash; <a href="/#/showsrc/{{name}}">View Source</a>{{#download_url}} &mdash; <a href="{{download_url}}">Download Archive</a>{{/download_url}}
                 </div>
                 <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" alt="" /></a></div>
-                <div class="separator">&nbsp;</div>
             </div>
             <div id="pod_html" class="pod" style="float: left;">{{{podHTML}}}</div>
             <div class="spacer" style="float: left;"></div>
@@ -148,6 +139,14 @@
                             </div>
                             <div class="contact_info_value">
                                 {{#email}}<a href="mailto:{{email}}">{{email}}</a>{{/email}}
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                Blog:
+                            </div>
+                            <div class="contact_info_value">
+                                {{#blogURL}}<a href="{{blogURL}}">{{blogURL}}</a>{{/blogURL}}{{#blogFeed}} (<a href="{{blogFeed}}">feed</a>){{/blogFeed}}
                             </div>
                         </div>
                         <div class="left contact_info">
@@ -184,7 +183,7 @@
                         </div>
                         <div class="left contact_info">
                             <div class="contact_info_label">
-                                Stack Oveflow:
+                                Stack Overflow:
                             </div>
                             <div class="contact_info_value">
                                 {{#stackoverflowProfile}}<a href="{{stackoverflowProfile}}">{{stackoverflowProfile}}</a>{{/stackoverflowProfile}}
@@ -196,6 +195,14 @@
                             </div>
                             <div class="contact_info_value">
                                 {{#twitterName}}<a href="http://www.twitter.com/{{twitterName}}">{{twitterName}} &mdash; twitter.com/{{twitterName}}</a>{{/twitterName}}
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                Website:
+                            </div>
+                            <div class="contact_info_value">
+                                {{#website}}<a href="{{website}}">{{website}}</a>{{/website}}
                             </div>
                         </div>
                     </div>
