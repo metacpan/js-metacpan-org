@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--<html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:og="http://opengraphprotocol.org/schema/"
-    xmlns:fb="http://www.facebook.com/2008/fbml"    
-    xml:lang="en" lang="en"
->-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
 
@@ -30,11 +24,14 @@
         <div id="main_container">
             <a href="http://search.metacpan.org"><img src="/images/metacpan_logo.png" alt="metacpan" style="position: absolute; left: 0px; width: 113px; height: 64px; border: none;" /></a>
             <div id="search_box"></div>
+            <!--<div id="system_message" style="font-weight: bold; text-align: center; margin: 25px 0; display: block;">The module index will be offline today while we do some maintainance and re-index.</div>-->
+            <div id="home" class="metacpanView"></div>
             <div id="module_results" class="metacpanView"></div>
             <div id="module_details" class="metacpanView"></div>
             <div id="source_details" class="metacpanView"></div>
-            <div id="distribution_results" class="metacpanView"></div>
             <div id="author_details" class="metacpanView"></div>
+            <div id="dist_results" class="metacpanView"></div>
+            <div id="dist_details" class="metacpanView"></div>
         </div>
         <div id="footer">
             <p>
@@ -44,8 +41,9 @@
         </div>
 
         <!-- Scripts, Templates, Etc. -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+        <!--<script type="text/javascript" src="/js/scripts.js"></script>-->
         <script type="text/javascript" src="/js/ICanHaz.min.js"></script>
         <script type="text/javascript" src="/js/json2.min.js"></script>
         <script type="text/javascript" src="/js/underscore-min.js"></script>
@@ -60,6 +58,26 @@
         <script type="text/javascript" src="http://yandex.st/highlightjs/5.15/highlight.min.js"></script>
 
         <!--Template Definitions-->
+        <script id="homeView" type="text/html">
+            <div id="home_contents" class="ui-widget ui-widget-content ui-corner-all">
+                <p>
+                    Welcome to <strong>search.metacpan.org</strong>
+                </p>
+                <p>
+                    This site is a front-end for <a href="http://api.metacpan.org" title="The CPAN-API">api.metacpan.org</a>.
+                </p>
+                <p>
+                    We created the api so that cpan metadata can be searched and accessed without necessarily having to us any specific interface.  The API is currently using <a href="http://www.elasticsearch.com/" title="ElasticSearch">ElasticSearch</a> as its backend.
+                </p>
+                <p>
+                    This search page is one example of how to interface with the API.  This whole site is written as a javascript application, with no backend.  <a href="http://documentcloud.github.com/backbone/" title="Backbone.js">Backbone.js</a> is being used to handle routes and views, with jQuery being used for DOM manipultion.
+                </p>
+                <p>
+                    If you find any problems with the site or you have any comments or suggestions please feel free to contact us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group mailing list</a> or even better by adding an item directly to the <a href="https://github.com/CPAN-API/search-metacpan-org/issues">Github issue tracker</a>.
+                </p>
+            </div>
+            <div class="spacer">&nbsp;</div>
+        </script>
         <script id="resultsTable" type="text/html">
             <table id="{{id}}" cellpadding="0" cellspacing="0" border="0" class="results_table"></table>
             <div class="spacer">&nbsp;</div>
@@ -92,10 +110,10 @@
                 <input id="search_input" type="text" class=".ui-widget" />
                 <button id="search_button">Search</button>
             </span>
-            <div style="width: 700px; height: 45px; margin: 5px auto 0px 215px;">
+            <div style="width: 700px; height: 45px; margin: 5px auto 0px 190px;">
                 <div id="search_type" style="float: left;">
                     <input type="radio" id="type_module" name="search_type" value="module" checked="checked" /><label for="type_module">Module</label>
-                    <!--<input type="radio" id="type_dist" name="search_type" value="dist" /><label for="type_dist">Distribution</label>-->
+                    <input type="radio" id="type_dist" name="search_type" value="dist" /><label for="type_dist">Distribution</label>
                     <input type="radio" id="type_author" name="search_type" value="author" /><label for="type_author">Author</label>
                 </div>
                 <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
@@ -105,9 +123,8 @@
         <script id="podView" type="text/html">
             <div id="module_details_header" class="pod">
                 <div class="module_name">{{name}}</div>
-                <!--<div class="fb_box">{{{fbLike}}}</div>-->
                 <div class="module_info">
-                    {{distvname}} &mdash; {{release_date}} &mdash; <a href="/#/showsrc/{{name}}">View Source</a>{{#download_url}} &mdash; <a href="{{download_url}}">Download Archive</a>{{/download_url}}
+                    {{version}} &mdash; {{release_date}} &mdash; <a href="/#/dist/{{distname}}" title="View Distribution">{{distname}}</a> &mdash; <a href="/#/showsrc/{{name}}">View Source</a>{{#download_url}} &mdash; <a href="{{download_url}}">Download Archive</a>{{/download_url}}
                 </div>
                 <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" alt="" /></a></div>
             </div>
@@ -132,7 +149,6 @@
                         Contact Information
                     </div>
                     <div class="left" style="width: 720px; padding: 0 20px;">
-                        <!--Author Dir: {{authorDir}}<br />-->
                         <div class="left contact_info">
                             <div class="contact_info_label">
                                 Email:
@@ -213,6 +229,40 @@
                 <div class="spacer">&nbsp;</div>
 			</div>
         </script>
+        <script id="distView" type="text/html">
+            {{>backButtonPart}}
+            <div id="dist_view_contents"></div>
+            <div id="dist_details_results" style="float: left; display: none;"></div>
+            <div id="dist_view_loader">{{>loaderPart}}</div>
+            <div class="spacer">&nbsp;</div>
+        </script>
+        <script id="distDetails" type="text/html">
+            <div class="ui-widget ui-widget-content ui-corner-all author_details_info">
+                <div class="left">
+                    <div class="left ui-widget-header ui-corner-all" style="width: 818px; padding: 5px 20px; margin-bottom: 10px; font-size: 1.5em;">
+                        <div style="float: left;">{{name}}</div>
+                        <div style="float: right;"><a href="/#/author/{{author}}" title="View author info for {{author}}">{{author}}</a></div>
+                    </div>
+                    <div class="left" style="width: 720px; padding: 5px 20px; margin-bottom: 5px; font-size: 1.2em; font-weight: bold; border-bottom: 1px dotted;">
+                        Distribution Information
+                    </div>
+                    <div class="left" style="width: 720px; padding: 0 20px;">
+                        <div class="left contact_info">
+                            <div class="contact_info_label" style="width: auto; margin-right: 30px;">
+                                Version: {{version}}
+                            </div>
+                            <div class="contact_info_label" style="width: auto;">
+                                Release Date: {{releaseDate}}
+                            </div>
+                            <div class="contact_info_label" style="float: right; width: auto; margin-right: 40px;">
+                                <a href="{{downloadURL}}" title="Download Distribution Archive">Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="spacer">&nbsp;</div>
+			</div>
+        </script>
         <script id="error" type="text/html">
             {{>errorPart}}
         </script>
@@ -233,7 +283,7 @@
         </script>
         <script id="errorPart" class="partial" type="text/html">
             <div class="error ui-widget" style="width: 50%; margin: auto;">
-                <div style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"> 
+                <div style="padding: 0 0.7em;" class="ui-state-error ui-corner-all"> 
                     <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span> 
                     <strong>Error:</strong> <span id="pod_error">{{message}}</span></p>
                 </div>
@@ -256,6 +306,12 @@
                 SourceDetailsView.render();
                 AuthorDetailsView = new AuthorDetails();
                 AuthorDetailsView.render();
+                DistResultsView = new DistResults();
+                DistResultsView.render();
+                DistDetailsView = new DistDetails();
+                DistDetailsView.render();
+                HomeView = new Home();
+                HomeView.render();
                 MetacpanController.enableBackButtons();
                 Backbone.history.start();
 

@@ -3,10 +3,12 @@
 var Metacpan = Backbone.Controller.extend({
 
     routes: {
+        "":                        "home",
         "/author/:query":           "showauthor",
         "/search/:type/:query":     "search",
         "/showpod/:query":          "showpod",
-        "/showsrc/:query":          "showsrc"
+        "/showsrc/:query":          "showsrc",
+        "/dist/:query":             "showdist"
     },
 
     initialize: function() {
@@ -17,7 +19,7 @@ var Metacpan = Backbone.Controller.extend({
 
         $.ajaxSetup({
             cache: false,
-            dataType: 'json'
+            dataType: 'jsonp'
         });
 
         // some global defaults for the DataTable plugin
@@ -36,7 +38,15 @@ var Metacpan = Backbone.Controller.extend({
 
         _.bindAll(this, [ "enableBackButtons" ]);
     },
-    
+
+    home: function() {
+        debug("Action: home page");
+
+        document.title = 'Welcome to search.metacpan.org'
+        this.saveLocation("");
+        HomeView.show();
+    },
+
     search: function(type, query) {
         debug("Action: search");
         debug("Type :  " + type);
@@ -50,13 +60,16 @@ var Metacpan = Backbone.Controller.extend({
         switch(type) {
 
             case 'module':
-                this.saveLocation("/search/module/" +query);
+                this.saveLocation("/search/module/" + query);
                 SearchBoxView.updateTweet();
+                SearchBoxView.loader('show');
 
                 if ( ModuleResultsView.current() === query ) {
                     ModuleResultsView.show();
+                    SearchBoxView.loader('hide');
                 } else {
                     ModuleResultsView.current(query);
+                    $(".metacpanView").fadeOut(200);
                     $.ajax({
                         url: 'http://api.metacpan.org/module/_search',
                         data: { 'q': 'name: "' + query + '"', size: 1000 },
@@ -69,10 +82,6 @@ var Metacpan = Backbone.Controller.extend({
                         //        }
                         //    }
                         //},
-                        beforeSend: function() {
-                            $(".metacpanView").fadeOut(200);
-                            SearchBoxView.loader('show');
-                        },
                         success: function(res) {
                             debug(res);
                             $("#module_results_table").dataTable().fnClearTable();
@@ -90,8 +99,40 @@ var Metacpan = Backbone.Controller.extend({
                     });
                 }
                 break;
+            case 'dist':
+                this.saveLocation("/search/dist/" + query);
+                SearchBoxView.updateTweet();
+                SearchBoxView.loader('show');
+
+                if ( DistResultsView.current() === query ) {
+                    DistResultsView.show();
+                    SearchBoxView.loader('hide');
+                } else {
+                    DistResultsView.current(query);
+                    $(".metacpanView").fadeOut(200);
+                    $.ajax({
+                        url: 'http://api.metacpan.org/dist/_search',
+                        data: { 'q': 'name: "' + query + '"', size: 1000 },
+                        success: function(res) {
+                            debug(res);
+                            $("#dist_results_table").dataTable().fnClearTable();
+                            DistResultsView.update(res, true);
+                            SearchBoxView.loader('hide');
+                        },
+                        error: function(xhr,status,error) {
+                            debug(xhr);
+                            debug(status);
+                            debug(error);
+                            $("#dist_results_table").dataTable().fnClearTable()
+                            DistResultsView.show();
+                            SearchBoxView.loader('hide');
+                        }
+                    });
+                }
+                break;
             default:
                 debug('<< ' + type + ' >> is not a valid search type.' );
+                SearchBoxView.loader('hide');
         
         } 
 
@@ -206,9 +247,6 @@ var Metacpan = Backbone.Controller.extend({
                                     $.ajax({
                                         url: 'http://api.metacpan.org/module/_search',
                                         data: { 'q': 'author: "' + res._source.author + '"', size: 1000 },
-                                        beforeSend: function() {
-                                            $("#author_results_table").dataTable().fnClearTable();
-                                        },
                                         success: function(results) {
                                             debug('Succeeded module search for author: ' + res._source.author);
                                             debug(res);
@@ -285,15 +323,15 @@ var Metacpan = Backbone.Controller.extend({
                         debug(res);
                         AuthorDetailsView.updateAuthor(res);
                         $.ajax({
-                            url: 'http://api.metacpan.org/module/_search',
+                            url: 'http://api.metacpan.org/dist/_search',
                             data: { 'q': 'author: "' + author + '"', size: 1000 },
                             success: function(results) {
-                                debug('Succeeded module search for author: ' + author);
-                                debug(res);
+                                debug('Succeeded dist search for author: ' + author);
+                                debug(results);
                                 AuthorDetailsView.update(results);
                             },
                             error: function(xhr,status,error) {
-                                debug('Failed module search for author: ' + author);
+                                debug('Failed dist search for author: ' + author);
                                 debug(xhr);
                                 debug(status);
                                 debug(error);
@@ -302,10 +340,69 @@ var Metacpan = Backbone.Controller.extend({
                         });
                     },
                     error: function(xhr, error, status) {
+                        debug('Failed author search for PAUSEID << ' + author + ' >>');
                         debug(xhr);
                         debug(status);
                         debug(error);
                         AuthorDetailsView.noAuthor("no author info found for PAUSEID << " + author + " >>");
+                    }
+                });  
+            });
+            setTimeout(fn, 410);
+        }
+
+    },
+
+    showdist: function(query) {
+        debug("Action: showdist");
+        debug("Query:  " + query);
+
+        document.title = 'Distribution: ' + query + ' - search.metacpan.org';
+
+        MetacpanController.saveLocation("/dist/" + query);
+        SearchBoxView.updateTweet();
+
+        SearchBoxView.searchType('dist');
+        SearchBoxView.updateQuery(query);
+
+        DistDetailsView.show();
+
+        if ( DistDetailsView.current() === query ) {
+            var fn = (function() { DistDetailsView.showDist(); });
+            setTimeout(fn, 410);
+        } else {
+            DistDetailsView.current(query);
+            var fn = (function() {
+                $.ajax({
+                    url:  'http://api.metacpan.org/dist/' + query,
+                    success: function(res) {
+                        debug(res);
+                        DistDetailsView.updateDist(res);
+                        $.ajax({
+                            url: 'http://api.metacpan.org/module/_search',
+                            data: { 'q': 'distname:"' + query.toLowerCase() + '"', size: 1000 },
+                            //type: 'post',
+                            //data: '{ "size": "1000", "query": { "field": { "distname": "' + query.toLowerCase() + '" } } }',
+                            success: function(results) {
+                                debug('Succeeded module search for dist: ' + query);
+                                debug(results);
+                                DistDetailsView.update(results);
+                            },
+                            error: function(xhr,status,error) {
+                                debug('Failed module search for dist: ' + query);
+                                debug(xhr);
+                                debug(status);
+                                debug(error);
+                                DistDetailsView.update();
+                            }
+                        });
+                    },
+                    error: function(xhr, error, status) {
+                        debug('Failed distrbution search for dist: ' + query);
+                        debug(xhr);
+                        debug(status);
+                        debug(error);
+                        DistDetailsView.noDist("No distribution info found for << " + query + " >>");
                     }
                 });  
             });
