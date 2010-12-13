@@ -11,6 +11,8 @@ var Metacpan = Backbone.Controller.extend({
         "/dist/:query":             "showdist"
     },
 
+    apiUrl: 'http://api.metacpan.org',
+
     initialize: function() {
 
         $("#main_content a").click(function(e) {
@@ -52,6 +54,8 @@ var Metacpan = Backbone.Controller.extend({
         debug("Type :  " + type);
         debug("Query:  " + query);
 
+        var my = this;
+
         document.title = 'Search results for: ' + query + ' - search.metacpan.org';
 
         SearchBoxView.searchType(type);
@@ -71,7 +75,7 @@ var Metacpan = Backbone.Controller.extend({
                     ModuleResultsView.current(query);
                     $(".metacpanView").fadeOut(200);
                     $.ajax({
-                        url: 'http://api.metacpan.org/module/_search',
+                        url: my.apiUrl + '/module/_search',
                         data: { 'q': 'name: "' + query + '"', size: 1000 },
                         //type: 'post',
                         //data: '{ "size": "500", "query": { "term": { "name": "' + module.toLowerCase() + '" } } }',
@@ -111,7 +115,7 @@ var Metacpan = Backbone.Controller.extend({
                     DistResultsView.current(query);
                     $(".metacpanView").fadeOut(200);
                     $.ajax({
-                        url: 'http://api.metacpan.org/dist/_search',
+                        url: my.apiUrl + '/dist/_search',
                         data: { 'q': 'name: "' + query + '"', size: 1000 },
                         success: function(res) {
                             debug(res);
@@ -142,6 +146,8 @@ var Metacpan = Backbone.Controller.extend({
         debug("Action: showpod");
         debug("Query:  " + query);
 
+        var my = this;
+
         document.title = query + ' - search.metacpan.org';
 
         SearchBoxView.searchType('module');
@@ -154,7 +160,7 @@ var Metacpan = Backbone.Controller.extend({
             setTimeout(fn, 410);
         } else {
             $.ajax({
-                url:  'http://api.metacpan.org/module/' + query,
+                url:  my.apiUrl + '/module/' + query,
                 success: function(res) {
                     debug(res);
                     MetacpanController.saveLocation("/showpod/" + res._source.name);
@@ -164,12 +170,12 @@ var Metacpan = Backbone.Controller.extend({
                     } else {
                         ModuleDetailsView.current(res._source.name);
                         $.ajax({
-                            url: 'http://api.metacpan.org/pod/' + res._source.name,
+                            url: my.apiUrl + '/pod/' + res._source.name,
                             success: function(pod) {
                                 debug(pod);
                                 if ( pod.hasOwnProperty('_source') && pod._source.hasOwnProperty('pod') ) {
                                     $.ajax({
-                                        url: 'http://api.metacpan.org/author/' + res._source.author,
+                                        url: my.apiUrl + '/author/' + res._source.author,
                                         success: function(author) {
                                             ModuleDetailsView.updatePod(res, pod, author);
                                         },
@@ -216,6 +222,8 @@ var Metacpan = Backbone.Controller.extend({
         debug("Action: showsrc");
         debug("Query:  " + query);
 
+        var my = this;
+
         document.title = 'Source: ' + query + ' - search.metacpan.org';
 
         SearchBoxView.searchType('module');
@@ -228,7 +236,7 @@ var Metacpan = Backbone.Controller.extend({
             setTimeout(fn, 410);
         } else {
             $.ajax({
-                url:  'http://api.metacpan.org/module/' + query,
+                url:  my.apiUrl + '/module/' + query,
                 success: function(res) {
                     debug(res);
                     MetacpanController.saveLocation("/showsrc/" + res._source.name);
@@ -245,7 +253,7 @@ var Metacpan = Backbone.Controller.extend({
                                 if ( typeof(source) != 'undefined') {
                                     SourceDetailsView.showSource(source, res._source.author);
                                     $.ajax({
-                                        url: 'http://api.metacpan.org/module/_search',
+                                        url: my.apiUrl + '/module/_search',
                                         data: { 'q': 'author: "' + res._source.author + '"', size: 1000 },
                                         success: function(results) {
                                             debug('Succeeded module search for author: ' + res._source.author);
@@ -299,6 +307,8 @@ var Metacpan = Backbone.Controller.extend({
         debug("Action: showauthor");
         debug("Query:  " + query);
 
+        var my = this;
+
         var author = query.toUpperCase();
 
         document.title = author + ' - search.metacpan.org';
@@ -318,12 +328,12 @@ var Metacpan = Backbone.Controller.extend({
             AuthorDetailsView.current(query);
             var fn = (function() {
                 $.ajax({
-                    url:  'http://api.metacpan.org/author/' + author,
+                    url:  my.apiUrl + '/author/' + author,
                     success: function(res) {
                         debug(res);
                         AuthorDetailsView.updateAuthor(res);
                         $.ajax({
-                            url: 'http://api.metacpan.org/dist/_search',
+                            url: my.apiUrl + '/dist/_search',
                             data: { 'q': 'author: "' + author + '"', size: 1000 },
                             success: function(results) {
                                 debug('Succeeded dist search for author: ' + author);
@@ -357,6 +367,8 @@ var Metacpan = Backbone.Controller.extend({
         debug("Action: showdist");
         debug("Query:  " + query);
 
+        var my = this;
+
         document.title = 'Distribution: ' + query + ' - search.metacpan.org';
 
         MetacpanController.saveLocation("/dist/" + query);
@@ -374,12 +386,12 @@ var Metacpan = Backbone.Controller.extend({
             DistDetailsView.current(query);
             var fn = (function() {
                 $.ajax({
-                    url:  'http://api.metacpan.org/dist/' + query,
+                    url: my.apiUrl + '/dist/' + query,
                     success: function(res) {
                         debug(res);
                         DistDetailsView.updateDist(res);
                         $.ajax({
-                            url: 'http://api.metacpan.org/module/_search',
+                            url: my.apiUrl + '/module/_search',
                             data: { 'q': 'distname:"' + query.toLowerCase() + '"', size: 1000 },
                             //type: 'post',
                             //data: '{ "size": "1000", "query": { "field": { "distname": "' + query.toLowerCase() + '" } } }',
