@@ -1,0 +1,141 @@
+.pod {
+    width: 100%;
+}
+.pod pre     {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid #681818;
+    color: black;
+    padding: 1em;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.pod code {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.pod a {
+  color: #681818;
+  text-decoration: underline;
+  font-size: 1em;
+}
+
+.pod a:visited {
+  color: #453821;
+}
+
+.pod a:hover {
+    text-decoration: none;
+}
+
+.pod h1      {
+  background: transparent;
+  color: #681818;
+  font-size: 1.7em;
+}
+
+.pod h1 a { text-decoration: none; }
+.pod h2 a { text-decoration: none; }
+.pod h3 a { text-decoration: none; }
+.pod h4 a { text-decoration: none; }
+
+.pod h2      {
+  background: transparent;
+  color: #681818;
+  font-size: 1.5em;
+}
+
+.pod h3      {
+  background: transparent;
+  color: #681818;
+  font-size: 1.3em;
+  font-style: italic;
+}
+
+.pod h4      {
+  background: transparent;
+  color: #681818;
+  font-size: 1.1em;
+  font-weight: normal;
+}
+
+.pod img     {
+  border: none;
+  vertical-align: top;
+}
+
+.pod #index {
+    padding: 0px;
+}
+
+.pod #index li {
+  list-style-type: none;
+  margin: .3em 0;
+}
+
+.pod #index ul  {
+    padding-left: 1.5em;
+}
+
+.pod #index a:visited {
+  color: #681818;
+}
+
+#module_details_header {
+    float: left;
+    color: #681818;
+	border-bottom: 1px solid #681818;
+    padding-bottom: 10px;
+}
+
+#module_details_header .module_name {
+    float: left;
+    width: 600px;
+    font-size: 1.8em;
+    color: #681818;
+}
+
+#module_details_header .fb_box {
+    float: left;
+    width: 300px;
+    text-align: right;
+}
+
+#module_details_header .module_info {
+    float: left;
+    width: 600px;
+    font-size: 1em;
+    color: #654b24;
+}
+
+#module_details_header .author_info {
+    position: relative;
+    float: left;
+    width: 300px;
+    font-size: 1.2em;
+    color: #654b24;
+    text-align: right;
+}
+
+#module_details_header .gravatar {
+    position: absolute;
+    bottom: -105px;
+    right: 0px;
+    border: 0;
+}
+
+#module_details_header .separator {
+    float: left;
+    width: 100%;
+    height: 4px;
+    margin: 5px 0;
+    background-color: #6e4f1c;
+}
