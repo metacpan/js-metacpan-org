@@ -11,7 +11,7 @@ var Metacpan = Backbone.Controller.extend({
         "/dist/:query":             "showdist"
     },
 
-    apiUrl: 'http://api.metacpan.org',
+    apiUrl: 'http://ww5.wundercounter.com:9200/cpan',
 
     initialize: function() {
 
