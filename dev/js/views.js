@@ -74,7 +74,7 @@ var ModuleResults = Backbone.View.extend({
         $(res.hits.hits).each(function() {
             rowData.push([
                 '<div class="cell_contents" title="' + this._source.name + '" style="width: 176px;">' + this._source.name + '</div>',
-                '<div class="cell_contents" title="' + this._source.description + '" style="width: 160px;">' + /*this._source.description*/ '<< not yet avaialble >>' + '</div>',
+                '<div class="cell_contents" title="' + this._source.abstract + '" style="width: 160px;">' + this._source.abstract + '</div>',
                 '<div class="cell_contents" title="' + this._source.version + '" style="width: 58px;">' + this._source.version + '</div>',
                 '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 83px;">' + this._source.release_date.substr(0,10) + '</div>',
                 '<div class="cell_contents" title="' + this._source.distname + '" style="width: 115px;"><a href="/#/dist/' + this._source.distname + '" title="View Distribution page for ' + this._source.distname + '" style="font-weight: normal; text-decoration: underline;">' + this._source.distname + '</div>',
@@ -438,7 +438,7 @@ var AuthorDetails = Backbone.View.extend({
                 $(res.hits.hits).each(function() {
                     rowData.push([
                         '<div class="cell_contents" title="' + this._source.name + '" style="width: 320px;">' + this._source.name + '</div>',
-                        '<div class="cell_contents" title="' + this._source.description + '" style="width: 288px;">' + /*this._source.description*/ '<< not yet avaialble >>' + '</div>',
+                        '<div class="cell_contents" title="' + this._source.description + '" style="width: 288px;">' + /*this._source.description*/ '<< not yet available >>' + '</div>',
                         '<div class="cell_contents" title="' + this._source.version + '" style="width: 68px;">' + this._source.version + '</div>',
                         '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 78px;">' + this._source.release_date.substr(0,10) + '</div>'
                     ]);
@@ -554,7 +554,7 @@ var DistResults = Backbone.View.extend({
         $(res.hits.hits).each(function() {
             rowData.push([
                 '<div class="cell_contents" title="' + this._source.name + '" style="width: 227px;">' + this._source.name + '</div>',
-                '<div class="cell_contents" title="' + this._source.description + '" style="width: 195px;">' + /*this._source.description*/ '<< description not avaialble... yet >>' + '</div>',
+                '<div class="cell_contents" title="' + this._source.abstract + '" style="width: 195px;">' + this._source.abstract + '</div>',
                 '<div class="cell_contents" title="' + this._source.version + '" style="width: 68px;">' + this._source.version + '</div>',
                 '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 78px;">' + this._source.release_date.substr(0,10) + '</div>',
                 '<div class="cell_contents" title="' + this._source.author + '" style="width: 100px;">' + this._source.author + '</div>',
@@ -668,7 +668,7 @@ var DistDetails = Backbone.View.extend({
                 $(res.hits.hits).each(function() {
                     rowData.push([
                         '<div class="cell_contents" title="' + this._source.name + '" style="width: 320px;">' + this._source.name + '</div>',
-                        '<div class="cell_contents" title="' + this._source.distvname + '" style="width: 288px;">' + this._source.distvname + '</div>',
+                        '<div class="cell_contents" title="' + this._source.description + '" style="width: 288px;">' + '<< not yet available >>' + '</div>',
                         '<div class="cell_contents" title="' + this._source.version + '" style="width: 78px;">' + this._source.version + '</div>',
                         '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 68px;">' + this._source.release_date.substr(0,10) + '</div>'
                     ]);

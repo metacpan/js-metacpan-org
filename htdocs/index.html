@@ -64,13 +64,16 @@
                     Welcome to <strong>search.metacpan.org</strong>
                 </p>
                 <p>
+                    <em>New updates will appear in the New Year, including more information on the Distribution page (links to cpan tester, dependencies etc) and an Author search results page where instead of requiring the Author's exact puaseid, a result list based on pauseid and name will be shown. And possibly another tidbit or two.</em>
+                </p>
+                <p>
                     This site is a front-end for <a href="http://api.metacpan.org" title="The CPAN-API">api.metacpan.org</a>.
                 </p>
                 <p>
-                    We created the api so that CPAN metadata can be searched and accessed without necessarily having to us any specific interface.  The API is currently using <a href="http://www.elasticsearch.com/" title="ElasticSearch">ElasticSearch</a> as its backend.
+                    We created the api so that CPAN metadata can be searched and accessed without necessarily having to use any specific interface.  The API is currently using <a href="http://www.elasticsearch.com/" title="ElasticSearch">ElasticSearch</a> as its backend.
                 </p>
                 <p>
-                    This search page is one example of how to interface with the API.  This whole site is written as a javascript application, with no backend.  <a href="http://documentcloud.github.com/backbone/" title="Backbone.js">Backbone.js</a> is being used to handle routes and views, with jQuery being used for DOM manipultion and AJAX calls.
+                    This search page is one example of how to interface with the API.  This whole site is written as a javascript application, with no backend.  <a href="http://documentcloud.github.com/backbone/" title="Backbone.js">Backbone.js</a> is being used to handle routes and views, with jQuery being used for DOM manipulation and AJAX calls.
                 </p>
                 <p>
                     If you find any problems with the site or you have any comments or suggestions please feel free to contact us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group mailing list</a> or even better by adding an item directly to the <a href="https://github.com/CPAN-API/search-metacpan-org/issues">Github issue tracker</a>.
@@ -161,8 +164,11 @@
                             <div class="contact_info_label">
                                 Blog:
                             </div>
+                            <div class="contact_info_value" style="margin-right: 5px;">
+                                {{#blogURL}}<a href="{{.}}" title="{{.}}">URL</a><br />{{/blogURL}}
+                            </div>
                             <div class="contact_info_value">
-                                {{#blogURL}}<a href="{{blogURL}}">{{blogURL}}</a>{{/blogURL}}{{#blogFeed}} (<a href="{{blogFeed}}">feed</a>){{/blogFeed}}
+                               {{#blogFeed}} (<a href="{{.}}" title="{{.}}">feed</a>)<br />{{/blogFeed}}
                             </div>
                         </div>
                         <div class="left contact_info">
@@ -218,13 +224,17 @@
                                 Website:
                             </div>
                             <div class="contact_info_value">
-                                {{#website}}<a href="{{website}}">{{website}}</a>{{/website}}
+                                {{#website}}<a href="{{.}}">{{.}}</a><br />{{/website}}
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="right" style="text-align: center;">
                     <div><img src="{{gravatar}}" alt=" " /></div>
+                </div>
+                <div class="left" style="width: 100%; font-size: 1em; font-weight: bold; text-align: right;">
+                    <a href="http://blogs.perl.org/users/olaf_alders/2010/12/expanding-your-author-info-in-the-metacpan.html" title="Update Author Information">How To Update</a>
                 </div>
                 <div class="spacer">&nbsp;</div>
 			</div>
@@ -248,14 +258,30 @@
                     </div>
                     <div class="left" style="width: 720px; padding: 0 20px;">
                         <div class="left contact_info">
-                            <div class="contact_info_label" style="width: auto; margin-right: 30px;">
-                                Version: {{version}}
+                            <div class="contact_info_label">
+                                Description:
                             </div>
-                            <div class="contact_info_label" style="width: auto;">
-                                Release Date: {{releaseDate}}
+                            <div class="contact_info_value">
+                               {{description}}
                             </div>
                             <div class="contact_info_label" style="float: right; width: auto; margin-right: 40px;">
                                 <a href="{{downloadURL}}" title="Download Distribution Archive">Download</a>
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label">
+                                Version:
+                            </div>
+                            <div class="contact_info_value">
+                                {{version}} &mdash; {{releaseDate}}
+                            </div>
+                            <div class="contact_info_label" style="float: right; width: auto; margin-right: 40px;">
+                                <a href="http://deps.cpantesters.org/?module={{nameColon}};perl=latest" title="View Dependencies">Dependencies</a>
+                            </div>
+                        </div>
+                        <div class="left contact_info">
+                            <div class="contact_info_label" style="float: right; width: auto; margin-right: 40px;">
+                                <a href="http://www.cpantesters.org/distro/{{letter}}/{{name}}" title="View Test Results">CPAN Testers</a>
                             </div>
                         </div>
                     </div>
@@ -296,22 +322,6 @@
 
                 // initialize Backbone code
                 MetacpanController = new Metacpan();
-                SearchBoxView = new SearchBox();
-                SearchBoxView.render();
-                ModuleResultsView = new ModuleResults();
-                ModuleResultsView.render();
-                ModuleDetailsView = new ModuleDetails();
-                ModuleDetailsView.render();
-                SourceDetailsView = new SourceDetails();
-                SourceDetailsView.render();
-                AuthorDetailsView = new AuthorDetails();
-                AuthorDetailsView.render();
-                DistResultsView = new DistResults();
-                DistResultsView.render();
-                DistDetailsView = new DistDetails();
-                DistDetailsView.render();
-                HomeView = new Home();
-                HomeView.render();
                 MetacpanController.enableBackButtons();
                 Backbone.history.start();
 

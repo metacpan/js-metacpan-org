@@ -3,7 +3,7 @@
 var Metacpan = Backbone.Controller.extend({
 
     routes: {
-        "":                        "home",
+        "":                         "home",
         "/author/:query":           "showauthor",
         "/search/:type/:query":     "search",
         "/showpod/:query":          "showpod",
@@ -37,6 +37,23 @@ var Metacpan = Backbone.Controller.extend({
         if ( $.cookie('jquery-ui-theme') == '' || $.cookie('jquery-ui-theme') == null ) {
             $.cookie('jquery-ui-theme', 'metaCPAN');
         }
+
+        SearchBoxView = new SearchBox();
+        SearchBoxView.render();
+        ModuleResultsView = new ModuleResults();
+        ModuleResultsView.render();
+        ModuleDetailsView = new ModuleDetails();
+        ModuleDetailsView.render();
+        SourceDetailsView = new SourceDetails();
+        SourceDetailsView.render();
+        AuthorDetailsView = new AuthorDetails();
+        AuthorDetailsView.render();
+        DistResultsView = new DistResults();
+        DistResultsView.render();
+        DistDetailsView = new DistDetails();
+        DistDetailsView.render();
+        HomeView = new Home();
+        HomeView.render();
 
         _.bindAll(this, [ "enableBackButtons" ]);
     },
@@ -173,7 +190,7 @@ var Metacpan = Backbone.Controller.extend({
                             url: my.apiUrl + '/pod/' + res._source.name,
                             success: function(pod) {
                                 debug(pod);
-                                if ( pod.hasOwnProperty('_source') && pod._source.hasOwnProperty('pod') ) {
+                                if ( pod.hasOwnProperty('_source') && pod._source.hasOwnProperty('html') ) {
                                     $.ajax({
                                         url: my.apiUrl + '/author/' + res._source.author,
                                         success: function(author) {
@@ -392,7 +409,7 @@ var Metacpan = Backbone.Controller.extend({
                         DistDetailsView.updateDist(res);
                         $.ajax({
                             url: my.apiUrl + '/module/_search',
-                            data: { 'q': 'distname:"' + query.toLowerCase() + '"', size: 1000 },
+                            data: { 'q': 'distvname:"' + res._source.distvname + '"', size: 1000 },
                             //type: 'post',
                             //data: '{ "size": "1000", "query": { "field": { "distname": "' + query.toLowerCase() + '" } } }',
                             success: function(results) {

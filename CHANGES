@@ -1,0 +1,11 @@
+2011-01-09
+
+* added a change log to the homepage
+* added links to CPAN Testers and Dependencies to
+  the dist details page
+* added dist description to the dist details page
+
+2011-01-07
+
+* added module and dist abstracts to all result tables
+

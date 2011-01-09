@@ -11,7 +11,7 @@ var Metacpan = Backbone.Controller.extend({
         "/dist/:query":             "showdist"
     },
 
-    apiUrl: 'http://ww5.wundercounter.com:9200/cpan',
+    apiUrl: 'http://dev.metacpan.org/api',
 
     initialize: function() {
 
@@ -21,7 +21,7 @@ var Metacpan = Backbone.Controller.extend({
 
         $.ajaxSetup({
             cache: false,
-            dataType: 'jsonp'
+            dataType: 'json'
         });
 
         // some global defaults for the DataTable plugin
@@ -78,7 +78,7 @@ var Metacpan = Backbone.Controller.extend({
                         url: my.apiUrl + '/module/_search',
                         data: { 'q': 'name: "' + query + '"', size: 1000 },
                         //type: 'post',
-                        //data: '{ "size": "500", "query": { "term": { "name": "' + module.toLowerCase() + '" } } }',
+                        //data: '{ "size": "1000", "query": { "field": { "name": "' + query + '" } } }',
                         //data: {
                         //    "query": {
                         //        "term": {
@@ -246,7 +246,7 @@ var Metacpan = Backbone.Controller.extend({
                     } else {
                         SourceDetailsView.current(res._source.name);
                         $.ajax({
-                            url: res._source.source_url,
+                            url: res._source.source_url.replace("search.metacpan.org", "dev.metacpan.org"),
                             dataType: 'text',
                             processData: false,
                             success: function(source) {
@@ -392,7 +392,7 @@ var Metacpan = Backbone.Controller.extend({
                         DistDetailsView.updateDist(res);
                         $.ajax({
                             url: my.apiUrl + '/module/_search',
-                            data: { 'q': 'distname:"' + query.toLowerCase() + '"', size: 1000 },
+                            data: { 'q': 'distvname:"' + res._source.distvname + '"', size: 1000 },
                             //type: 'post',
                             //data: '{ "size": "1000", "query": { "field": { "distname": "' + query.toLowerCase() + '" } } }',
                             success: function(results) {
