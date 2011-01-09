@@ -62,6 +62,7 @@ var Metacpan = Backbone.Controller.extend({
         debug("Action: home page");
 
         document.title = 'Welcome to search.metacpan.org'
+        $("#changes").load("/CHANGES");
         this.saveLocation("");
         HomeView.show();
     },
