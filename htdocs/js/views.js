@@ -251,7 +251,7 @@ var SearchBox = Backbone.View.extend({
 
     el: $("#search_box"),
 
-    tweetcode: '<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="ioncache">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>',
+    tweetcode: '<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="metacpan">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>',
 
     initialize: function() {
         _.bindAll(this, [ "render", "updateQuery", "searchType", "loader", "updateTweet" ]);

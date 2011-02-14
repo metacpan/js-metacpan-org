@@ -11,7 +11,7 @@ var Metacpan = Backbone.Controller.extend({
         "/dist/:query":             "showdist"
     },
 
-    apiUrl: 'http://api.metacpan.org',
+    apiUrl: 'http://search.metacpan.org/api',
 
     initialize: function() {
 
@@ -21,7 +21,7 @@ var Metacpan = Backbone.Controller.extend({
 
         $.ajaxSetup({
             cache: false,
-            dataType: 'jsonp'
+            dataType: 'json'
         });
 
         // some global defaults for the DataTable plugin
