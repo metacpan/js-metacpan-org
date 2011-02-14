@@ -68,6 +68,7 @@ var Metacpan = Backbone.Controller.extend({
     },
 
     search: function(type, query) {
+        query = unescape(query);
         debug("Action: search");
         debug("Type :  " + type);
         debug("Query:  " + query);
@@ -161,6 +162,7 @@ var Metacpan = Backbone.Controller.extend({
     },
 
     showpod: function(query) {
+        query = unescape(query);
         debug("Action: showpod");
         debug("Query:  " + query);
 
@@ -237,6 +239,7 @@ var Metacpan = Backbone.Controller.extend({
     },
 
     showsrc: function(query) {
+        query = unescape(query);
         debug("Action: showsrc");
         debug("Query:  " + query);
 
@@ -322,6 +325,7 @@ var Metacpan = Backbone.Controller.extend({
     },
 
     showauthor: function(query) {
+        query = unescape(query);
         debug("Action: showauthor");
         debug("Query:  " + query);
 
@@ -340,6 +344,7 @@ var Metacpan = Backbone.Controller.extend({
         AuthorDetailsView.show();
 
         if ( AuthorDetailsView.current() === query ) {
+            debug("Author info already retrieved.");
             var fn = (function() { AuthorDetailsView.showAuthor(); });
             setTimeout(fn, 410);
         } else {
@@ -382,6 +387,7 @@ var Metacpan = Backbone.Controller.extend({
     },
 
     showdist: function(query) {
+        query = unescape(query);
         debug("Action: showdist");
         debug("Query:  " + query);
 
@@ -405,6 +411,7 @@ var Metacpan = Backbone.Controller.extend({
             var fn = (function() {
                 $.ajax({
                     url: my.apiUrl + '/dist/' + query,
+                    //url: my.apiUrl + '/dist,cpanratings/_search?q=_id:' + query + '&analyzer=keyword',
                     success: function(res) {
                         debug(res);
                         DistDetailsView.updateDist(res);

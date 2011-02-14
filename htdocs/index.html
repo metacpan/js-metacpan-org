@@ -48,6 +48,7 @@
         <script type="text/javascript" src="/js/json2.min.js"></script>
         <script type="text/javascript" src="/js/underscore-min.js"></script>
         <script type="text/javascript" src="/js/backbone-min.js"></script>
+        <script type="text/javascript" src="/js/encoder.js"></script>
         <script type="text/javascript" src="/js/main.js"></script>
         <script type="text/javascript" src="/js/views.js"></script>
         <script type="text/javascript" src="/js/controllers.js"></script>
@@ -328,7 +329,11 @@
 
         <!-- begin wundercounter.com code http://www.wundercounter.com/?refID=ioncache -->
         <script type="text/javascript">
-        
+
+            String.prototype.htmlEntities = function () {
+                return this.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            };
+
             (function() {
             
                 var lang     = ( typeof( navigator.browserLanguage ) == 'undefined' ) ? navigator.language : navigator.browserLanguage;

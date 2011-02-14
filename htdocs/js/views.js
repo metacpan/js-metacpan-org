@@ -425,8 +425,12 @@ var AuthorDetails = Backbone.View.extend({
     
     showAuthor: function() {
         $("#author_view_loader").fadeOut(200, function() {
-            $("#author_view_contents, #author_results, #author_results_table_container").fadeIn(200);
+            $("#author_view_contents").fadeIn(200);
         });
+        var table = $("#author_results_table").dataTable();
+        if ( table.oNodes.length > 0 ) {
+            $("#author_results, #author_results_table_container").fadeIn(200);
+        }
     },
 
     // updates the author results table
@@ -446,7 +450,6 @@ var AuthorDetails = Backbone.View.extend({
             }
             var temp = $("#author_results_table").dataTable().fnAddData(rowData);
         }).fadeIn(200);
-
     },
 
     // fades the view in
