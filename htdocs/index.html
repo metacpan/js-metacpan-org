@@ -14,7 +14,7 @@
 
         <link rel="stylesheet" type="text/css" media="screen" href="/css/screen.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/pod.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="http://jqueryui.com/themes/base/ui.all.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery.ui.all.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="http://yandex.st/highlightjs/5.15/styles/vs.min.css" />
 
     </head>
@@ -126,7 +126,7 @@
             <div id="module_details_header" class="pod">
                 <div class="module_name">{{name}}</div>
                 <div class="module_info">
-                    {{version}} &mdash; {{release_date}} &mdash; <a href="/#/dist/{{distname}}" title="View Distribution">{{distname}}</a> &mdash; <a href="/#/showsrc/{{name}}">View Source</a>{{#download_url}} &mdash; <a href="{{download_url}}">Download Archive</a>{{/download_url}}
+                    {{version}} &mdash; {{date}} &mdash; <a href="/#/dist/{{release}}" title="View Distribution">{{release}}</a> &mdash; <a href="/#/showsrc/{{name}}">View Source</a>{{#download_url}} &mdash; <a href="{{download_url}}">Download Archive</a>{{/download_url}}
                 </div>
                 <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" alt="" /></a></div>
             </div>

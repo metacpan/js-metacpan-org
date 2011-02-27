@@ -11,7 +11,7 @@ var Metacpan = Backbone.Controller.extend({
         "/dist/:query":             "showdist"
     },
 
-    apiUrl: 'http://search.metacpan.org/api',
+    apiUrl: '/api',
 
     initialize: function() {
 
@@ -93,18 +93,13 @@ var Metacpan = Backbone.Controller.extend({
                 } else {
                     ModuleResultsView.current(query);
                     $(".metacpanView").fadeOut(200);
+                    query = query.replace(/::/, " ");
+                    console.log(query);
                     $.ajax({
                         url: my.apiUrl + '/module/_search',
-                        data: { 'q': 'name: "' + query + '"', size: 1000 },
-                        //type: 'post',
-                        //data: '{ "size": "500", "query": { "term": { "name": "' + module.toLowerCase() + '" } } }',
-                        //data: {
-                        //    "query": {
-                        //        "term": {
-                        //            "name": '"' + module + '"'
-                        //        }
-                        //    }
-                        //},
+                        type: 'post',
+                        processData: false,
+                        data: '{ "size": "500", "query": { "field": { "name":"' + query.toLowerCase() + '"}}, "filter":{"term":{"status":"latest"}} } }',
                         success: function(res) {
                             debug(res);
                             $("#module_results_table").dataTable().fnClearTable();
@@ -134,8 +129,10 @@ var Metacpan = Backbone.Controller.extend({
                     DistResultsView.current(query);
                     $(".metacpanView").fadeOut(200);
                     $.ajax({
-                        url: my.apiUrl + '/dist/_search',
-                        data: { 'q': 'name: "' + query + '"', size: 1000 },
+                        url: my.apiUrl + '/release/_search',
+                        type: 'post',
+                        processData: false,
+                        data: '{ "size": "500", "query": { "field": { "name":"' + query.toLowerCase() + '"}}, "filter":{"term":{"status":"latest"}} } }',
                         success: function(res) {
                             debug(res);
                             $("#dist_results_table").dataTable().fnClearTable();
@@ -183,6 +180,7 @@ var Metacpan = Backbone.Controller.extend({
                 url:  my.apiUrl + '/module/' + query,
                 success: function(res) {
                     debug(res);
+                    res["_source"] = res;
                     MetacpanController.saveLocation("/showpod/" + res._source.name);
                     SearchBoxView.updateTweet();
                     if ( ModuleDetailsView.current() === res._source.name ) {
@@ -191,9 +189,10 @@ var Metacpan = Backbone.Controller.extend({
                         ModuleDetailsView.current(res._source.name);
                         $.ajax({
                             url: my.apiUrl + '/pod/' + res._source.name,
+                            dataType: 'text',
                             success: function(pod) {
                                 debug(pod);
-                                if ( pod.hasOwnProperty('_source') && pod._source.hasOwnProperty('html') ) {
+                                if ( pod ) {
                                     $.ajax({
                                         url: my.apiUrl + '/author/' + res._source.author,
                                         success: function(author) {
@@ -260,34 +259,22 @@ var Metacpan = Backbone.Controller.extend({
                 url:  my.apiUrl + '/module/' + query,
                 success: function(res) {
                     debug(res);
+                    res["_source"] = res;
                     MetacpanController.saveLocation("/showsrc/" + res._source.name);
                     SearchBoxView.updateTweet();
                     if ( SourceDetailsView.current() === res._source.name ) {
                         SourceDetailsView.showSource();
                     } else {
                         SourceDetailsView.current(res._source.name);
+                        var url = ["/source", res._source.author, res._source.release, res._source.file].join("/");
+                        console.log(url);
                         $.ajax({
-                            url: res._source.source_url,
+                            url: url,
                             dataType: 'text',
                             processData: false,
                             success: function(source) {
                                 if ( typeof(source) != 'undefined') {
                                     SourceDetailsView.showSource(source, res._source.author);
-                                    $.ajax({
-                                        url: my.apiUrl + '/module/_search',
-                                        data: { 'q': 'author: "' + res._source.author + '"', size: 1000 },
-                                        success: function(results) {
-                                            debug('Succeeded module search for author: ' + res._source.author);
-                                            debug(res);
-                                            AuthorDetailsView.update(results);
-                                        },
-                                        error: function(xhr,status,error) {
-                                            debug('Failed module search for author: ' + res._source.author);
-                                            debug(xhr);
-                                            debug(status);
-                                            debug(error);
-                                        }
-                                    });
                                 } else {
                                     SourceDetailsView.noSource("no source could be found for << " + res._source.name + " >>");
                                 }
@@ -410,16 +397,15 @@ var Metacpan = Backbone.Controller.extend({
             DistDetailsView.current(query);
             var fn = (function() {
                 $.ajax({
-                    url: my.apiUrl + '/dist/' + query,
-                    //url: my.apiUrl + '/dist,cpanratings/_search?q=_id:' + query + '&analyzer=keyword',
+                    url: my.apiUrl + '/release/' + query,
                     success: function(res) {
                         debug(res);
                         DistDetailsView.updateDist(res);
                         $.ajax({
                             url: my.apiUrl + '/module/_search',
-                            data: { 'q': 'distvname:"' + res._source.distvname + '"', size: 1000 },
-                            //type: 'post',
-                            //data: '{ "size": "1000", "query": { "field": { "distname": "' + query.toLowerCase() + '" } } }',
+                            type: 'post',
+                            processData: false,
+                            data: '{ "size": "1000", "query": { "term": { "release": "' + query + '" } } }',
                             success: function(results) {
                                 debug('Succeeded module search for dist: ' + query);
                                 debug(results);
