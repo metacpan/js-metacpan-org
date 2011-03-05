@@ -218,7 +218,6 @@ var SourceDetails = Backbone.View.extend({
                 container.wrapInner('<pre id="module_source" class="language-perl"><code></code></pre>');
                 container.prepend(ich.sourceHeader({ module: SourceDetailsView.current(), author: author }));
                 hljs.highlightBlock($("#module_source").get(0), '    ');
-                console.log("FOOBAR");
                 $("#source_view_loader").hide();
             //}).fadeIn(205);
         } else {
@@ -395,6 +394,7 @@ var AuthorDetails = Backbone.View.extend({
     },
 
     updateAuthor: function(author) {
+        author._source = author;
         $("#author_view_contents").fadeOut(200, function() {
             $(this).html(ich.authorDetails({
                 pauseid: author._source.pauseid,

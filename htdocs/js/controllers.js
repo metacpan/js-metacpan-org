@@ -94,7 +94,6 @@ var Metacpan = Backbone.Controller.extend({
                     ModuleResultsView.current(query);
                     $(".metacpanView").fadeOut(200);
                     query = query.replace(/::/, " ");
-                    console.log(query);
                     $.ajax({
                         url: my.apiUrl + '/module/_search',
                         type: 'post',
@@ -179,7 +178,6 @@ var Metacpan = Backbone.Controller.extend({
             $.ajax({
                 url:  my.apiUrl + '/module/' + query,
                 success: function(res) {
-                    debug(res);
                     res["_source"] = res;
                     MetacpanController.saveLocation("/showpod/" + res._source.name);
                     SearchBoxView.updateTweet();
@@ -191,7 +189,6 @@ var Metacpan = Backbone.Controller.extend({
                             url: my.apiUrl + '/pod/' + res._source.name,
                             dataType: 'text',
                             success: function(pod) {
-                                debug(pod);
                                 if ( pod ) {
                                     $.ajax({
                                         url: my.apiUrl + '/author/' + res._source.author,
@@ -266,8 +263,7 @@ var Metacpan = Backbone.Controller.extend({
                         SourceDetailsView.showSource();
                     } else {
                         SourceDetailsView.current(res._source.name);
-                        var url = ["/source", res._source.author, res._source.release, res._source.file].join("/");
-                        console.log(url);
+                        var url = ["/source", res._source.author, res._source.release, res._source.path].join("/");
                         $.ajax({
                             url: url,
                             dataType: 'text',
@@ -343,8 +339,10 @@ var Metacpan = Backbone.Controller.extend({
                         debug(res);
                         AuthorDetailsView.updateAuthor(res);
                         $.ajax({
-                            url: my.apiUrl + '/dist/_search',
-                            data: { 'q': 'author: "' + author + '"', size: 1000 },
+                            url: my.apiUrl + '/release/_search',
+                            processData: false,
+                            type: 'post',
+                            data: '{ "query": { "term": { "author": "' + author + '" } }, "size": 1000 }',
                             success: function(results) {
                                 debug('Succeeded dist search for author: ' + author);
                                 debug(results);
