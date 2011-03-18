@@ -25,15 +25,14 @@ var ModuleResults = Backbone.View.extend({
         
         $("#module_results_table").dataTable({
             aoColumns: [
-                { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 176px;">Module</div>', sWidth: '176px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Description" style="width: 160px;">Description</div>', sWidth: '160px', bSearchable: false },
+                { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 344px;">Module</div>', sWidth: '344px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 58px;">Version</div>', sWidth: '68px', bSearchable: false },
                 { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 83px;">Release Date</div>', sWidth: '83px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 115px;">Distribution</div>', sClass: 'clickable', sWidth: '115px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 121px;">Distribution</div>', sClass: 'clickable', sWidth: '121px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 86px;">Author</div>', sClass: 'clickable', sWidth: '86px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 76px;">Score</div>', sWidth: '76px', bSearchable: false, sType: 'numeric' }
+                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 62px;">Score</div>', sWidth: '62px', bSearchable: false, sType: 'numeric' }
             ],
-            aaSorting: [[ 6, "desc" ]],
+            aaSorting: [[ 5, "desc" ]],
             bAutoWidth: false,
             bJQueryUI: true,
             fnDrawCallback: function() {
@@ -73,11 +72,11 @@ var ModuleResults = Backbone.View.extend({
         var rowData = [];
         $(res.hits.hits).each(function() {
             rowData.push([
-                '<div class="cell_contents" title="' + this._source.name + '" style="width: 176px;">' + this._source.name + '</div>',
-                '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 160px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
+                '<div class="cell_contents" title="' + this._source.name + '" style="width: 344px; font-size: 1.15em; font-weight: bold;">' + this._source.name + '</div>' +
+                '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 336px; font-style: italic;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
                 '<div class="cell_contents" title="' + this._source.version + '" style="width: 58px;">' + this._source.version + '</div>',
                 '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 83px;">' + this._source.release_date.substr(0,10) + '</div>',
-                '<div class="cell_contents" title="' + this._source.distname + '" style="width: 115px;"><a href="/#/dist/' + this._source.distname + '" title="View Distribution page for ' + this._source.distname + '" style="font-weight: normal; text-decoration: underline;">' + this._source.distname + '</div>',
+                '<div class="cell_contents" title="' + this._source.distname + '" style="width: 121px;"><a href="/#/dist/' + this._source.distname + '" title="View Distribution page for ' + this._source.distname + '" style="font-weight: normal; text-decoration: underline;">' + this._source.distname + '</div>',
                 '<div class="cell_contents" title="' + this._source.author + '" style="width: 86px;"><a href="/#/author/' + this._source.author + '" title="View Author page for ' + this._source.author + '" style="font-weight: normal; text-decoration: underline;">' + this._source.author + '</a></div>',
                 Number(this._score)
             ]);
