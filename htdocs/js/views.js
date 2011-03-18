@@ -72,8 +72,8 @@ var ModuleResults = Backbone.View.extend({
         var rowData = [];
         $(res.hits.hits).each(function() {
             rowData.push([
-                '<div class="cell_contents" title="' + this._source.name + '" style="width: 344px; font-size: 1.15em; font-weight: bold;">' + this._source.name + '</div>' +
-                '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 336px; font-style: italic;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
+                '<div class="cell_contents name" title="' + this._source.name + '" style="width: 344px;">' + this._source.name + '</div>' +
+                '<div class="cell_contents description" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 336px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
                 '<div class="cell_contents" title="' + this._source.version + '" style="width: 58px;">' + this._source.version + '</div>',
                 '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 83px;">' + this._source.release_date.substr(0,10) + '</div>',
                 '<div class="cell_contents" title="' + this._source.distname + '" style="width: 121px;"><a href="/#/dist/' + this._source.distname + '" title="View Distribution page for ' + this._source.distname + '" style="font-weight: normal; text-decoration: underline;">' + this._source.distname + '</div>',
@@ -367,10 +367,9 @@ var AuthorDetails = Backbone.View.extend({
         
         $("#author_results_table").dataTable({
             aoColumns: [
-                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 320px;">Distribution</div>', sWidth: '320px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Description" style="width: 288px;">Description</div>', sWidth: '288px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
-                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 78px;">Release Date</div>', sWidth: '78px' }
+                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 613px;">Distribution</div>', sWidth: '613px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 58px;">Version</div>', sWidth: '58px', bSearchable: false },
+                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 83px;">Release Date</div>', sWidth: '83px' }
             ],
             aaSorting: [[ 0, "asc" ]],
             bAutoWidth: false,
@@ -440,10 +439,10 @@ var AuthorDetails = Backbone.View.extend({
             if ( typeof(res) != 'undefined' ) {
                 $(res.hits.hits).each(function() {
                     rowData.push([
-                        '<div class="cell_contents" title="' + this._source.name + '" style="width: 320px;">' + this._source.name + '</div>',
-                        '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 288px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
-                        '<div class="cell_contents" title="' + this._source.version + '" style="width: 68px;">' + this._source.version + '</div>',
-                        '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 78px;">' + this._source.release_date.substr(0,10) + '</div>'
+                        '<div class="cell_contents name" title="' + this._source.name + '" style="width: 613px;">' + this._source.name + '</div>' +
+                        '<div class="cell_contents description" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 613px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
+                        '<div class="cell_contents" title="' + this._source.version + '" style="width: 58px;">' + this._source.version + '</div>',
+                        '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 83px;">' + this._source.release_date.substr(0,10) + '</div>'
                     ]);
                 });
             }
@@ -508,14 +507,13 @@ var DistResults = Backbone.View.extend({
         
         $("#dist_results_table").dataTable({
             aoColumns: [
-                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 227px;">Distribution</div>', sWidth: '227px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Description" style="width: 195px;">Description</div>', sWidth: '195px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
-                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 78px;">Release Date</div>', sWidth: '78px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 446px;">Distribution</div>', sWidth: '451px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 58px;">Version</div>', sWidth: '58px', bSearchable: false },
+                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 83px;">Release Date</div>', sWidth: '83px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 100px;">Author</div>', sWidth: '100px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 86px;">Score</div>', sWidth: '86px', bSearchable: false, sType: 'numeric' }
+                { sTitle: '<div class="cell_contents" title="Sort by Search Score" style="width: 62px;">Score</div>', sWidth: '62px', bSearchable: false, sType: 'numeric' }
             ],
-            aaSorting: [[ 5, "desc" ]],
+            aaSorting: [[ 4, "desc" ]],
             bAutoWidth: false,
             bJQueryUI: true,
             fnDrawCallback: function() {
@@ -555,10 +553,10 @@ var DistResults = Backbone.View.extend({
         var rowData = [];
         $(res.hits.hits).each(function() {
             rowData.push([
-                '<div class="cell_contents" title="' + this._source.name + '" style="width: 227px;">' + this._source.name + '</div>',
-                '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 195px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
-                '<div class="cell_contents" title="' + this._source.version + '" style="width: 68px;">' + this._source.version + '</div>',
-                '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 78px;">' + this._source.release_date.substr(0,10) + '</div>',
+                '<div class="cell_contents name" title="' + this._source.name + '" style="width: 451px;">' + this._source.name + '</div>' +
+                '<div class="cell_contents description" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 451px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
+                '<div class="cell_contents" title="' + this._source.version + '" style="width: 58px;">' + this._source.version + '</div>',
+                '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 83px;">' + this._source.release_date.substr(0,10) + '</div>',
                 '<div class="cell_contents" title="' + this._source.author + '" style="width: 100px;">' + this._source.author + '</div>',
                 Number(this._score)
             ]);
@@ -609,10 +607,9 @@ var DistDetails = Backbone.View.extend({
         
         $("#dist_details_results_table").dataTable({
             aoColumns: [
-                { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 320px;">Module</div>', sWidth: '320px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Module Description" style="width: 288px;">Description</div>', sWidth: '288px' },
-                { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 68px;">Version</div>', sWidth: '68px', bSearchable: false },
-                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 78px;">Release Date</div>', sWidth: '78px' }
+                { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 613px;">Module</div>', sWidth: '613px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 58px;">Version</div>', sWidth: '58px', bSearchable: false },
+                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 838px;">Release Date</div>', sWidth: '83px' }
             ],
             aaSorting: [[ 0, "asc" ]],
             bAutoWidth: false,
@@ -672,10 +669,10 @@ var DistDetails = Backbone.View.extend({
             if ( typeof(res) != 'undefined' ) {
                 $(res.hits.hits).each(function() {
                     rowData.push([
-                        '<div class="cell_contents" title="' + this._source.name + '" style="width: 320px;">' + this._source.name + '</div>',
-                        '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 288px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
-                        '<div class="cell_contents" title="' + this._source.version + '" style="width: 78px;">' + this._source.version + '</div>',
-                        '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 68px;">' + this._source.release_date.substr(0,10) + '</div>'
+                        '<div class="cell_contents name" title="' + this._source.name + '" style="width: 613px;">' + this._source.name + '</div>' +
+                        '<div class="cell_contents description" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 613px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
+                        '<div class="cell_contents" title="' + this._source.version + '" style="width: 83px;">' + this._source.version + '</div>',
+                        '<div class="cell_contents" title="' + this._source.release_date.substr(0,10) + '" style="width: 58px;">' + this._source.release_date.substr(0,10) + '</div>'
                     ]);
                 });
             }
