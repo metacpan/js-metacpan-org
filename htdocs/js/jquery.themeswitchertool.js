@@ -4,9 +4,9 @@ $.fn.themeswitcher = function(settings) {
     var options = jQuery.extend({
         loadTheme: null,
         initialText: 'Switch Theme',
-        width: 150,
+        width: 185,
         height: 200,
-        buttonPreText: 'Theme: ',
+        buttonPreText: 'Current Theme: ',
         closeOnSelect: true,
         buttonHeight: 14,
         cookieName: 'jquery-ui-theme',
