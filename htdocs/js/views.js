@@ -507,7 +507,7 @@ var DistResults = Backbone.View.extend({
         
         $("#dist_results_table").dataTable({
             aoColumns: [
-                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 446px;">Distribution</div>', sWidth: '451px' },
+                { sTitle: '<div class="cell_contents" title="Sort by Distribution Name" style="width: 451px;">Distribution</div>', sWidth: '451px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 58px;">Version</div>', sWidth: '58px', bSearchable: false },
                 { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 83px;">Release Date</div>', sWidth: '83px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Author ID" style="width: 100px;">Author</div>', sWidth: '100px' },
@@ -609,7 +609,7 @@ var DistDetails = Backbone.View.extend({
             aoColumns: [
                 { sTitle: '<div class="cell_contents" title="Sort by Module Name" style="width: 613px;">Module</div>', sWidth: '613px' },
                 { sTitle: '<div class="cell_contents" title="Sort by Version" style="width: 58px;">Version</div>', sWidth: '58px', bSearchable: false },
-                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 838px;">Release Date</div>', sWidth: '83px' }
+                { sTitle: '<div class="cell_contents" title="Sort by Release Date" style="width: 83px;">Release Date</div>', sWidth: '83px' }
             ],
             aaSorting: [[ 0, "asc" ]],
             bAutoWidth: false,

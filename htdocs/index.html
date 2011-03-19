@@ -56,6 +56,7 @@
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
+        <script type="text/javascript" src="/js/jquery.ba-hashchange.min.js"></script>
         <script type="text/javascript" src="http://yandex.st/highlightjs/5.16/highlight.min.js"></script>
 
         <!--Template Definitions-->
@@ -77,7 +78,7 @@
                     If you find any problems with the site or you have any comments or suggestions please feel free to contact us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group mailing list</a> or even better by adding an item directly to the <a href="https://github.com/CPAN-API/search-metacpan-org/issues">Github issue tracker</a>.
                 </p>
             </div>
-            <div id="changes" class="info ui-widget ui-widget-content ui-corner-all" style="white-space: pre;"></div>
+            <div id="changes" class="info ui-widget ui-widget-content ui-corner-all" style="white-space: pre-wrap;"></div>
             <div class="spacer">&nbsp;</div>
         </script>
         <script id="resultsTable" type="text/html">
@@ -324,6 +325,10 @@
                 MetacpanController.enableBackButtons();
                 Backbone.history.start();
 
+                $(window).hashchange(function () {
+                    window.GoSquared.DefaultTracker.TrackView(GoSquared.DefaultTracker.qa, document.title);
+                });
+
             });
         </script>
 
@@ -364,18 +369,18 @@
         <noscript><div><img src="http://www.wundercounter.com/cgi-bin/stats/image.cgi?WUNVERSION=2.0&amp;user=ioncache&amp;page=search.metacpan.org&amp;digits=0" width="1" height="1" alt=" " /></div>
         </noscript>
         <!-- end wundercounter.com code http://www.wundercounter.com/?refID=ioncache -->
-<script type="text/javascript">
-    var GoSquared={};
-    GoSquared.acct = "GSN-477900-A";
-    (function(w){
-        function gs(){
-            w._gstc_lt=+(new Date); var d=document;
-            var g = d.createElement("script"); g.type = "text/javascript"; g.async = true; g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js";
-            var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g, s);
-        }
-        w.addEventListener?w.addEventListener("load",gs,false):w.attachEvent("onload",gs);
-    })(window);
-</script>
+        <script type="text/javascript">
+            var GoSquared={};
+            GoSquared.acct = "GSN-477900-A";
+            (function(w){
+                function gs(){
+                    w._gstc_lt=+(new Date); var d=document;
+                    var g = d.createElement("script"); g.type = "text/javascript"; g.async = true; g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js";
+                    var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g, s);
+                }
+                w.addEventListener?w.addEventListener("load",gs,false):w.attachEvent("onload",gs);
+            })(window);
+        </script>
     </body>
 
 </html>

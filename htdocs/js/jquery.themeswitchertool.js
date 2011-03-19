@@ -23,6 +23,7 @@ $.fn.themeswitcher = function(settings) {
             '<div id="themeGallery">' +
                 '<ul>' +
                     '<li><a href="http://search.metacpan.org/css/jquery-ui/jquery-ui.custom.css"><img src="http://search.metacpan.org/images/metacpan_logo_flat.png" width="30" alt="metacpan.org" title="metaCPAN" /><span class="themeName">metaCPAN</span></a></li>' +
+                    '<li><a href="http://search.metacpan.org/css/jquery-ui/Aristo/aristo.css"><img src="http://search.metacpan.org/css/jquery-ui/Aristo/images/aristo.png" width="16" alt="Aristo" title="Aristo" /><span class="themeName" >Aristo</span></a></li>' +
                     '<li><a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/ui-lightness/jquery-ui.css"><img src="http://static.jquery.com/ui/themeroller/images/themeGallery/theme_30_ui_light.png" alt="UI Lightness" title="UI Lightness" /><span class="themeName">UI lightness</span></a></li>' +
                     '<li><a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/ui-darkness/jquery-ui.css"><img src="http://static.jquery.com/ui/themeroller/images/themeGallery/theme_30_ui_dark.png" alt="UI Darkness" title="UI Darkness" /><span class="themeName">UI darkness</span></a></li>' +
                     '<li><a href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/smoothness/jquery-ui.css"><img src="http://static.jquery.com/ui/themeroller/images/themeGallery/theme_30_smoothness.png" alt="Smoothness" title="Smoothness" /><span class="themeName">Smoothness</span></a></li>' +
