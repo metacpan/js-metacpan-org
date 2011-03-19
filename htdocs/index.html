@@ -56,7 +56,7 @@
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
-        <script type="text/javascript" src="/js/jquery.ba-hashchange.min.js"></script>
+        <!--<script type="text/javascript" src="/js/jquery.ba-hashchange.min.js"></script>-->
         <script type="text/javascript" src="http://yandex.st/highlightjs/5.16/highlight.min.js"></script>
 
         <!--Template Definitions-->
@@ -325,9 +325,9 @@
                 MetacpanController.enableBackButtons();
                 Backbone.history.start();
 
-                $(window).hashchange(function () {
-                    window.GoSquared.DefaultTracker.TrackView(GoSquared.DefaultTracker.qa, document.title);
-                });
+                //$(window).hashchange(function () {
+                //    window.GoSquared.DefaultTracker.TrackView(GoSquared.DefaultTracker.qa, document.title);
+                //});
 
             });
         </script>
