@@ -95,10 +95,10 @@ var Metacpan = Backbone.Controller.extend({
                     $(".metacpanView").fadeOut(200);
                     query = query.replace(/::/, " ");
                     $.ajax({
-                        url: my.apiUrl + '/module/_search',
+                        url: my.apiUrl + '/file/_search',
                         type: 'post',
                         processData: false,
-                        data: '{ "size": "500", "query": { "field": { "name":"' + query.toLowerCase() + '"}}, "filter":{"term":{"status":"latest"}} } }',
+                        data: '{ "size": "50", "query": { "field":{"file.documentation.analyzed":"' + query.toLowerCase() + '"}}, "filter":{"term":{"file.status":"latest"}} }',
                         success: function(res) {
                             debug(res);
                             $("#module_results_table").dataTable().fnClearTable();
@@ -131,7 +131,7 @@ var Metacpan = Backbone.Controller.extend({
                         url: my.apiUrl + '/release/_search',
                         type: 'post',
                         processData: false,
-                        data: '{ "size": "500", "query": { "field": { "name":"' + query.toLowerCase() + '"}}, "filter":{"term":{"status":"latest"}} } }',
+                        data: '{ "size": "500", "query": { "field": { "release.name.analyzed":"' + query.toLowerCase() + '"}}, "filter":{"term":{"status":"latest"}} }',
                         success: function(res) {
                             debug(res);
                             $("#dist_results_table").dataTable().fnClearTable();
@@ -179,14 +179,14 @@ var Metacpan = Backbone.Controller.extend({
                 url:  my.apiUrl + '/module/' + query,
                 success: function(res) {
                     res["_source"] = res;
-                    MetacpanController.saveLocation("/showpod/" + res._source.name);
+                    MetacpanController.saveLocation("/showpod/" + res._source.documentation);
                     SearchBoxView.updateTweet();
-                    if ( ModuleDetailsView.current() === res._source.name ) {
+                    if ( ModuleDetailsView.current() === res._source.documentation ) {
                         ModuleDetailsView.showPod();
                     } else {
-                        ModuleDetailsView.current(res._source.name);
+                        ModuleDetailsView.current(res._source.documentation);
                         $.ajax({
-                            url: my.apiUrl + '/pod/' + res._source.name,
+                            url: my.apiUrl + '/pod/' + res._source.documentation + '?content-type=text/html',
                             dataType: 'text',
                             success: function(pod) {
                                 if ( pod ) {
@@ -257,12 +257,12 @@ var Metacpan = Backbone.Controller.extend({
                 success: function(res) {
                     debug(res);
                     res["_source"] = res;
-                    MetacpanController.saveLocation("/showsrc/" + res._source.name);
+                    MetacpanController.saveLocation("/showsrc/" + res._source.documentation);
                     SearchBoxView.updateTweet();
-                    if ( SourceDetailsView.current() === res._source.name ) {
+                    if ( SourceDetailsView.current() === res._source.documentation ) {
                         SourceDetailsView.showSource();
                     } else {
-                        SourceDetailsView.current(res._source.name);
+                        SourceDetailsView.current(res._source.documentation);
                         var url = ["/source", res._source.author, res._source.release, res._source.path].join("/");
                         $.ajax({
                             url: url,
@@ -395,15 +395,18 @@ var Metacpan = Backbone.Controller.extend({
             DistDetailsView.current(query);
             var fn = (function() {
                 $.ajax({
-                    url: my.apiUrl + '/release/' + query,
+                    url: my.apiUrl + '/release/_search',
+                    type: 'post',
+                    data: '{"size":1,"query":{"term":{"release.name":"' + query + '"}}}',
                     success: function(res) {
+                        res = res.hits.hits[0]._source;
                         debug(res);
                         DistDetailsView.updateDist(res);
                         $.ajax({
-                            url: my.apiUrl + '/module/_search',
+                            url: my.apiUrl + '/file/_search',
                             type: 'post',
                             processData: false,
-                            data: '{ "size": "1000", "query": { "term": { "release": "' + query + '" } } }',
+                            data: '{ "size": "1000", "query":{"match_all":{}},"filter": { "and":[{"exists":{"field":"file.documentation"}},{"term": { "file.release": "' + query + '" } },{"term": { "file.indexed": true } }] } }',
                             success: function(results) {
                                 debug('Succeeded module search for dist: ' + query);
                                 debug(results);

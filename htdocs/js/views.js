@@ -73,7 +73,7 @@ var ModuleResults = Backbone.View.extend({
         var rowData = [];
         $(res.hits.hits).each(function() {
             rowData.push([
-                '<div class="cell_contents" title="' + this._source.name + '" style="width: 176px;">' + this._source.name + '</div>',
+                '<div class="cell_contents" title="' + this._source.documentation + '" style="width: 176px;">' + this._source.documentation + '</div>',
                 '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 160px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
                 '<div class="cell_contents" title="' + this._source.version + '" style="width: 58px;">' + this._source.version + '</div>',
                 '<div class="cell_contents" title="' + this._source.date.substr(0,10) + '" style="width: 83px;">' + this._source.date.substr(0,10) + '</div>',
@@ -130,7 +130,7 @@ var ModuleDetails = Backbone.View.extend({
     },
 
     updatePod: function(module, pod, author) {
-        author = {"_source": {}};
+        author = {"_source": author};
         $("#module_view_contents").fadeOut(200, function() {
             $(this).html(ich.podView({
                 author: module._source.author,
@@ -140,7 +140,7 @@ var ModuleDetails = Backbone.View.extend({
                 download_url: module._source.download_url,
                 email: author._source.email,
                 gravatar: author._source.gravatar_url,
-                name: module._source.name,
+                name: module._source.documentation,
                 podHTML: pod,
                 date: module._source.date.substr(0,10),
                 version: module._source.version
@@ -211,7 +211,7 @@ var SourceDetails = Backbone.View.extend({
 
     showSource: function(source, author) {
         if ( typeof(source) != 'undefined' ) {
-            //$("#source_view_contents").fadeOut(200, function() {
+            $("#source_view_contents").fadeOut(200, function() {
                 var container = $("#source_view_contents");
                 container.html('');
                 container.text(source);
@@ -219,7 +219,7 @@ var SourceDetails = Backbone.View.extend({
                 container.prepend(ich.sourceHeader({ module: SourceDetailsView.current(), author: author }));
                 hljs.highlightBlock($("#module_source").get(0), '    ');
                 $("#source_view_loader").hide();
-            //}).fadeIn(205);
+            }).fadeIn(205);
         } else {
             $("#source_view_loader").fadeOut(200, function() {
                 $("#source_view_contents").fadeIn(200);
@@ -676,7 +676,7 @@ var DistDetails = Backbone.View.extend({
             if ( typeof(res) != 'undefined' ) {
                 $(res.hits.hits).each(function() {
                     rowData.push([
-                        '<div class="cell_contents" title="' + this._source.name + '" style="width: 320px;">' + this._source.name + '</div>',
+                        '<div class="cell_contents" title="' + this._source.documentation + '" style="width: 320px;">' + this._source.documentation + '</div>',
                         '<div class="cell_contents" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 288px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
                         '<div class="cell_contents" title="' + this._source.version + '" style="width: 78px;">' + this._source.version + '</div>',
                         '<div class="cell_contents" title="' + this._source.date.substr(0,10) + '" style="width: 68px;">' + this._source.date.substr(0,10) + '</div>'
