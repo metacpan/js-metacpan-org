@@ -1,5 +1,9 @@
 CHANGE LOG
 
+2011-06-04
+
+* ported to use the new MetaCPAN API
+
 2011-03-18
 
 * combined the module name and description columns into one column on all search results tables
