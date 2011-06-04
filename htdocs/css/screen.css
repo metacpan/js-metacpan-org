@@ -113,6 +113,15 @@ a:hover {
     text-overflow: ellipsis;
 }
 
+.name {
+	font-size: 1.15em;
+	font-weight: bold;
+}
+
+.description {
+	font-style: italic;
+}
+
 .DataTables_sort_wrapper {
     position: relative;
 }

@@ -14,9 +14,8 @@
 
         <link rel="stylesheet" type="text/css" media="screen" href="/css/screen.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="/css/pod.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery.ui.all.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="http://yandex.st/highlightjs/5.15/styles/vs.min.css" />
-
+        <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery.ui.all.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="http://yandex.st/highlightjs/5.16/styles/vs.min.css" />
     </head>
 
     <body>
@@ -41,8 +40,8 @@
         </div>
 
         <!-- Scripts, Templates, Etc. -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
         <!--<script type="text/javascript" src="/js/scripts.js"></script>-->
         <script type="text/javascript" src="/js/ICanHaz.min.js"></script>
         <script type="text/javascript" src="/js/json2.min.js"></script>
@@ -56,7 +55,8 @@
         <script type="text/javascript" src="/js/jquery.text-overflow.min.js"></script>
         <script type="text/javascript" src="/js/jquery.cookie.min.js"></script>
         <script type="text/javascript" src="/js/jquery.themeswitchertool.js"></script>
-        <script type="text/javascript" src="http://yandex.st/highlightjs/5.15/highlight.min.js"></script>
+        <!--<script type="text/javascript" src="/js/jquery.ba-hashchange.min.js"></script>-->
+        <script type="text/javascript" src="http://yandex.st/highlightjs/5.16/highlight.min.js"></script>
 
         <!--Template Definitions-->
         <script id="homeView" type="text/html">
@@ -77,7 +77,7 @@
                     If you find any problems with the site or you have any comments or suggestions please feel free to contact us on our <a href="http://groups.google.com/group/cpan-api" target="_blank">Google Group mailing list</a> or even better by adding an item directly to the <a href="https://github.com/CPAN-API/search-metacpan-org/issues">Github issue tracker</a>.
                 </p>
             </div>
-            <div id="changes" class="info ui-widget ui-widget-content ui-corner-all" style="white-space: pre;"></div>
+            <div id="changes" class="info ui-widget ui-widget-content ui-corner-all" style="white-space: pre-wrap;"></div>
             <div class="spacer">&nbsp;</div>
         </script>
         <script id="resultsTable" type="text/html">
@@ -118,7 +118,7 @@
                     <input type="radio" id="type_dist" name="search_type" value="dist" /><label for="type_dist">Distribution</label>
                     <input type="radio" id="type_author" name="search_type" value="author" /><label for="type_author">Author</label>
                 </div>
-                <div id="switcher" style="float: left; width: 150px; margin: 5px 0px 0px 15px;"></div>
+                <div id="switcher" style="float: left; width: 185px; margin: 5px 0px 0px 15px;"></div>
                 <div id="tweetbox"></div>
             </div>
         </script>
@@ -324,6 +324,10 @@
                 MetacpanController.enableBackButtons();
                 Backbone.history.start();
 
+                //$(window).hashchange(function () {
+                //    window.GoSquared.DefaultTracker.TrackView(GoSquared.DefaultTracker.qa, document.title);
+                //});
+
             });
         </script>
 
@@ -364,7 +368,18 @@
         <noscript><div><img src="http://www.wundercounter.com/cgi-bin/stats/image.cgi?WUNVERSION=2.0&amp;user=ioncache&amp;page=search.metacpan.org&amp;digits=0" width="1" height="1" alt=" " /></div>
         </noscript>
         <!-- end wundercounter.com code http://www.wundercounter.com/?refID=ioncache -->
-
+        <script type="text/javascript">
+            var GoSquared={};
+            GoSquared.acct = "GSN-477900-A";
+            (function(w){
+                function gs(){
+                    w._gstc_lt=+(new Date); var d=document;
+                    var g = d.createElement("script"); g.type = "text/javascript"; g.async = true; g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js";
+                    var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g, s);
+                }
+                w.addEventListener?w.addEventListener("load",gs,false):w.attachEvent("onload",gs);
+            })(window);
+        </script>
     </body>
 
 </html>

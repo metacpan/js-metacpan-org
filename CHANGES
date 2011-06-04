@@ -1,12 +1,18 @@
 CHANGE LOG
 
+2011-06-04
+
+* ported to use the new MetaCPAN API
+
+2011-03-18
+
+* combined the module name and description columns into one column on all search results tables
+
 2011-02-14
 
-* fixed issue with description column causing the html to break when the module/dist description
-  contained greater than or less than signs
+* fixed issue with description column causing the html to break when the module/dist description contained greater than or less than signs
 * fixed issue where urls that that had escaped characters would not work except in Firefox
-* now using json instead of jsonp ajax calls -- this fixes an issue with the loader image never
-  disappearing when searching an invalid author
+* now using json instead of jsonp ajax calls -- this fixes an issue with the loader image never disappearing when searching an invalid author
 * the tweet button now has via @metacpan as the default text instead of via @ioncache
 
 2011-01-09
