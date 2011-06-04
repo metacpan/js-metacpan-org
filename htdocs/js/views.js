@@ -145,8 +145,10 @@ var ModuleDetails = Backbone.View.extend({
                 date: module._source.date.substr(0,10),
                 version: module._source.version
             }));
-            $("#pod_html a.moduleLink").map(function() {
-                $(this).attr('href', '/#/showpod/' + $(this).attr('href'));
+            $("#pod_html a").map(function() {
+                var href = $(this).attr('href');
+                if(!href.match(/^http:\/\/metacpan.org\/module\//)) return;
+                $(this).attr('href', href.replace(/^http:\/\/metacpan.org\/module\//, '/#/showpod/'));
             });
             $("#pod_html pre").each(function(i, e) {
                 $(this).addClass("language-perl");
