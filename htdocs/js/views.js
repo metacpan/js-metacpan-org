@@ -394,24 +394,42 @@ var AuthorDetails = Backbone.View.extend({
     },
 
     updateAuthor: function(author) {
-        author._source = author;
         $("#author_view_contents").fadeOut(200, function() {
-            $(this).html(ich.authorDetails({
-                pauseid: author._source.pauseid,
-                authorDir: author._source.author_dir,
-                authorName: author._source.name,
-                blogFeed: author._source.blog_feed,
-                blogURL: author._source.blog_url,
-                email: author._source.email,
-                githubName: author._source.github_username,
-                gravatar: author._source.gravatar_url,
-                irc_nick: author._source.irc_nick,
-                linkedinProfile: author._source.linkedin_public_profile,
-                perlmonksName: author._source.perlmonks_username,
-                stackoverflowProfile: author._source.stackoverflow_public_profile,
-                twitterName: author._source.twitter_username,
-                website: author._source.website
-            }));
+            var blogURL = [], blogFeed = [];
+            for (var i in author.blog ) {
+               blogURL.push(author.blog[i].url);
+               blogFeed.push(author.blog[i].feed);
+            }
+
+            author.blogFeed = blogFeed;
+            author.blogURL = blogURL;
+
+            var profileName = [], profileId = [];
+            for (var i in author.profile ) {
+                switch(author.profile[i].name) {
+                    case "github": 
+                        author.github = author.profile[i]["id"];
+                        break;
+                    case "irc":
+                        author.irc = author.profile[i]["id"];
+                        break;
+                    case "linkedin":
+                        author.linkedin = author.profile[i]["id"];
+                        break;
+                    case "perlmonks":
+                        author.perlmonks = author.profile[i]["id"];
+                        break;
+                    case "stackoverflow":
+                        author.stackoverflow = author.profile[i]["id"];
+                        break;
+                    case "twitter":
+                        author.twitter = author.profile[i]["id"];
+                        break;
+                    default: {};
+                }
+            }
+
+            $(this).html(ich.authorDetails(author));
             $("#author_view_loader").hide();
         }).fadeIn(205);
         $("#author_results").fadeOut(200).fadeIn(205);
@@ -674,8 +692,7 @@ var DistDetails = Backbone.View.extend({
             if ( typeof(res) != 'undefined' ) {
                 $(res.hits.hits).each(function() {
                     rowData.push([
-                        '<div class="cell_contents name" title="' + this._source.documentation + '" style="width: 320px;">' + this._source.documentation + '</div>',
-                        '<div class="cell_contents description" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 288px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
+                        '<div class="cell_contents name" title="' + this._source.documentation + '" style="width: 320px;">' + this._source.documentation + '</div>' + '<div class="cell_contents description" title="' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '" style="width: 288px;">' + ((this._source.abstract) ? Encoder.htmlEncode(this._source.abstract) : '&lt;no description available&gt') + '</div>',
                         '<div class="cell_contents" title="' + this._source.version + '" style="width: 78px;">' + this._source.version + '</div>',
                         '<div class="cell_contents" title="' + this._source.date.substr(0,10) + '" style="width: 68px;">' + this._source.date.substr(0,10) + '</div>'
                     ]);

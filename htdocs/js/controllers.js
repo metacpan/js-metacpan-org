@@ -342,7 +342,7 @@ var Metacpan = Backbone.Controller.extend({
                             url: my.apiUrl + '/release/_search',
                             processData: false,
                             type: 'post',
-                            data: '{ "query": { "term": { "author": "' + author + '" } }, "size": 1000 }',
+                            data: '{ "query": { "term": { "author": "' + author + '" } }, "filter":{"term":{"status":"latest"}},  "size": 1000 }',
                             success: function(results) {
                                 debug('Succeeded dist search for author: ' + author);
                                 debug(results);

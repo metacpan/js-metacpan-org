@@ -128,7 +128,7 @@
                 <div class="module_info">
                     {{version}} &mdash; {{date}} &mdash; <a href="/#/dist/{{release}}" title="View Distribution">{{release}}</a> &mdash; <a href="/#/showsrc/{{name}}">View Source</a>{{#download_url}} &mdash; <a href="{{download_url}}">Download Archive</a>{{/download_url}}
                 </div>
-                <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar}}" class="gravatar" alt="" /></a></div>
+l               <div class="author_info"><a href="/#/author/{{author}}">{{authorName}} ({{author}})</a><a href="/#/author/{{author}}"><img src="{{gravatar_url}}" class="gravatar" alt="" /></a></div>
             </div>
             <div id="pod_html" class="pod" style="float: left;">{{{podHTML}}}</div>
             <div class="spacer" style="float: left;"></div>
@@ -175,7 +175,7 @@
                                 Github:
                             </div>
                             <div class="contact_info_value">
-                                {{#githubName}}<a href="https://github.com/{{githubName}}">{{githubName}} &mdash; github.com/{{githubName}}</a>{{/githubName}}
+                                {{#github}}<a href="https://github.com/{{github}}">{{github}} &mdash; github.com/{{github}}</a>{{/github}}
                             </div>
                         </div>
                         <!--<div class="left contact_info">
@@ -191,7 +191,7 @@
                                Linkedin:
                             </div>
                             <div class="contact_info_value">
-                               {{#linkedinProfile}}<a href="{{linkedinProfile}}">{{linkedinProfile}}</a>{{/linkedinProfile}}
+                               {{#linkedin}}<a href="{{linkedin}}">{{linkedin}}</a>{{/linkedin}}
                             </div>
                         </div>
                         <div class="left contact_info">
@@ -199,7 +199,7 @@
                                 PerlMonks:
                             </div>
                             <div class="contact_info_value">
-                                {{#perlmonksName}}<a href="http://www.perlmonks.org/?node={{perlmonksName}}">{{perlmonksName}} &mdash; http://www.perlmonks.org/?node={{perlmonksName}}</a>{{/perlmonksName}}
+                                {{#perlmonks}}<a href="http://www.perlmonks.org/?node={{perlmonks}}">{{perlmonks}} &mdash; http://www.perlmonks.org/?node={{perlmonks}}</a>{{/perlmonks}}
                             </div>
                         </div>
                         <div class="left contact_info">
@@ -207,7 +207,7 @@
                                 Stack Overflow:
                             </div>
                             <div class="contact_info_value">
-                                {{#stackoverflowProfile}}<a href="{{stackoverflowProfile}}">{{stackoverflowProfile}}</a>{{/stackoverflowProfile}}
+                                {{#stackoverflow}}<a href="{{stackoverflow}}">{{stackoverflow}}</a>{{/stackoverflow}}
                             </div>
                         </div>
                         <div class="left contact_info">
@@ -215,7 +215,7 @@
                                 Twitter:
                             </div>
                             <div class="contact_info_value">
-                                {{#twitterName}}<a href="http://www.twitter.com/{{twitterName}}">{{twitterName}} &mdash; twitter.com/{{twitterName}}</a>{{/twitterName}}
+                                {{#twitter}}<a href="http://www.twitter.com/{{twitter}}">{{twitter}} &mdash; twitter.com/{{twitter}}</a>{{/twitter}}
                             </div>
                         </div>
                         <div class="left contact_info">
@@ -230,7 +230,7 @@
 
                 </div>
                 <div class="right" style="text-align: center;">
-                    <div><img src="{{gravatar}}" alt=" " /></div>
+                    <div><img src="{{gravatar_url}}" alt=" " /></div>
                 </div>
                 <div class="left" style="width: 100%; font-size: 1em; font-weight: bold; text-align: right;">
                     <a href="http://blogs.perl.org/users/olaf_alders/2010/12/expanding-your-author-info-in-the-metacpan.html" title="Update Author Information">How To Update</a>
