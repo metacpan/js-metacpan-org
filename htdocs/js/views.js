@@ -414,13 +414,13 @@ var AuthorDetails = Backbone.View.extend({
                         author.irc = author.profile[i]["id"];
                         break;
                     case "linkedin":
-                        author.linkedin = author.profile[i]["id"];
+                        author.linkedin = "http://www.linkedin.com/profile/view?id=" + author.profile[i]["id"];
                         break;
                     case "perlmonks":
                         author.perlmonks = author.profile[i]["id"];
                         break;
                     case "stackoverflow":
-                        author.stackoverflow = author.profile[i]["id"];
+                        author.stackoverflow = "http://stackoverflow.com/users/" + author.profile[i]["id"];
                         break;
                     case "twitter":
                         author.twitter = author.profile[i]["id"];
