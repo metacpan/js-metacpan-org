@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2011-06-27
+
+* Removed erroneous 'l' in the podView template
+
+* Changed the Google Groups link to https://groups.google.com/forum/#!forum/cpan-api due to issue with Google Grooups changing their URL scheme.  Fixes issues #31.
+
 2011-06-04
 
 * ported to use the new MetaCPAN API
