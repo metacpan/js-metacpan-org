@@ -138,7 +138,7 @@ var ModuleDetails = Backbone.View.extend({
                 distvname: module._source.distvname,
                 download_url: module._source.download_url,
                 email: author._source.email,
-                gravatar: author._source.gravatar_url,
+                gravatar_url: author._source.gravatar_url,
                 name: module._source.documentation,
                 podHTML: pod,
                 date: module._source.date.substr(0,10),
