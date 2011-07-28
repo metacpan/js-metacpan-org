@@ -95,7 +95,7 @@ var Metacpan = Backbone.Controller.extend({
                     $(".metacpanView").fadeOut(200);
                     query = query.replace(/::/, " ");
                     $.ajax({
-                        url: my.apiUrl + '/file/_search',
+                        url: 'http://0.0.0.0:3000/',
                         type: 'post',
                         processData: false,
                         data: '{ "size": "50", "query": { "field":{"file.documentation.analyzed":"' + query.toLowerCase() + '"}}, "filter":{"term":{"file.status":"latest"}} }',

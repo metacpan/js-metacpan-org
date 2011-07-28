@@ -1,5 +1,9 @@
 CHANGE LOG
 
+2011-07-28
+
+* moved search.metacpan.org to js.metacpan.org
+
 2011-06-29
 
 * fixed display issue on author details view whene the author had multiple email addresses
